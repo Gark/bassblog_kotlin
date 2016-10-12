@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import pixel.kotlin.bassblog.network.NetworkService
 
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
@@ -13,7 +14,10 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loaderManager.initLoader(0, Bundle.EMPTY, this)
+
+        NetworkService.start(this)
+
+//        loaderManager.initLoader(0, Bundle.EMPTY, this)
         this.all_posts_recycler.adapter = PostAdapter(this)
     }
 

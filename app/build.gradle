@@ -1,16 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'android-apt'
+
+def int currentVersionCode = 1;
+def String currentVersionName = "1.0";
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion "${rootProject.buildToolsVersion}"
     defaultConfig {
         applicationId "pixel.kotlin.bassblog"
-        minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        multiDexEnabled true
+        versionCode currentVersionCode
+        versionName currentVersionName
+        vectorDrawables.useSupportLibrary = true
+        resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,6 +32,7 @@ android {
 }
 
 dependencies {
+    compile project(':network')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -36,6 +44,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    
+    debugCompile 'im.dino:dbinspector:3.3.0@aar'
 }
 repositories {
     mavenCentral()

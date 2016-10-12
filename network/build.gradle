@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion "${rootProject.buildToolsVersion}"
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'BLOG_ID', '\"4928216501086861761\"'
+        buildConfigField 'String', 'API_KEY', '\"AIzaSyB-ZPijkunpFb6Lu5BUDNMhensnto_fB-o\"'
+        buildConfigField 'String', 'BASE_URL', '\"https://www.googleapis.com/\"'
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile project(':storage')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+}
