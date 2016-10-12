@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import android.widget.TextView
 import com.devbrackets.android.recyclerext.adapter.RecyclerCursorAdapter
 
 internal class PostAdapter(context: Context) : RecyclerCursorAdapter<PostAdapter.PostVieHolder>(null) {
@@ -28,9 +28,14 @@ internal class PostAdapter(context: Context) : RecyclerCursorAdapter<PostAdapter
     }
 
     internal inner class PostVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val text : TextView
+
+        init {
+            text = itemView.findViewById(R.id.text_item) as TextView
+        }
 
         fun displayData(cursor: Cursor) {
-
+            text.text = cursor.position.toString();
         }
     }
 
