@@ -31,6 +31,7 @@ internal object PostUtils {
         val loader = CursorLoader(context)
         loader.uri = IoContract.Post.CONTENT_URI
         loader.projection = POST_PROJECTION
+        loader.sortOrder = IoContract.Post.COL_PUBLISHED
         return loader
     }
 

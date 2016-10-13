@@ -4,13 +4,13 @@ import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import pixel.kotlin.bassblog.network.NetworkService
+import pixel.kotlin.bassblog.ui.PlaybackActivity
 
 
-class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private var mAdapter: PostAdapter? = null
 

@@ -11,8 +11,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import pixel.kotlin.bassblog.storage.IoContract;
 import retrofit2.Call;
@@ -21,6 +25,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService extends IntentService {
+
+    protected static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH);
+
+    static {
+        FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     private static final String TAG = NetworkService.class.getName();
     private static final int MAX_RESULT = 5;
@@ -81,6 +91,7 @@ public class NetworkService extends IntentService {
             ops.add(ContentProviderOperation.newInsert(IoContract.Post.CONTENT_URI)
                     .withValue(IoContract.Post.COL_POST_ID, item.id)
                     .withValue(IoContract.Post.COL_TITLE, item.title)
+                    .withValue(IoContract.Post.COL_PUBLISHED, getTime(item.published))
                     .withValue(IoContract.Post.COL_LABEL, TextUtils.join(", ", item.labels))
                     .withValue(IoContract.Post.COL_IMAGE, getImageUrl(item))
                     .build());
@@ -92,6 +103,15 @@ public class NetworkService extends IntentService {
         } catch (RemoteException | OperationApplicationException e) {
             Log.e("NetworkService", "apply batch error", e);
         }
+    }
+
+    private long getTime(String published) {
+        try {
+            return FORMATTER.parse(published).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 
     private String getImageUrl(PostsResponse.RawPost item) {
