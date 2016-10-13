@@ -5,7 +5,8 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 
-class PlaybackService : Service() {
+class PlaybackService : Service(), IPlayback {
+
 
     inner class LocalBinder : Binder() {
         val service: PlaybackService
@@ -28,6 +29,10 @@ class PlaybackService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun play(): Boolean {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

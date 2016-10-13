@@ -7,11 +7,12 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
+import pixel.kotlin.bassblog.service.IPlayback
 import pixel.kotlin.bassblog.service.PlaybackService
 
 open class PlaybackActivity : AppCompatActivity(), ServiceConnection {
 
-    private var mPlaybackService: PlaybackService? = null
+    protected var mPlaybackService: IPlayback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +22,9 @@ open class PlaybackActivity : AppCompatActivity(), ServiceConnection {
     override fun onDestroy() {
         super.onDestroy()
         unbindService(this)
+
+        // TODO if not play
+        stopService(Intent(applicationContext, PlaybackService::class.java))
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {

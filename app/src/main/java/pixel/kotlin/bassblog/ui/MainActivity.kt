@@ -1,23 +1,27 @@
-package pixel.kotlin.bassblog
+package pixel.kotlin.bassblog.ui
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import pixel.kotlin.bassblog.PostUtils
+import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.NetworkService
-import pixel.kotlin.bassblog.ui.PlaybackActivity
+import pixel.kotlin.bassblog.storage.BlogPost
+import pixel.kotlin.bassblog.ui.PostAdapter.PostCallback
 
 
-class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor>, PostCallback {
 
     private var mAdapter: PostAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mAdapter = PostAdapter(this)
+        mAdapter = PostAdapter(this, this)
 
         all_posts_recycler.layoutManager = LinearLayoutManager(applicationContext)
         all_posts_recycler.adapter = mAdapter
@@ -38,4 +42,7 @@ class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor> {
         mAdapter?.swapCursor(null)
     }
 
+    override fun onPostSelected(blogPost: BlogPost?) {
+        startActivity(Intent(applicationContext, MusicPlayerActivity::class.java))
+    }
 }

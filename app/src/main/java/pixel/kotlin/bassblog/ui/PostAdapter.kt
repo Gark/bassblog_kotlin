@@ -1,4 +1,4 @@
-package pixel.kotlin.bassblog
+package pixel.kotlin.bassblog.ui
 
 import android.content.Context
 import android.database.Cursor
@@ -8,13 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.devbrackets.android.recyclerext.adapter.RecyclerCursorAdapter
 import com.squareup.picasso.Picasso
+import pixel.kotlin.bassblog.PostUtils
+import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.storage.BlogPost
 
-internal class PostAdapter(context: Context) : RecyclerCursorAdapter<PostAdapter.PostVieHolder>(null) {
+internal class PostAdapter(context: Context, val callback: PostCallback) : RecyclerCursorAdapter<PostAdapter.PostVieHolder>(null) {
 
     private val mInflater: LayoutInflater
+
+    interface PostCallback {
+        fun onPostSelected(blogPost: BlogPost?)
+    }
 
     init {
         mInflater = LayoutInflater.from(context)
@@ -33,7 +39,7 @@ internal class PostAdapter(context: Context) : RecyclerCursorAdapter<PostAdapter
         private val mPostTitle: TextView
         private val mPostLabel: TextView
         private val mPostImage: ImageView
-        private var mId: String? = null
+        private var mPost: BlogPost? = null
 
         init {
             mPostTitle = itemView.findViewById(R.id.post_title) as TextView
@@ -43,12 +49,12 @@ internal class PostAdapter(context: Context) : RecyclerCursorAdapter<PostAdapter
         }
 
         private fun handleClick() {
-            Toast.makeText(itemView.context, mId, Toast.LENGTH_SHORT).show()
+            callback.onPostSelected(mPost)
         }
 
         fun displayData(cursor: Cursor) {
             val post = PostUtils.getBlogPost(cursor)
-            mId = post.id
+            mPost = post
             mPostTitle.text = post.title
             mPostLabel.text = post.label
             Picasso.with(itemView.context).load(post.image).into(mPostImage)
