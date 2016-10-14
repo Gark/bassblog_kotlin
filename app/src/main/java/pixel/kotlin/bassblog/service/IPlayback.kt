@@ -1,16 +1,22 @@
 package pixel.kotlin.bassblog.service
 
-interface IPlayback {
+import pixel.kotlin.bassblog.storage.BlogPost
 
-    //    void setPlayList(PlayList list);
+interface IPlayback {
 
     fun play(): Boolean
 
+    fun setPlayList(array: Array<BlogPost>)
+
+
 //    boolean play(PlayList list);
+//
+//    void setPlayList( list);
 //
 //    boolean play(PlayList list, int startIndex);
 //
 //    boolean play(Song song);
+//    boolean play(BlogPost[] songs);
 //
 //    abstract fun playLast(): Boolean
 //
