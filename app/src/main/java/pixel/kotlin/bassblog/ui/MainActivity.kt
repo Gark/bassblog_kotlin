@@ -14,7 +14,7 @@ import pixel.kotlin.bassblog.storage.BlogPost
 import pixel.kotlin.bassblog.ui.PostAdapter.PostCallback
 
 
-class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor>, PostCallback {
+class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Cursor>, PostCallback {
 
     private var mAdapter: PostAdapter? = null
 
@@ -32,6 +32,7 @@ class MainActivity : PlaybackActivity(), LoaderManager.LoaderCallbacks<Cursor>, 
 
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
         mAdapter?.swapCursor(data)
+        mPlaybackService?.updatePlayList(data)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {

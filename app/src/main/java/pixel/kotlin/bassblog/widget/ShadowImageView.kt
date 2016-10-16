@@ -21,17 +21,24 @@ class ShadowImageView : ImageView {
     private var mShadowRadius: Int = 0
 
     // Animation
-    private var mRotateAnimator: ObjectAnimator? = null
+    private val mRotateAnimator: ObjectAnimator
+
     private var mLastAnimationValue: Long = 0
 
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
+        mRotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
+        mRotateAnimator.duration = 7200
+        mRotateAnimator.interpolator = LinearInterpolator()
+        mRotateAnimator.repeatMode = ValueAnimator.RESTART
+        mRotateAnimator.repeatCount = ValueAnimator.INFINITE
+
         init()
     }
 
-    @SuppressWarnings("unused")
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init()
-    }
+//    @SuppressWarnings("unused")
+//    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+//        init()
+//    }
 
     private fun init() {
         val density = context.resources.displayMetrics.density
@@ -57,11 +64,7 @@ class ShadowImageView : ImageView {
         circle.paint.color = DEFAULT_BACKGROUND_COLOR
         background = circle
 
-        mRotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
-        mRotateAnimator!!.duration = 7200
-        mRotateAnimator!!.interpolator = LinearInterpolator()
-        mRotateAnimator!!.repeatMode = ValueAnimator.RESTART
-        mRotateAnimator!!.repeatCount = ValueAnimator.INFINITE
+
     }
 
     private fun elevationSupported(): Boolean {
@@ -78,31 +81,28 @@ class ShadowImageView : ImageView {
     // Animation
 
     fun startRotateAnimation() {
-        mRotateAnimator!!.cancel()
-        mRotateAnimator!!.start()
+        mRotateAnimator.cancel()
+        mRotateAnimator.start()
     }
 
     fun cancelRotateAnimation() {
         mLastAnimationValue = 0
-        mRotateAnimator!!.cancel()
+        mRotateAnimator.cancel()
     }
 
     fun pauseRotateAnimation() {
-        mLastAnimationValue = mRotateAnimator!!.currentPlayTime
-        mRotateAnimator!!.cancel()
+        mLastAnimationValue = mRotateAnimator.currentPlayTime
+        mRotateAnimator.cancel()
     }
 
     fun resumeRotateAnimation() {
-        mRotateAnimator!!.start()
-        mRotateAnimator!!.currentPlayTime = mLastAnimationValue
+        mRotateAnimator.start()
+        mRotateAnimator.currentPlayTime = mLastAnimationValue
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (mRotateAnimator != null) {
-            mRotateAnimator!!.cancel()
-            mRotateAnimator = null
-        }
+        mRotateAnimator.cancel()
     }
 
     /**

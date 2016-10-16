@@ -9,8 +9,9 @@ import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
 import pixel.kotlin.bassblog.service.IPlayback
 import pixel.kotlin.bassblog.service.PlaybackService
+import pixel.kotlin.bassblog.storage.BlogPost
 
-open class PlaybackActivity : AppCompatActivity(), ServiceConnection {
+open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlayback.Callback {
 
     protected var mPlaybackService: IPlayback? = null
 
@@ -23,15 +24,35 @@ open class PlaybackActivity : AppCompatActivity(), ServiceConnection {
         super.onDestroy()
         unbindService(this)
 
-        // TODO if not play
-        stopService(Intent(applicationContext, PlaybackService::class.java))
+//        // TODO if not play
+//        stopService(Intent(applicationContext, PlaybackService::class.java))
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
         mPlaybackService == null
+        mPlaybackService?.unregisterCallback(this)
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         mPlaybackService = (service as PlaybackService.LocalBinder).service
+        mPlaybackService?.registerCallback(this)
+        onPlayStatusChanged(mPlaybackService!!.isPlaying())
     }
+
+    override fun onSwitchLast(last: BlogPost?) {
+
+    }
+
+    override fun onSwitchNext(next: BlogPost) {
+
+    }
+
+    override fun onComplete(next: BlogPost) {
+
+    }
+
+    override fun onPlayStatusChanged(isPlaying: Boolean) {
+
+    }
+
 }

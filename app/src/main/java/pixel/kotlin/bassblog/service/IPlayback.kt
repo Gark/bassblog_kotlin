@@ -1,44 +1,32 @@
 package pixel.kotlin.bassblog.service
 
+import android.database.Cursor
+import pixel.kotlin.bassblog.player.PlayMode
 import pixel.kotlin.bassblog.storage.BlogPost
 
 interface IPlayback {
-
     fun play(): Boolean
+    fun updatePlayList(cursor: Cursor?)
+    fun play(array: Array<BlogPost>): Boolean
+    fun play(array: Array<BlogPost>, startIndex: Int) : Boolean
+    fun play(post: BlogPost): Boolean
+    fun playLast(): Boolean
+    fun playNext(): Boolean
+    fun pause(): Boolean
+    fun isPlaying(): Boolean
+    fun getProgress(): Int
+    fun getPlayingSong(): BlogPost
+    fun seekTo(progress: Int): Boolean
+    fun setPlayMode(playMode: PlayMode)
+    fun registerCallback(callback: Callback)
+    fun unregisterCallback(callback: Callback)
+    fun removeCallbacks()
+    fun releasePlayer()
 
-    fun setPlayList(array: Array<BlogPost>)
-
-
-//    boolean play(PlayList list);
-//
-//    void setPlayList( list);
-//
-//    boolean play(PlayList list, int startIndex);
-//
-//    boolean play(Song song);
-//    boolean play(BlogPost[] songs);
-//
-//    abstract fun playLast(): Boolean
-//
-//    abstract fun playNext(): Boolean
-//
-//    abstract fun pause(): Boolean
-//
-//    abstract fun isPlaying(): Boolean
-//
-//    abstract fun getProgress(): Int
-//
-//    Song getPlayingSong();
-//
-//    abstract fun seekTo(progress: Int): Boolean
-//
-//    abstract fun setPlayMode(playMode: PlayMode)
-//
-//    abstract fun registerCallback(callback: Callback)
-//
-//    abstract fun unregisterCallback(callback: Callback)
-//
-//    abstract fun removeCallbacks()
-//
-//    abstract fun releasePlayer()
+    interface Callback {
+        fun onSwitchLast(last: BlogPost?)
+        fun onSwitchNext(next: BlogPost)
+        fun onComplete(next: BlogPost)
+        fun onPlayStatusChanged(isPlaying: Boolean)
+    }
 }
