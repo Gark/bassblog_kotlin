@@ -23,7 +23,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     init {
         mPlayer = MediaPlayer()
         mPlayer.setOnCompletionListener { handleOnComplete() }
+        mPlayer.setOnPreparedListener { mp -> handlePrepare(mp) }
     }
+
 
     private fun handleOnComplete() {
     }
@@ -61,9 +63,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             try {
                 mPlayer.reset()
                 mPlayer.setDataSource(blogPost.track)
-                mPlayer.prepare()
-                mPlayer.start()
-                notifyPlayStatusChanged(true)
+                mPlayer.prepareAsync()
             } catch (e: IOException) {
                 Log.e(TAG, "play: ", e)
                 notifyPlayStatusChanged(false)
@@ -73,6 +73,12 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             return true
         }
         return false
+    }
+
+    private fun handlePrepare(mp: MediaPlayer?) {
+        mp?.start()
+        if (mp != null) notifyPlayStatusChanged(true)
+
     }
 
     override fun play(array: Array<BlogPost>): Boolean {

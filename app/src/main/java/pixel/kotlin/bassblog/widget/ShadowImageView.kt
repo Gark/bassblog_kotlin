@@ -35,11 +35,6 @@ class ShadowImageView : ImageView {
         init()
     }
 
-//    @SuppressWarnings("unused")
-//    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-//        init()
-//    }
-
     private fun init() {
         val density = context.resources.displayMetrics.density
         val shadowXOffset = (density * X_OFFSET).toInt()
