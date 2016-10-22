@@ -67,8 +67,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="10000"
-            tools:progress="5000" />
+            android:max="100"
+            tools:progress="50"
+            tools:secondaryProgress="75" />
 
         <TextView
             android:id="@+id/text_view_duration"

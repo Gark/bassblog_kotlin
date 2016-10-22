@@ -4,7 +4,7 @@ ext {
     compileSdkVersion = 24
     minSdkVersion = 19
     targetSdkVersion = 24
-    buildToolsVersion = "24.0.0"
+    buildToolsVersion = "24.0.2"
     androidSupportVersion = "24.2.1"
     playServicesVersion = "9.6.1"
     flywayVersion = '4.0.3'
@@ -16,7 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

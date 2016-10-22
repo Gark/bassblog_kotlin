@@ -15,8 +15,10 @@ interface IPlayback {
     fun pause(): Boolean
     fun isPlaying(): Boolean
     fun getProgress(): Int
+    fun getDuration(): Int
+    fun getBuffered(): Int
     fun getPlayingSong(): BlogPost
-    fun seekTo(progress: Int): Boolean
+    fun seekTo(progress: Int)
     fun setPlayMode(playMode: PlayMode)
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)

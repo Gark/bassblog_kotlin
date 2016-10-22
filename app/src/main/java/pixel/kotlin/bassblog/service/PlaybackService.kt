@@ -77,12 +77,20 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.getProgress()
     }
 
+    override fun getDuration(): Int {
+        return mPlayer!!.getDuration()
+    }
+
+    override fun getBuffered(): Int {
+        return mPlayer!!.getBuffered()
+    }
+
     override fun getPlayingSong(): BlogPost {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun seekTo(progress: Int): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun seekTo(progress: Int) {
+        mPlayer!!.seekTo(progress)
     }
 
     override fun setPlayMode(playMode: PlayMode) {

@@ -16,18 +16,30 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     private val mPlayer: MediaPlayer
     private var isPaused = false
-    // Default size 2: for service and UI
+    private var mBuffered = 0
 
+    // Default size 2: for service and UI
     private val mCallbacks = ArrayList<IPlayback.Callback>(2)
 
     init {
         mPlayer = MediaPlayer()
         mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare(mp) }
+        mPlayer.setOnBufferingUpdateListener { mediaPlayer, i -> handleBuffering(i) }
+    }
+
+
+    private fun handleBuffering(i: Int) {
+        mBuffered = i
     }
 
 
     private fun handleOnComplete() {
+        // TODO
+    }
+
+    override fun getBuffered(): Int {
+        return mBuffered
     }
 
     override fun onCompletion(mp: MediaPlayer) {
@@ -145,21 +157,17 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         return mPlayer.currentPosition
     }
 
+    override fun getDuration(): Int {
+        return mPlayer.duration
+    }
+
     override fun getPlayingSong(): BlogPost {
         return mPlayList.getCurrentPost()
     }
 
-    override fun seekTo(progress: Int): Boolean {
-        if (mPlayList.isEmpty()) return false
-        // TODO
-//        val currentSong = mPlayList[mIndex]
-//            if (currentSong!!.getDuration() <= progress) {
-//                onCompletion(mPlayer)
-//            } else {
-//                mPlayer.seekTo(progress)
-//            return true
-//        }
-        return false
+    override fun seekTo(progress: Int) {
+        if (mPlayList.isEmpty()) return
+        mPlayer.seekTo(progress * mPlayer.duration / 100)
     }
 
     override fun setPlayMode(playMode: PlayMode) {
