@@ -3,26 +3,26 @@ package pixel.kotlin.bassblog.ui
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.DragEvent
-import android.view.View
 import android.widget.SeekBar
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.play_music.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.widget.CircleTransform
 
 class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
-
 
     private val INTERVAL = 1000L
     private val mHandler = Handler()
     private val runnable = Runnable { scheduleUpdater() }
+    private val CIRCLE_TRANSFORMATION = CircleTransform()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music)
         button_play_toggle.setOnClickListener { handleToggleClick() }
         seek_bar.setOnSeekBarChangeListener(this)
+//        image_view_album.setImageResource(R.mipmap.ic_launcher)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -45,7 +45,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
         if (mPlaybackService!!.isPlaying()) {
             text_view_progress.text = convertSecondsToHMmSs(progress)
-            text_view_artist.text = "" + (100 * progress / duration)
             seek_bar.progress = 100 * progress / duration
             seek_bar.secondaryProgress = mPlaybackService!!.getBuffered()
         }
@@ -64,12 +63,30 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     override fun onPlayStatusChanged(isPlaying: Boolean) {
         super.onPlayStatusChanged(isPlaying)
         updatePlayToggle(isPlaying)
+        updateSongData()
         if (isPlaying) {
             image_view_album.startRotateAnimation()
-            image_view_album.setImageResource(R.mipmap.ic_launcher)
+
         } else {
             image_view_album.cancelRotateAnimation()
         }
+    }
+
+    private fun updateSongData() {
+        if (mPlaybackService == null) return
+
+        val song = mPlaybackService!!.getPlayingSong()
+        text_view_name.text = song.title
+        text_view_artist.text = song.label
+
+        Picasso.with(applicationContext)
+                .load(song.image)
+                .resizeDimen(R.dimen.circle_image_size, R.dimen.circle_image_size)
+                .centerCrop()
+                .placeholder(R.drawable.default_record_album)
+                .error(R.drawable.default_record_album)
+                .transform(CIRCLE_TRANSFORMATION)
+                .into(image_view_album)
     }
 
     fun updatePlayToggle(play: Boolean) {

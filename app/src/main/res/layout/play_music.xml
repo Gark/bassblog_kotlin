@@ -15,8 +15,8 @@
 
         <pixel.kotlin.bassblog.widget.ShadowImageView
             android:id="@+id/image_view_album"
-            android:layout_width="260dp"
-            android:layout_height="260dp"
+            android:layout_width="@dimen/circle_image_size"
+            android:layout_height="@dimen/circle_image_size"
             android:layout_centerInParent="true"
             android:src="@drawable/default_record_album" />
     </RelativeLayout>
@@ -48,7 +48,7 @@
         android:id="@+id/layout_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:minHeight="44dp">
 
