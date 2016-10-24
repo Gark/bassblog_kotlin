@@ -3,7 +3,7 @@ package pixel.kotlin.bassblog.network;
 
 import java.util.List;
 
-public class PostsResponse {
+class PostsResponse {
     private String nextPageToken;
     private List<RawPost> items;
 

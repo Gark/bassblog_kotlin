@@ -9,6 +9,7 @@ CREATE TABLE post (
     -- 0 not favorite
     -- 1 favorite
     post_favorite INTEGER default 0,
-    post_track_url TEXT default "http://mixes.bassblog.pro/DNBTV_Live_219_5_Years_of_Titan_Records_-_Glass_Cobra.mp3",
+    post_track_url TEXT,
+    post_content TEXT,
     UNIQUE (post_id) ON CONFLICT IGNORE
 );
