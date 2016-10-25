@@ -21,7 +21,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         setContentView(R.layout.play_music)
         button_play_toggle.setOnClickListener { handleToggleClick() }
         seek_bar.setOnSeekBarChangeListener(this)
-//        image_view_album.setImageResource(R.mipmap.ic_launcher)
     }
 
     override fun onResume() {

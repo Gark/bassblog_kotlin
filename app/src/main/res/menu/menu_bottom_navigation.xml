@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_one"
+        android:icon="@drawable/ic_view_carousel_black_24dp"
+        android:title="@string/all_posts" />
+    <item
+        android:id="@+id/action_two"
+        android:icon="@drawable/ic_favorite_no"
+        android:title="@string/favourites" />
+
+</menu>

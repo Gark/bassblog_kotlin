@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/all_posts_recycler"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
-    tools:listitem="@layout/item_post_list" />
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_posts_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation_view"
+        tools:context=".ui.MainActivity"
+        tools:listitem="@layout/item_post_list" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
+        app:itemIconTint="@color/bottom_navigation_item_background_colors"
+        app:itemTextColor="@color/bottom_navigation_item_background_colors"
+        app:menu="@menu/menu_bottom_navigation" />
+
+
+</RelativeLayout>

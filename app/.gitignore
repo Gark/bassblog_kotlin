@@ -1,2 +1,5 @@
 /build
 .idea*
+app.iml
+../.idea*
+../.idea
