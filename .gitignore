@@ -53,3 +53,7 @@ app/libs/
 app/src/androidTest/
 app/src/main/res/drawable/
 app/src/test/
+network/libs/
+network/src/main/res/drawable/
+storage/libs/
+storage/src/main/res/drawable/
