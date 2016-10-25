@@ -47,7 +47,7 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
 
     }
 
-    override fun onComplete(next: BlogPost) {
+    override fun onComplete(next: BlogPost?) {
 
     }
 

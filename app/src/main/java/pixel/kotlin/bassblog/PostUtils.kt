@@ -68,4 +68,6 @@ internal object PostUtils {
     fun isFavorite(cursor: Cursor): Boolean {
         return cursor.getInt(INDEX_FAVORITE) == PostConstant.FAVORITE
     }
+
+    val POST_KEY: String = "BLOG_KEY"
 }

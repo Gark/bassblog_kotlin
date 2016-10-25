@@ -45,16 +45,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.play()
     }
 
-    override fun play(array: Array<BlogPost>): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun play(array: Array<BlogPost>, startIndex: Int): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun play(post: BlogPost): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mPlayer!!.play(post)
     }
 
     override fun playLast(): Boolean {
@@ -85,7 +77,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.getBuffered()
     }
 
-    override fun getPlayingSong(): BlogPost {
+    override fun getPlayingSong(): BlogPost? {
         return mPlayer!!.getPlayingSong()
     }
 
@@ -121,7 +113,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onComplete(next: BlogPost) {
+    override fun onComplete(next: BlogPost?) {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

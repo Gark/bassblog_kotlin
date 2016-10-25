@@ -1,12 +1,16 @@
 package pixel.kotlin.bassblog.ui
 
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.play_music.*
+import pixel.kotlin.bassblog.PostUtils
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.storage.BlogPost
 import pixel.kotlin.bassblog.widget.CircleTransform
 
 class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
@@ -19,8 +23,19 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music)
+
+
+
         button_play_toggle.setOnClickListener { handleToggleClick() }
         seek_bar.setOnSeekBarChangeListener(this)
+    }
+
+    companion object {
+        fun start(context: Context, blogPost: BlogPost?) {
+            val intent = Intent(context, MusicPlayerActivity::class.java)
+            intent.putExtra(PostUtils.POST_KEY, blogPost)
+            context.startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -61,11 +76,12 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
         super.onPlayStatusChanged(isPlaying)
+
+
         updatePlayToggle(isPlaying)
         updateSongData()
         if (isPlaying) {
             image_view_album.startRotateAnimation()
-
         } else {
             image_view_album.cancelRotateAnimation()
         }
@@ -74,12 +90,16 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     private fun updateSongData() {
         if (mPlaybackService == null) return
 
+        // TODO
+        val blogPost = intent.getParcelableExtra<BlogPost>(PostUtils.POST_KEY)
+        mPlaybackService!!.play(blogPost)
+
         val song = mPlaybackService!!.getPlayingSong()
-        text_view_name.text = song.title
-        text_view_artist.text = song.label
+        text_view_name.text = song?.title
+        text_view_artist.text = song?.label
 
         Picasso.with(applicationContext)
-                .load(song.image)
+                .load(song?.image)
                 .resizeDimen(R.dimen.circle_image_size, R.dimen.circle_image_size)
                 .centerCrop()
                 .placeholder(R.drawable.default_record_album)

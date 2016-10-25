@@ -2,38 +2,46 @@ package pixel.kotlin.bassblog.player
 
 
 import android.database.Cursor
+import android.util.SparseArray
 import pixel.kotlin.bassblog.PostUtils
 import pixel.kotlin.bassblog.storage.BlogPost
 import java.util.*
 
 class PlayList {
 
-    private var mCurrentPosiotion = 0
-    private val mList = ArrayList<BlogPost>()
+    val mPlayList = SparseArray<BlogPost>()
+
+    private var mCurrentPosition = 0
 
     fun updatePlayList(cursor: Cursor?) {
         if (cursor != null && cursor.moveToFirst()) {
 
-            if (mList.size == cursor.count) {
+            if (mPlayList.size() == cursor.count) {
                 return
             }
 
-            mList.clear()
+            mPlayList.clear()
             do {
-                mList.add(PostUtils.getBlogPost(cursor))
+                mPlayList.put(cursor.position, PostUtils.getBlogPost(cursor))
             } while (cursor.moveToNext())
         }
     }
 
-    fun getCurrentPost(): BlogPost {
-        return mList[mCurrentPosiotion]
+    fun updateCurrent(blogPost: BlogPost?) {
+        mCurrentPosition = mPlayList.indexOfValue(blogPost)
     }
 
-    fun isEmpty(): Boolean {
-        return mList.isEmpty()
+    fun getCurrentPost(): BlogPost? {
+        return mPlayList.get(mCurrentPosition)
     }
+
+    fun isEmpty(): Boolean = mPlayList.isEmpty()
 
     fun clear() {
-        mList.clear()
+        mPlayList.clear()
     }
+}
+
+private fun <E> SparseArray<E>.isEmpty(): Boolean {
+    return size() == 0
 }

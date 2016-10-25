@@ -44,6 +44,6 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
     }
 
     override fun onPostSelected(blogPost: BlogPost?) {
-        startActivity(Intent(applicationContext, MusicPlayerActivity::class.java))
+        MusicPlayerActivity.start(applicationContext, blogPost)
     }
 }

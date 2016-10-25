@@ -15,7 +15,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     private val mPlayList = PlayList()
 
     private val mPlayer: MediaPlayer
-    private var isPaused = false
+    private var isPaused = false // TODO make states
     private var mBuffered = 0
 
     // Default size 2: for service and UI
@@ -70,11 +70,11 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             notifyPlayStatusChanged(true)
             return true
         }
-        if (!mPlayList.isEmpty()) {
+        if (!mPlayList.isEmpty()) { // TODO
             val blogPost = mPlayList.getCurrentPost()
             try {
                 mPlayer.reset()
-                mPlayer.setDataSource(blogPost.track)
+                mPlayer.setDataSource(blogPost?.track)
                 mPlayer.prepareAsync()
             } catch (e: IOException) {
                 Log.e(TAG, "play: ", e)
@@ -93,26 +93,16 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     }
 
-    override fun play(array: Array<BlogPost>): Boolean {
-//        if (array.isEmpty()) return false
-//        isPaused = false
-//        updatePlayList(array)
-//        return play()
-        return false
-    }
-
-
-    override fun play(array: Array<BlogPost>, startIndex: Int): Boolean {
-//        if (array.isEmpty() || startIndex < 0 || startIndex >= array.size) return false
-//        isPaused = false
-//        mIndex = startIndex // TODO optimise it
-//        mPlayList.clear()
-//        mPlayList.addAll(array)
-//        return play()
-        return false
-    }
-
     override fun play(post: BlogPost): Boolean {
+        val blogPost = mPlayList.getCurrentPost()
+        if (blogPost?.equals(post) ?: false) {
+            // do nothing, keep paying
+        } else {
+            isPaused = false
+            mPlayList.updateCurrent(post)// TODO
+        }
+
+
         return play() // TODO
     }
 
@@ -161,7 +151,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         return mPlayer.duration
     }
 
-    override fun getPlayingSong(): BlogPost {
+    override fun getPlayingSong(): BlogPost? {
         return mPlayList.getCurrentPost()
     }
 
@@ -214,7 +204,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         }
     }
 
-    private fun notifyComplete(blogPost: BlogPost) {
+    private fun notifyComplete(blogPost: BlogPost?) {
         for (callback in mCallbacks) {
             callback.onComplete(blogPost)
         }
