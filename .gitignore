@@ -3,6 +3,7 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea*
 .DS_Store
 /build
 /captures
@@ -49,7 +50,4 @@ captures/
 
 # Keystore files
 *.jks
-app/libs/
-app/src/androidTest/
-app/src/main/res/drawable/
-app/src/test/
+
