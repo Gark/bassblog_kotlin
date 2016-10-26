@@ -24,6 +24,7 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         mAdapter = PostAdapter(this, this)
 
         all_posts_recycler.layoutManager = LinearLayoutManager(applicationContext)
@@ -32,6 +33,8 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
 
         supportLoaderManager.initLoader(0, Bundle.EMPTY, this)
         NetworkService.start(this)
+
+
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
