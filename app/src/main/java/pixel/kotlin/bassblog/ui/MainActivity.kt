@@ -62,7 +62,11 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
+                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
+            }
         }
     }
 
@@ -72,7 +76,7 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         mBehavior?.setBottomSheetCallback(MyCallback())
     }
 
-    public fun toggle(view: View) {
+    fun toggle() {
         mBehavior?.state = if (mBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
     }
 }

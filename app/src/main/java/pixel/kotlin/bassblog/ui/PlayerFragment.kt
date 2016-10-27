@@ -22,7 +22,7 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        top_panel.setOnClickListener { handleClick(it) }
+        top_panel.setOnClickListener { handleClick() }
         button_play_toggle.setOnClickListener { toggleClick() }
     }
 
@@ -30,7 +30,11 @@ class PlayerFragment : Fragment() {
         Toast.makeText(activity, "toast", Toast.LENGTH_SHORT).show()
     }
 
-    private fun handleClick(view: View) {
-        (activity as MainActivity).toggle(view)
+    private fun handleClick() {
+        (activity as MainActivity).toggle()
+    }
+
+    public fun setPanelVisibility(visibility: Int) {
+        top_panel.visibility = visibility
     }
 }
