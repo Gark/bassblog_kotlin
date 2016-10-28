@@ -23,9 +23,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music)
-
-
-
         button_play_toggle.setOnClickListener { handleToggleClick() }
         seek_bar.setOnSeekBarChangeListener(this)
     }
@@ -92,7 +89,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
         // TODO
         val blogPost = intent.getParcelableExtra<BlogPost>(PostUtils.POST_KEY)
-        mPlaybackService!!.play(blogPost)
+        mPlaybackService!!.play(blogPost.id)
 
         val song = mPlaybackService!!.getPlayingSong()
         text_view_name.text = song?.title

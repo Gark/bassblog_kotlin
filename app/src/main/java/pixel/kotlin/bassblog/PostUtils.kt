@@ -12,19 +12,21 @@ internal object PostUtils {
 
     private val POST_PROJECTION = arrayOf(
             IoContract.Post.COL_ID, // 0
-            IoContract.Post.COL_TITLE, // 1
-            IoContract.Post.COL_IMAGE, // 2
-            IoContract.Post.COL_LABEL, // 3
-            IoContract.Post.COL_FAVORITE, // 4
-            IoContract.Post.COL_TRACK // 5
+            IoContract.Post.COL_POST_ID, // 1
+            IoContract.Post.COL_TITLE, // 2
+            IoContract.Post.COL_IMAGE, // 3
+            IoContract.Post.COL_LABEL, // 4
+            IoContract.Post.COL_FAVORITE, // 5
+            IoContract.Post.COL_TRACK // 6
     )
 
     private val INDEX_ID = 0
-    private val INDEX_TITLE = 1
-    private val INDEX_IMAGE = 2
-    private val INDEX_LABEL = 3
-    private val INDEX_FAVORITE = 4
-    private val INDEX_TRACK = 5
+    private val INDEX_POST_ID = 1
+    private val INDEX_TITLE = 2
+    private val INDEX_IMAGE = 3
+    private val INDEX_LABEL = 4
+    private val INDEX_FAVORITE = 5
+    private val INDEX_TRACK = 6
 
 
     fun createLoader(context: Context): CursorLoader {
@@ -38,6 +40,7 @@ internal object PostUtils {
     fun getBlogPost(cursor: Cursor): BlogPost {
         return BlogPost(
                 getId(cursor),
+                getPostId(cursor),
                 getPostTitle(cursor),
                 getImageUrl(cursor),
                 getLabel(cursor),
@@ -47,6 +50,10 @@ internal object PostUtils {
 
     fun getId(cursor: Cursor): String {
         return cursor.getString(INDEX_ID)
+    }
+
+    fun getPostId(cursor: Cursor): String {
+        return cursor.getString(INDEX_POST_ID)
     }
 
     fun getTrack(cursor: Cursor): String {

@@ -7,7 +7,7 @@ import pixel.kotlin.bassblog.storage.BlogPost
 interface IPlayback {
     fun play(): Boolean
     fun updatePlayList(cursor: Cursor?)
-    fun play(post: BlogPost): Boolean
+    fun play(id: String): Boolean
     fun playLast(): Boolean
     fun playNext(): Boolean
     fun pause(): Boolean

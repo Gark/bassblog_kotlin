@@ -14,15 +14,6 @@
         android:layout_height="@dimen/bottom_margin"
         android:background="@color/white">
 
-        <TextView
-            android:id="@+id/text_view_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:textColor="?attr/colorAccent"
-            android:textSize="18sp"
-            tools:text="Drag me down" />
 
     </FrameLayout>
 
@@ -39,6 +30,15 @@
             android:src="@drawable/default_record_album" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/text_view_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:textColor="?attr/colorAccent"
+        android:textSize="18sp"
+        tools:text="Drag me down" />
 
     <TextView
         android:id="@+id/text_view_artist"

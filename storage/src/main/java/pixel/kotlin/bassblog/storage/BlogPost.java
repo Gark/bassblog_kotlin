@@ -7,14 +7,16 @@ import android.os.Parcelable;
 public class BlogPost implements Parcelable {
 
     private final String mId;
+    private final String mPostId;
     private final String mTitle;
     private final String mImage;
     private final String mLabel;
     private final String mTrack;
     private final boolean mFavourite;
 
-    public BlogPost(String mId, String title, String image, String label, String track, boolean favourite) {
-        this.mId = mId;
+    public BlogPost(String id, String postId, String title, String image, String label, String track, boolean favourite) {
+        this.mId = id;
+        this.mPostId = postId;
         this.mTitle = title;
         this.mImage = image;
         this.mLabel = label;
@@ -24,6 +26,7 @@ public class BlogPost implements Parcelable {
 
     private BlogPost(Parcel in) {
         mId = in.readString();
+        mPostId = in.readString();
         mTitle = in.readString();
         mImage = in.readString();
         mLabel = in.readString();
@@ -45,6 +48,10 @@ public class BlogPost implements Parcelable {
 
     public String getId() {
         return mId;
+    }
+
+    public String getPostId() {
+        return mPostId;
     }
 
     public String getTitle() {

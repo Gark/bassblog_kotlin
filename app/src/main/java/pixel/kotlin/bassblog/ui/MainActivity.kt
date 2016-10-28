@@ -40,6 +40,9 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
         mAdapter?.swapCursor(data)
         mPlaybackService?.updatePlayList(data)
+        // TODO
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
+        fragment.updateSongData()
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
@@ -51,7 +54,9 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
     }
 
     override fun onPostSelected(blogPost: BlogPost?) {
-        MusicPlayerActivity.start(applicationContext, blogPost)
+//        MusicPlayerActivity.start(applicationContext, blogPost)
+        // TODO
+        mPlaybackService?.play(blogPost?.postId!!)
     }
 
 
@@ -62,11 +67,11 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
-            when (newState) {
-                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
-                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
-            }
+//            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
+//            when (newState) {
+//                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
+//                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
+//            }
         }
     }
 
@@ -78,5 +83,13 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
 
     fun toggle() {
         mBehavior?.state = if (mBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    override fun onBackPressed() {
+        if (mBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+            mBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 }

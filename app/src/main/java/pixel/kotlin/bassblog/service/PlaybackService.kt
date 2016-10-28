@@ -45,8 +45,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.play()
     }
 
-    override fun play(post: BlogPost): Boolean {
-        return mPlayer!!.play(post)
+    override fun play(id: String): Boolean {
+        return mPlayer!!.play(id)
     }
 
     override fun playLast(): Boolean {

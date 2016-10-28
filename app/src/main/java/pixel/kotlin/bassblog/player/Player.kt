@@ -93,16 +93,14 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     }
 
-    override fun play(post: BlogPost): Boolean {
+    override fun play(id: String): Boolean {
         val blogPost = mPlayList.getCurrentPost()
-        if (blogPost?.equals(post) ?: false) {
+        if (blogPost?.id.equals(id)) {
             // do nothing, keep paying
         } else {
             isPaused = false
-            mPlayList.updateCurrent(post)// TODO
+            mPlayList.updateCurrent(id)// TODO
         }
-
-
         return play() // TODO
     }
 
