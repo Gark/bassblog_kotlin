@@ -15,11 +15,10 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.storage.BlogPost
 
 internal class PostAdapter(context: Context, val callback: PostCallback) : RecyclerCursorAdapter<PostAdapter.PostVieHolder>(null) {
-
     private val mInflater: LayoutInflater
 
     interface PostCallback {
-        fun onPostSelected(blogPost: BlogPost?)
+        fun onPostSelected(blogPost: BlogPost)
     }
 
     init {
@@ -49,7 +48,7 @@ internal class PostAdapter(context: Context, val callback: PostCallback) : Recyc
         }
 
         private fun handleClick() {
-            callback.onPostSelected(mPost)
+            callback.onPostSelected(mPost!!)
         }
 
         fun displayData(cursor: Cursor) {

@@ -30,6 +30,10 @@ class PlayList {
         mCurrentPosition = mPlayList.indexOfKey(id)
     }
 
+    fun moveToNext() {
+        mCurrentPosition = if (mCurrentPosition == mPlayList.size - 1) 0 else mCurrentPosition + 1
+    }
+
     fun getCurrentPost(): BlogPost? {
         if (isEmpty()) {
             return null

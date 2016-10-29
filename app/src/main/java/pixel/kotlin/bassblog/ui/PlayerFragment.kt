@@ -10,11 +10,12 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.play_music_fragmnet.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.widget.CircleTransform
+import java.util.concurrent.TimeUnit
 
 class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
 
-    private val INTERVAL = 1000L
+    private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
     private val mHandler = Handler()
     private val runnable = Runnable { scheduleUpdater() }
     private val CIRCLE_TRANSFORMATION = CircleTransform()
@@ -27,7 +28,15 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         super.onViewCreated(view, savedInstanceState)
         top_panel.setOnClickListener { handleClick() }
         button_play_toggle.setOnClickListener { handleToggleClick() }
+        button_play_toggle_top.setOnClickListener { handleToggleClick() }
+        button_play_next.setOnClickListener { handleNextClick() }
         seek_bar.setOnSeekBarChangeListener(this)
+    }
+
+    private fun handleNextClick() {
+        if (mPlaybackService == null) return
+
+        mPlaybackService!!.playNext()
     }
 
     override fun onResume() {
@@ -43,6 +52,10 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         super.onPause()
         mHandler.removeCallbacks(runnable)
         image_view_album.pauseRotateAnimation()
+    }
+
+    fun setPanelVisibility(visibility: Int) {
+        top_panel.visibility = visibility
     }
 
     private fun scheduleUpdater() {
@@ -95,6 +108,7 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
         val song = mPlaybackService!!.getPlayingSong()
         text_view_name.text = song?.title
+        text_view_name_top.text = song?.title
         text_view_artist.text = song?.label
 
         Picasso.with(activity)
@@ -105,10 +119,15 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
                 .error(R.drawable.default_record_album)
                 .transform(CIRCLE_TRANSFORMATION)
                 .into(image_view_album)
+
+        Picasso.with(activity)
+                .load(song?.image)
+                .into(image_view_album_top)
     }
 
     fun updatePlayToggle(play: Boolean) {
         button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
+        button_play_toggle_top.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
     }
 
     fun convertSecondsToHMmSs(seconds: Int): String {

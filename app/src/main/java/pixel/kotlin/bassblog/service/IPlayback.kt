@@ -8,8 +8,8 @@ interface IPlayback {
     fun play(): Boolean
     fun updatePlayList(cursor: Cursor?)
     fun play(id: String): Boolean
-    fun playLast(): Boolean
-    fun playNext(): Boolean
+    fun playLast()
+    fun playNext()
     fun pause(): Boolean
     fun isPlaying(): Boolean
     fun getProgress(): Int

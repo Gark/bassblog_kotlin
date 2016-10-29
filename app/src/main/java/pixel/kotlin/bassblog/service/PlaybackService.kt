@@ -11,7 +11,6 @@ import pixel.kotlin.bassblog.storage.BlogPost
 
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
-
     inner class LocalBinder : Binder() {
         val service: PlaybackService
             get() = this@PlaybackService
@@ -49,12 +48,12 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.play(id)
     }
 
-    override fun playLast(): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun playLast() {
+        mPlayer!!.playNext()
     }
 
-    override fun playNext(): Boolean {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun playNext() {
+        return mPlayer!!.playNext()
     }
 
     override fun pause(): Boolean {

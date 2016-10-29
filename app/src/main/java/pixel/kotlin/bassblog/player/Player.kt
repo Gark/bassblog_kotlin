@@ -10,14 +10,12 @@ import java.util.*
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
-
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()
-
     private val mPlayer: MediaPlayer
+
     private var isPaused = false // TODO make states
     private var mBuffered = 0
-
     // Default size 2: for service and UI
     private val mCallbacks = ArrayList<IPlayback.Callback>(2)
 
@@ -28,11 +26,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         mPlayer.setOnBufferingUpdateListener { mediaPlayer, i -> handleBuffering(i) }
     }
 
-
     private fun handleBuffering(i: Int) {
         mBuffered = i
     }
-
 
     private fun handleOnComplete() {
         // TODO
@@ -98,33 +94,23 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         if (blogPost?.id.equals(id)) {
             // do nothing, keep paying
         } else {
+            pause()
             isPaused = false
             mPlayList.updateCurrent(id)// TODO
+            notifyPlayStatusChanged(false)
         }
         return play() // TODO
     }
 
-    override fun playLast(): Boolean {
-//        isPaused = false
-//        if (!mPlayList.isEmpty()) {
-//            val last = mPlayList.last()
-//            play()
-//            notifyPlayLast(last)
-//            return true
-//        }
-        return false
+    override fun playLast() {
+
     }
 
-    // TODO
-    override fun playNext(): Boolean {
-//        isPaused = false
-////        val hasNext = mPlayList.hasNext(false)
-////        if (hasNext) {
-////            val next = mPlayList.next()
-//        mIndex = 0
-//        play()
-//        notifyPlayNext(mPlayList[mIndex])
-        return true
+    override fun playNext() {
+        pause()
+        isPaused = false
+        mPlayList.moveToNext()
+        play()
     }
 
     override fun pause(): Boolean {

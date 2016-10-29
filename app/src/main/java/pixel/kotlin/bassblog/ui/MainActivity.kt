@@ -33,8 +33,6 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
 
         supportLoaderManager.initLoader(0, Bundle.EMPTY, this)
         NetworkService.start(this)
-
-
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
@@ -53,10 +51,8 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         mAdapter?.swapCursor(null)
     }
 
-    override fun onPostSelected(blogPost: BlogPost?) {
-//        MusicPlayerActivity.start(applicationContext, blogPost)
-        // TODO
-        mPlaybackService?.play(blogPost?.postId!!)
+    override fun onPostSelected(blogPost: BlogPost) {
+        mPlaybackService?.play(blogPost.postId)
     }
 
 
@@ -67,11 +63,12 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-//            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
-//            when (newState) {
-//                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
-//                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
-//            }
+            // TODO
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
+                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
+            }
         }
     }
 
