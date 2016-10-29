@@ -55,7 +55,6 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
         mPlaybackService?.play(blogPost.postId)
     }
 
-
     inner class MyCallback : BottomSheetBehavior.BottomSheetCallback() {
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {

@@ -44,12 +44,12 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.play()
     }
 
-    override fun play(id: String): Boolean {
-        return mPlayer!!.play(id)
+    override fun play(postId: String) {
+        mPlayer!!.play(postId)
     }
 
     override fun playLast() {
-        mPlayer!!.playNext()
+        mPlayer!!.playLast()
     }
 
     override fun playNext() {
@@ -104,21 +104,19 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onSwitchLast(last: BlogPost?) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onSwitchNext(next: BlogPost) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onComplete(next: BlogPost?) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+//    override fun onSwitchLast(last: BlogPost?) {
+//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//
+//    override fun onSwitchNext(next: BlogPost) {
+//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//
+//    override fun onComplete(next: BlogPost?) {
+//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
 
     }
-
-
 }

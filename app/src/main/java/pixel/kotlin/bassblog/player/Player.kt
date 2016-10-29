@@ -31,7 +31,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     private fun handleOnComplete() {
-        // TODO
+        playNext()
     }
 
     override fun getBuffered(): Int {
@@ -55,8 +55,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 //        play()
 //            }
 //        }
-        notifyComplete(mPlayList.getCurrentPost())
+//        notifyComplete(mPlayList.getCurrentPost())
 
+        playNext()
     }
 
     //    override fun playLast(): Boolean {
@@ -66,7 +67,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             notifyPlayStatusChanged(true)
             return true
         }
-        if (!mPlayList.isEmpty()) { // TODO
+        if (!mPlayList.isEmpty()) {
             val blogPost = mPlayList.getCurrentPost()
             try {
                 mPlayer.reset()
@@ -89,26 +90,38 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     }
 
-    override fun play(id: String): Boolean {
+    override fun play(postId: String) {
         val blogPost = mPlayList.getCurrentPost()
-        if (blogPost?.id.equals(id)) {
-            // do nothing, keep paying
+        if (postId == blogPost?.postId) {
+            if (isPaused) {
+                play()
+            }
         } else {
-            pause()
-            isPaused = false
-            mPlayList.updateCurrent(id)// TODO
+            stop()
+            mPlayList.updateCurrent(postId)
             notifyPlayStatusChanged(false)
+            play()
         }
-        return play() // TODO
+    }
+
+    private fun stop() {
+        pause()
+        isPaused = false
     }
 
     override fun playLast() {
-
+        val duration = mPlayer.currentPosition
+        if (duration > 20 * 1000) {
+            seekTo(0)
+        } else {
+            stop()
+            mPlayList.moveToPrevious()
+            play()
+        }
     }
 
     override fun playNext() {
-        pause()
-        isPaused = false
+        stop()
         mPlayList.moveToNext()
         play()
     }
@@ -176,21 +189,21 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         }
     }
 
-    private fun notifyPlayLast(blogPost: BlogPost) {
-        for (callback in mCallbacks) {
-            callback.onSwitchLast(blogPost)
-        }
-    }
-
-    private fun notifyPlayNext(song: BlogPost) {
-        for (callback in mCallbacks) {
-            callback.onSwitchNext(song)
-        }
-    }
-
-    private fun notifyComplete(blogPost: BlogPost?) {
-        for (callback in mCallbacks) {
-            callback.onComplete(blogPost)
-        }
-    }
+//    private fun notifyPlayLast(blogPost: BlogPost) {
+//        for (callback in mCallbacks) {
+//            callback.onSwitchLast(blogPost)
+//        }
+//    }
+//
+//    private fun notifyPlayNext(song: BlogPost) {
+//        for (callback in mCallbacks) {
+//            callback.onSwitchNext(song)
+//        }
+//    }
+//
+//    private fun notifyComplete(blogPost: BlogPost?) {
+//        for (callback in mCallbacks) {
+//            callback.onComplete(blogPost)
+//        }
+//    }
 }

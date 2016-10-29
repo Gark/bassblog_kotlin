@@ -47,4 +47,10 @@ class PlayList {
     fun clear() {
         mPlayList.clear()
     }
+
+    fun moveToPrevious() {
+        if (mCurrentPosition > 0) {
+            mCurrentPosition = mCurrentPosition - 1
+        }
+    }
 }

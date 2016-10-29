@@ -30,7 +30,14 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         button_play_toggle.setOnClickListener { handleToggleClick() }
         button_play_toggle_top.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
+        button_play_last.setOnClickListener { handlePlayLast() }
+
         seek_bar.setOnSeekBarChangeListener(this)
+    }
+
+    private fun handlePlayLast() {
+        if (mPlaybackService == null) return
+        mPlaybackService!!.playLast()
     }
 
     private fun handleNextClick() {

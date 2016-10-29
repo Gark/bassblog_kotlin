@@ -39,17 +39,17 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
         onPlayStatusChanged(mPlaybackService!!.isPlaying())
     }
 
-    override fun onSwitchLast(last: BlogPost?) {
-
-    }
-
-    override fun onSwitchNext(next: BlogPost) {
-
-    }
-
-    override fun onComplete(next: BlogPost?) {
-
-    }
+//    override fun onSwitchLast(last: BlogPost?) {
+//
+//    }
+//
+//    override fun onSwitchNext(next: BlogPost) {
+//
+//    }
+//
+//    override fun onComplete(next: BlogPost?) {
+//
+//    }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
 

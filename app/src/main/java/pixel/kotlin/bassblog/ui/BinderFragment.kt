@@ -9,7 +9,6 @@ import android.os.IBinder
 import android.support.v4.app.Fragment
 import pixel.kotlin.bassblog.service.IPlayback
 import pixel.kotlin.bassblog.service.PlaybackService
-import pixel.kotlin.bassblog.storage.BlogPost
 
 open class BinderFragment : Fragment(), ServiceConnection, IPlayback.Callback {
 
@@ -36,14 +35,14 @@ open class BinderFragment : Fragment(), ServiceConnection, IPlayback.Callback {
         onPlayStatusChanged(mPlaybackService!!.isPlaying())
     }
 
-    override fun onSwitchLast(last: BlogPost?) {
-    }
-
-    override fun onSwitchNext(next: BlogPost) {
-    }
-
-    override fun onComplete(next: BlogPost?) {
-    }
+//    override fun onSwitchLast(last: BlogPost?) {
+//    }
+//
+//    override fun onSwitchNext(next: BlogPost) {
+//    }
+//
+//    override fun onComplete(next: BlogPost?) {
+//    }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
     }
