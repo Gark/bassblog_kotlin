@@ -157,8 +157,8 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         mPlayer.seekTo(progress * mPlayer.duration / 100)
     }
 
-    override fun setPlayMode(playMode: PlayMode) {
-//        mPlayList.setPlayMode(playMode)
+    override fun nextPlayMode() : Int {
+        return mPlayList.nextPlayMode()
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {

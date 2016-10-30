@@ -17,16 +17,13 @@ interface IPlayback {
     fun getBuffered(): Int
     fun getPlayingSong(): BlogPost?
     fun seekTo(progress: Int)
-    fun setPlayMode(playMode: PlayMode)
+    fun nextPlayMode() : Int
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)
     fun removeCallbacks()
     fun releasePlayer()
 
     interface Callback {
-//        fun onSwitchLast(last: BlogPost?)
-//        fun onSwitchNext(next: BlogPost)
-//        fun onComplete(next: BlogPost?)
         fun onPlayStatusChanged(isPlaying: Boolean)
     }
 }

@@ -2,17 +2,16 @@ package pixel.kotlin.bassblog.player
 
 
 import android.database.Cursor
-import android.support.v4.util.ArrayMap
-import android.util.SparseArray
 import pixel.kotlin.bassblog.PostUtils
 import pixel.kotlin.bassblog.storage.BlogPost
 import java.util.*
 
 class PlayList {
-    //    private val mPlayList = ArrayMap<String, BlogPost>()
     private val mPlayList = ArrayList<BlogPost>()
+    private val mPlayMode = PlayerListMode()
 
     private var mCurrentPosition = 0
+
 
     fun updatePlayList(cursor: Cursor?) {
         if (cursor != null && cursor.moveToFirst()) {
@@ -30,10 +29,6 @@ class PlayList {
         mCurrentPosition = mPlayList.indexOf(post)
     }
 
-    fun moveToNext() {
-        mCurrentPosition = if (mCurrentPosition == mPlayList.size - 1) 0 else mCurrentPosition + 1
-    }
-
     fun getCurrentPost(): BlogPost? {
         if (isEmpty()) {
             return null
@@ -48,9 +43,23 @@ class PlayList {
         mPlayList.clear()
     }
 
-    fun moveToPrevious() {
-        if (mCurrentPosition > 0) {
-            mCurrentPosition -= 1
+    fun moveToNext() {
+        mCurrentPosition = when (mPlayMode.getCurrentMode()) {
+            PlayerListMode.LIST -> if (mCurrentPosition == mPlayList.size - 1) 0 else mCurrentPosition + 1
+            PlayerListMode.SHUFFLE -> Random().nextInt(mPlayList.size)
+            else -> mCurrentPosition
         }
+    }
+
+    fun moveToPrevious() {
+        mCurrentPosition = when (mPlayMode.getCurrentMode()) {
+            PlayerListMode.LIST -> Math.max(0, mCurrentPosition - 1)
+            PlayerListMode.SHUFFLE -> Random().nextInt(mPlayList.size)
+            else -> mCurrentPosition
+        }
+    }
+
+    fun nextPlayMode(): Int {
+        return mPlayMode.nextMode()
     }
 }

@@ -84,8 +84,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         mPlayer!!.seekTo(progress)
     }
 
-    override fun setPlayMode(playMode: PlayMode) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun nextPlayMode() : Int {
+        return mPlayer!!.nextPlayMode()
     }
 
     override fun registerCallback(callback: IPlayback.Callback) {
@@ -103,18 +103,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     override fun releasePlayer() {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-//    override fun onSwitchLast(last: BlogPost?) {
-//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
-//
-//    override fun onSwitchNext(next: BlogPost) {
-//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
-//
-//    override fun onComplete(next: BlogPost?) {
-//        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
 

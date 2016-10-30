@@ -31,8 +31,18 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         button_play_toggle_top.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
         button_play_last.setOnClickListener { handlePlayLast() }
+        button_play_mode_toggle.setOnClickListener { handlePlayModeClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    private fun handlePlayModeClick() {
+        if (mPlaybackService == null) return
+        button_play_mode_toggle.setImageResource(mPlaybackService!!.nextPlayMode())
     }
 
     private fun handlePlayLast() {
@@ -42,7 +52,6 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun handleNextClick() {
         if (mPlaybackService == null) return
-
         mPlaybackService!!.playNext()
     }
 
