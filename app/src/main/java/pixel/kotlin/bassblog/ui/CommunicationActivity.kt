@@ -23,9 +23,6 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
     override fun onDestroy() {
         super.onDestroy()
         unbindService(this)
-
-//        // TODO if not play
-//        stopService(Intent(applicationContext, PlaybackService::class.java))
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {

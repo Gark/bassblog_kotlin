@@ -44,8 +44,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.play()
     }
 
-    override fun play(postId: String) {
-        mPlayer!!.play(postId)
+    override fun play(post: BlogPost) {
+        mPlayer!!.play(post)
     }
 
     override fun playLast() {

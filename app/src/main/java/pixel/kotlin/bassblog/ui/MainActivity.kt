@@ -52,7 +52,7 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
     }
 
     override fun onPostSelected(blogPost: BlogPost) {
-        mPlaybackService?.play(blogPost.postId)
+        mPlaybackService?.play(blogPost)
     }
 
     inner class MyCallback : BottomSheetBehavior.BottomSheetCallback() {

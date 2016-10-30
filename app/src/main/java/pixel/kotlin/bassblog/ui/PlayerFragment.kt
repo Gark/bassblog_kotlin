@@ -66,7 +66,6 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun scheduleUpdater() {
-//        Log.d("PlayerFragment", "TICK")
         mHandler.postDelayed(runnable, INTERVAL)
         if (mPlaybackService == null) return
 

@@ -34,6 +34,19 @@ public class BlogPost implements Parcelable {
         mFavourite = in.readByte() != 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlogPost blogPost = (BlogPost) o;
+        return mPostId.equals(blogPost.mPostId);
+    }
+
+    @Override
+    public int hashCode() {
+        return mPostId.hashCode();
+    }
+
     public static final Creator<BlogPost> CREATOR = new Creator<BlogPost>() {
         @Override
         public BlogPost createFromParcel(Parcel in) {
@@ -88,4 +101,6 @@ public class BlogPost implements Parcelable {
         dest.writeString(mTrack);
         dest.writeByte((byte) (mFavourite ? 1 : 0));
     }
+
+
 }

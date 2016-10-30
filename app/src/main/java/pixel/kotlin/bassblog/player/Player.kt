@@ -90,15 +90,15 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     }
 
-    override fun play(postId: String) {
-        val blogPost = mPlayList.getCurrentPost()
-        if (postId == blogPost?.postId) {
-            if (isPaused) {
+    override fun play(post: BlogPost) {
+        val currentPost = mPlayList.getCurrentPost()
+        if (post == currentPost) {
+            if (!isPaused) {
                 play()
             }
         } else {
             stop()
-            mPlayList.updateCurrent(postId)
+            mPlayList.updateCurrent(post)
             notifyPlayStatusChanged(false)
             play()
         }
