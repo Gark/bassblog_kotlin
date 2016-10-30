@@ -115,6 +115,8 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
+        if (!isAdded || !isInLayout || !isVisible) return
+
         updatePlayToggle(isPlaying)
         updateSongData()
         if (isPlaying) {

@@ -21,12 +21,12 @@
         <service
             android:name=".service.PlaybackService"
             android:exported="false">
-            <!--<intent-filter>-->
-                <!--<action android:name="pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE" />-->
-                <!--<action android:name="pixel.kotlin.bassblog.ACTION.PLAY_NEXT" />-->
-                <!--<action android:name="pixel.kotlin.bassblog.ACTION.PLAY_LAST" />-->
-                <!--<action android:name="pixel.kotlin.bassblog.ACTION.STOP_SERVICE" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE" />
+                <action android:name="pixel.kotlin.bassblog.ACTION.PLAY_NEXT" />
+                <action android:name="pixel.kotlin.bassblog.ACTION.PLAY_LAST" />
+                <action android:name="pixel.kotlin.bassblog.ACTION.STOP_SERVICE" />
+            </intent-filter>
         </service>
 
     </application>
