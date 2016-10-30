@@ -17,6 +17,7 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startService(Intent(applicationContext, PlaybackService::class.java))
         bindService(Intent(applicationContext, PlaybackService::class.java), this, Context.BIND_AUTO_CREATE)
     }
 
@@ -35,18 +36,6 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
         mPlaybackService?.registerCallback(this)
         onPlayStatusChanged(mPlaybackService!!.isPlaying())
     }
-
-//    override fun onSwitchLast(last: BlogPost?) {
-//
-//    }
-//
-//    override fun onSwitchNext(next: BlogPost) {
-//
-//    }
-//
-//    override fun onComplete(next: BlogPost?) {
-//
-//    }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
 

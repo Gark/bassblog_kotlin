@@ -70,6 +70,14 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         image_view_album.pauseRotateAnimation()
     }
 
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     fun setPanelVisibility(visibility: Int) {
         top_panel.visibility = visibility
     }

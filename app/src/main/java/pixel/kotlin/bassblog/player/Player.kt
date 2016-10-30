@@ -39,24 +39,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun onCompletion(mp: MediaPlayer) {
-//        var next: Song? = null
-//        // There is only one limited play mode which is list, player should be stopped when hitting the list end
-//        if (mPlayList.getPlayMode() === PlayMode.LIST && mPlayList.getPlayingIndex() === mPlayList.getNumOfSongs() - 1) {
-//            // In the end of the list
-//            // Do nothing, just deliver the callback
-//        } else
-//            if (mPlayList.getPlayMode() === PlayMode.SINGLE) {
-//            next = mPlayList.getCurrentSong()
-//            play()
-//        } else {
-//            val hasNext = mPlayList.hasNext(true)
-//            if (hasNext) {
-//                next = mPlayList.next()
-//        play()
-//            }
-//        }
-//        notifyComplete(mPlayList.getCurrentPost())
-
         playNext()
     }
 
@@ -157,7 +139,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         mPlayer.seekTo(progress * mPlayer.duration / 100)
     }
 
-    override fun nextPlayMode() : Int {
+    override fun nextPlayMode(): Int {
         return mPlayList.nextPlayMode()
     }
 
@@ -188,22 +170,4 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             callback.onPlayStatusChanged(isPlaying)
         }
     }
-
-//    private fun notifyPlayLast(blogPost: BlogPost) {
-//        for (callback in mCallbacks) {
-//            callback.onSwitchLast(blogPost)
-//        }
-//    }
-//
-//    private fun notifyPlayNext(song: BlogPost) {
-//        for (callback in mCallbacks) {
-//            callback.onSwitchNext(song)
-//        }
-//    }
-//
-//    private fun notifyComplete(blogPost: BlogPost?) {
-//        for (callback in mCallbacks) {
-//            callback.onComplete(blogPost)
-//        }
-//    }
 }
