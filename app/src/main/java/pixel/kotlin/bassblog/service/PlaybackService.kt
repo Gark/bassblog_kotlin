@@ -16,10 +16,13 @@ import pixel.kotlin.bassblog.ui.MainActivity
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     private val ACTION_PLAY_TOGGLE = "pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE"
-    private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_NEXT"
-    private val ACTION_PLAY_NEXT = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
+    private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
+    private val ACTION_PLAY_NEXT = "pixel.kotlin.bassblog.ACTION.PLAY_NEXT"
     private val ACTION_STOP_SERVICE = "pixel.kotlin.bassblog.ACTION.STOP_SERVICE"
+
     private val NOTIFICATION_ID = 1
+
+    private var mPlayer: Player? = null
 
     inner class LocalBinder : Binder() {
         val service: PlaybackService
@@ -29,17 +32,27 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     override fun onBind(intent: Intent?): IBinder? = LocalBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        handleRemoteAction(intent?.action)
         return START_STICKY
     }
 
+    private fun handleRemoteAction(action: String?) {
+        when (action) {
+            ACTION_PLAY_LAST -> playLast()
+            ACTION_PLAY_NEXT -> playNext()
+            ACTION_STOP_SERVICE -> stopSelf()
+            ACTION_PLAY_TOGGLE -> toggle()
+        }
+    }
+
     override fun onDestroy() {
+        mPlayer?.pause()
         mPlayer?.releasePlayer()
         unregisterCallback(this)
         super.onDestroy()
     }
 
     //------------------------------------------------------------------------------------------------------------//
-    private var mPlayer: Player? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -51,8 +64,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         mPlayer?.updatePlayList(cursor)
     }
 
-    override fun play(): Boolean {
-        return mPlayer!!.play()
+    override fun toggle() {
+        mPlayer!!.toggle()
     }
 
     override fun play(post: BlogPost) {
@@ -67,9 +80,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         return mPlayer!!.playNext()
     }
 
-    override fun pause(): Boolean {
-        return mPlayer!!.pause()
-    }
 
     override fun isPlaying(): Boolean {
         return mPlayer!!.isPlaying()
@@ -107,20 +117,12 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         mPlayer?.unregisterCallback(callback)
     }
 
-    override fun removeCallbacks() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun releasePlayer() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // do nothing
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        if (isPlaying) {
-            showNotification()
-        } else {
-            stopForeground(true)
-        }
+        showNotification()
     }
 
     // Notification
@@ -136,7 +138,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         // Set the info for the views that show in the notification panel.
         val notification = NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
-//                .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(getSmallContentView())
                 .setCustomBigContentView(getBigContentView())

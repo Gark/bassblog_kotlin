@@ -4,12 +4,11 @@ import android.database.Cursor
 import pixel.kotlin.bassblog.storage.BlogPost
 
 interface IPlayback {
-    fun play(): Boolean
+    fun toggle()
     fun updatePlayList(cursor: Cursor?)
     fun play(post: BlogPost)
     fun playLast()
     fun playNext()
-    fun pause(): Boolean
     fun isPlaying(): Boolean
     fun getProgress(): Int
     fun getDuration(): Int
@@ -19,7 +18,6 @@ interface IPlayback {
     fun nextPlayMode() : Int
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)
-    fun removeCallbacks()
     fun releasePlayer()
 
     interface Callback {

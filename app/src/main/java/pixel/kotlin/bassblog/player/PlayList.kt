@@ -8,7 +8,7 @@ import java.util.*
 
 class PlayList {
     private val mPlayList = ArrayList<BlogPost>()
-    private val mPlayMode = PlayerListMode()
+    private val mPlayMode = PlayerMode()
 
     private var mCurrentPosition = 0
 
@@ -45,16 +45,16 @@ class PlayList {
 
     fun moveToNext() {
         mCurrentPosition = when (mPlayMode.getCurrentMode()) {
-            PlayerListMode.LIST -> if (mCurrentPosition == mPlayList.size - 1) 0 else mCurrentPosition + 1
-            PlayerListMode.SHUFFLE -> Random().nextInt(mPlayList.size)
+            PlayerMode.LIST -> if (mCurrentPosition == mPlayList.size - 1) 0 else mCurrentPosition + 1
+            PlayerMode.SHUFFLE -> Random().nextInt(mPlayList.size)
             else -> mCurrentPosition
         }
     }
 
     fun moveToPrevious() {
         mCurrentPosition = when (mPlayMode.getCurrentMode()) {
-            PlayerListMode.LIST -> Math.max(0, mCurrentPosition - 1)
-            PlayerListMode.SHUFFLE -> Random().nextInt(mPlayList.size)
+            PlayerMode.LIST -> Math.max(0, mCurrentPosition - 1)
+            PlayerMode.SHUFFLE -> Random().nextInt(mPlayList.size)
             else -> mCurrentPosition
         }
     }

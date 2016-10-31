@@ -35,17 +35,7 @@ open class BinderFragment : Fragment(), ServiceConnection, IPlayback.Callback {
         onPlayStatusChanged(mPlaybackService!!.isPlaying())
     }
 
-//    override fun onSwitchLast(last: BlogPost?) {
-//    }
-//
-//    override fun onSwitchNext(next: BlogPost) {
-//    }
-//
-//    override fun onComplete(next: BlogPost?) {
-//    }
-
     override fun onPlayStatusChanged(isPlaying: Boolean) {
+
     }
-
-
 }

@@ -8,7 +8,7 @@ import pixel.kotlin.bassblog.R
  * 1 - single
  * 2 - shuffle
  */
-class PlayerListMode {
+class PlayerMode {
 
     companion object {
         val LIST = 0

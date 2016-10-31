@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.play_music_fragmnet.*
 import pixel.kotlin.bassblog.R
@@ -14,7 +13,6 @@ import pixel.kotlin.bassblog.widget.CircleTransform
 import java.util.concurrent.TimeUnit
 
 class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
-
 
     private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
     private val mHandler = Handler()
@@ -101,12 +99,7 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun handleToggleClick() {
         if (mPlaybackService == null) return
-
-        if (mPlaybackService!!.isPlaying()) {
-            mPlaybackService?.pause()
-        } else {
-            mPlaybackService?.play()
-        }
+        mPlaybackService!!.toggle()
     }
 
     private fun handleClick() {
