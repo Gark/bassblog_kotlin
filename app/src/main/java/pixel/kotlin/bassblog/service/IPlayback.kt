@@ -1,7 +1,6 @@
 package pixel.kotlin.bassblog.service
 
 import android.database.Cursor
-import pixel.kotlin.bassblog.player.PlayMode
 import pixel.kotlin.bassblog.storage.BlogPost
 
 interface IPlayback {

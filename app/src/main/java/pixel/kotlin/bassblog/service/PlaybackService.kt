@@ -34,19 +34,17 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onDestroy() {
         mPlayer?.releasePlayer()
+        unregisterCallback(this)
         super.onDestroy()
     }
 
     //------------------------------------------------------------------------------------------------------------//
-
     private var mPlayer: Player? = null
 
     override fun onCreate() {
         super.onCreate()
         mPlayer = Player()
-
-//        setUpRemoteView(mContentViewSmall)
-//        setUpRemoteView(mContentViewBig)
+        registerCallback(this)
     }
 
     override fun updatePlayList(cursor: Cursor?) {
@@ -118,15 +116,19 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        showNotification()
+        if (isPlaying) {
+            showNotification()
+        } else {
+            stopForeground(true)
+        }
     }
 
     // Notification
     /**
      * Show a notification while this service is running.
      */
-    var mContentViewBig: RemoteViews? = null
-    var mContentViewSmall: RemoteViews? = null
+    private var mContentViewBig: RemoteViews? = null
+    private var mContentViewSmall: RemoteViews? = null
 
     private fun showNotification() {
         // The PendingIntent to launch our activity if the user selects this notification
@@ -134,7 +136,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         // Set the info for the views that show in the notification panel.
         val notification = NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
-                .setWhen(System.currentTimeMillis())  // the time stamp
+//                .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(getSmallContentView())
                 .setCustomBigContentView(getBigContentView())

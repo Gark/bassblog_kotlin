@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.play_music_fragmnet.*
 import pixel.kotlin.bassblog.R
@@ -115,7 +116,7 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
-        if (!isAdded || !isInLayout || !isVisible) return
+        if (activity == null) return
 
         updatePlayToggle(isPlaying)
         updateSongData()
