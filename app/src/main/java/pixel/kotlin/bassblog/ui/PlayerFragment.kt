@@ -83,13 +83,12 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun scheduleUpdater() {
         mHandler.postDelayed(runnable, INTERVAL)
-        if (mPlaybackService == null) return
+        if (mPlaybackService == null || activity == null) return
 
         val progress = mPlaybackService?.getProgress() ?: 0
         val duration = mPlaybackService?.getDuration() ?: 1
 
         text_view_duration.text = convertSecondsToHMmSs(duration)
-
         if (mPlaybackService!!.isPlaying()) {
             text_view_progress.text = convertSecondsToHMmSs(progress)
             seek_bar.progress = 100 * progress / duration

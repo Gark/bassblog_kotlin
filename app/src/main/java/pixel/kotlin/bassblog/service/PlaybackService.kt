@@ -64,50 +64,30 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         mPlayer?.updatePlayList(cursor)
     }
 
-    override fun toggle() {
-        mPlayer!!.toggle()
-    }
+    override fun toggle() = mPlayer!!.toggle()
 
-    override fun play(post: BlogPost) {
-        mPlayer!!.play(post)
-    }
+    override fun play(post: BlogPost) = mPlayer!!.play(post)
 
     override fun playLast() {
-        mPlayer!!.playLast()
+        mPlayer?.playLast()
     }
 
-    override fun playNext() {
-        return mPlayer!!.playNext()
-    }
+    override fun playNext() = mPlayer!!.playNext()
 
 
-    override fun isPlaying(): Boolean {
-        return mPlayer!!.isPlaying()
-    }
+    override fun isPlaying(): Boolean = mPlayer!!.isPlaying()
 
-    override fun getProgress(): Int {
-        return mPlayer!!.getProgress()
-    }
+    override fun getProgress(): Int = mPlayer!!.getProgress()
 
-    override fun getDuration(): Int {
-        return mPlayer!!.getDuration()
-    }
+    override fun getDuration(): Int = mPlayer!!.getDuration()
 
-    override fun getBuffered(): Int {
-        return mPlayer!!.getBuffered()
-    }
+    override fun getBuffered(): Int = mPlayer!!.getBuffered()
 
-    override fun getPlayingSong(): BlogPost? {
-        return mPlayer!!.getPlayingSong()
-    }
+    override fun getPlayingSong(): BlogPost? = mPlayer!!.getPlayingSong()
 
-    override fun seekTo(progress: Int) {
-        mPlayer!!.seekTo(progress)
-    }
+    override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
 
-    override fun nextPlayMode(): Int {
-        return mPlayer!!.nextPlayMode()
-    }
+    override fun nextPlayMode(): Int = mPlayer!!.nextPlayMode()
 
     override fun registerCallback(callback: IPlayback.Callback) {
         mPlayer?.registerCallback(callback)
@@ -121,9 +101,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         // do nothing
     }
 
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
-        showNotification()
-    }
+    override fun onPlayStatusChanged(isPlaying: Boolean) = showNotification()
 
     // Notification
     /**
@@ -187,8 +165,5 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     // PendingIntent
-    private fun getPendingIntent(action: String): PendingIntent {
-        return PendingIntent.getService(this, 0, Intent(action), 0)
-    }
-
+    private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)
 }

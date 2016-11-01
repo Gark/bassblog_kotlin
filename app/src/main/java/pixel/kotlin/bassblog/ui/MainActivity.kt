@@ -3,18 +3,19 @@ package pixel.kotlin.bassblog.ui
 import android.database.Cursor
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.Toast
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import pixel.kotlin.bassblog.PostUtils
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.network.NetworkService
 import pixel.kotlin.bassblog.storage.BlogPost
 import pixel.kotlin.bassblog.ui.PostAdapter.PostCallback
-
 
 class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Cursor>, PostCallback {
 
@@ -33,6 +34,11 @@ class MainActivity : CommunicationActivity(), LoaderManager.LoaderCallbacks<Curs
 
         supportLoaderManager.initLoader(0, Bundle.EMPTY, this)
         NetworkService.start(this)
+
+        val realm = Realm.getDefaultInstance()
+        val result = realm.where(Mix::class.java).findAll()
+        Toast.makeText(applicationContext, "" + result.size, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
