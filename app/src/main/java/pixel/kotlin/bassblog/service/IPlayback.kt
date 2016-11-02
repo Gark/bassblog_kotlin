@@ -1,12 +1,14 @@
 package pixel.kotlin.bassblog.service
 
 import android.database.Cursor
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.storage.BlogPost
 
 interface IPlayback {
     fun toggle()
     fun updatePlayList(cursor: Cursor?)
     fun play(post: BlogPost)
+//    fun play(mix: Mix)
     fun playLast()
     fun playNext()
     fun isPlaying(): Boolean
