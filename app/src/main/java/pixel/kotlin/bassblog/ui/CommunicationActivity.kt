@@ -9,7 +9,6 @@ import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
 import pixel.kotlin.bassblog.service.IPlayback
 import pixel.kotlin.bassblog.service.PlaybackService
-import pixel.kotlin.bassblog.storage.BlogPost
 
 open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlayback.Callback {
 

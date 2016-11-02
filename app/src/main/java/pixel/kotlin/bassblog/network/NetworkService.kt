@@ -1,16 +1,12 @@
 package pixel.kotlin.bassblog.network
 
 import android.app.IntentService
-import android.content.ContentProviderOperation
 import android.content.Context
 import android.content.Intent
-import android.content.OperationApplicationException
-import android.os.RemoteException
 import android.text.TextUtils
 import android.util.Log
 import io.realm.Realm
 import pixel.kotlin.bassblog.BuildConfig
-import pixel.kotlin.bassblog.storage.IoContract
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -54,7 +50,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         if (response.isSuccessful) {
             val body = response.body()
             val list = body.items
-            list?.let { applyBatch(it) }
+//            list?.let { applyBatch(it) }
             list?.let { saveRealmList(it) }
         } else {
             throw IOException("Unsuccessful result")
@@ -69,6 +65,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
                 mixId = item.id
                 title = item.title
                 image = getImageUrl(item)
+                track = getTrack(item)
                 label = TextUtils.join(", ", item.labels)
                 published = getTime(item.published)
             }
@@ -77,28 +74,28 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         realm.commitTransaction()
     }
 
-    private fun applyBatch(list: List<PostsResponse.RawPost>) {
-        val ops = ArrayList<ContentProviderOperation>()
-        for (item in list) {
-            ops.add(ContentProviderOperation.newInsert(IoContract.Post.CONTENT_URI)
-                    .withValue(IoContract.Post.COL_POST_ID, item.id)
-                    .withValue(IoContract.Post.COL_TITLE, item.title)
-                    .withValue(IoContract.Post.COL_PUBLISHED, getTime(item.published))
-                    .withValue(IoContract.Post.COL_LABEL, TextUtils.join(", ", item.labels))
-                    .withValue(IoContract.Post.COL_IMAGE, getImageUrl(item))
-                    .withValue(IoContract.Post.COL_TRACK, getTrack(item))
-                    .build())
-        }
-        try {
-            val result = contentResolver.applyBatch(IoContract.AUTHORITY, ops)
-            Log.e("NetworkService", " result " + result.size)
-        } catch (e: RemoteException) {
-            Log.e("NetworkService", "apply batch error", e)
-        } catch (e: OperationApplicationException) {
-            Log.e("NetworkService", "apply batch error", e)
-        }
-
-    }
+//    private fun applyBatch(list: List<PostsResponse.RawPost>) {
+//        val ops = ArrayList<ContentProviderOperation>()
+//        for (item in list) {
+//            ops.add(ContentProviderOperation.newInsert(IoContract.Post.CONTENT_URI)
+//                    .withValue(IoContract.Post.COL_POST_ID, item.id)
+//                    .withValue(IoContract.Post.COL_TITLE, item.title)
+//                    .withValue(IoContract.Post.COL_PUBLISHED, getTime(item.published))
+//                    .withValue(IoContract.Post.COL_LABEL, TextUtils.join(", ", item.labels))
+//                    .withValue(IoContract.Post.COL_IMAGE, getImageUrl(item))
+//                    .withValue(IoContract.Post.COL_TRACK, getTrack(item))
+//                    .build())
+//        }
+//        try {
+//            val result = contentResolver.applyBatch(IoContract.AUTHORITY, ops)
+//            Log.e("NetworkService", " result " + result.size)
+//        } catch (e: RemoteException) {
+//            Log.e("NetworkService", "apply batch error", e)
+//        } catch (e: OperationApplicationException) {
+//            Log.e("NetworkService", "apply batch error", e)
+//        }
+//
+//    }
 
     private fun getTrack(item: PostsResponse.RawPost): String? {
         var trackUrl: String? = null

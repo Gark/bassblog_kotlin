@@ -1,11 +1,11 @@
 package pixel.kotlin.bassblog.player
 
-import android.database.Cursor
 import android.media.MediaPlayer
 import android.util.Log
+import io.realm.RealmResults
+import pixel.kotlin.bassblog.BuildConfig
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.service.IPlayback
-import pixel.kotlin.bassblog.storage.BlogPost
-import pixel.kotlin.bassblog.storage.BuildConfig
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -45,14 +45,16 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             return
         }
         if (!mPlayList.isEmpty()) {
-            val blogPost = mPlayList.getCurrentPost()
-            try {
-                mPlayer.reset()
-                mPlayer.setDataSource(blogPost?.track)
-                mPlayer.prepareAsync()
-            } catch (e: IOException) {
-                if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)
-                notifyPlayStatusChanged(false)
+            val mix = mPlayList.getCurrentPost()
+            mix?.let {
+                try {
+                    mPlayer.reset()
+                    mPlayer.setDataSource(it.track)
+                    mPlayer.prepareAsync()
+                } catch (e: IOException) {
+                    if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)
+                    notifyPlayStatusChanged(false)
+                }
             }
         }
     }
@@ -72,15 +74,15 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         }
     }
 
-    override fun play(post: BlogPost) {
-        val currentPost = mPlayList.getCurrentPost()
-        if (post == currentPost) {
+    override fun play(mix: Mix) {
+        val currentMix = mPlayList.getCurrentPost()
+        if (mix == currentMix) {
             if (!isPaused) {
                 play()
             }
         } else {
             stop()
-            mPlayList.updateCurrent(post)
+            mPlayList.updateCurrent(mix)
             notifyPlayStatusChanged(false)
             play()
         }
@@ -122,11 +124,13 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun getDuration(): Int = mPlayer.duration
 
-    override fun getPlayingSong(): BlogPost? = mPlayList.getCurrentPost()
+    override fun getPlayingSong(): Mix? = mPlayList.getCurrentPost()
 
     override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
 
-    override fun updatePlayList(cursor: Cursor?) = mPlayList.updatePlayList(cursor)
+//    override fun updatePlayList(cursor: Cursor?) = mPlayList.updatePlayList(cursor)
+
+    override fun updatePlayList(list: RealmResults<Mix>?) = mPlayList.updatePlayList(list)
 
 
     override fun seekTo(progress: Int) {

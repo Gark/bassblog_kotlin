@@ -3,14 +3,14 @@ package pixel.kotlin.bassblog.service
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.database.Cursor
 import android.os.Binder
 import android.os.IBinder
 import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
+import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
-import pixel.kotlin.bassblog.storage.BlogPost
 import pixel.kotlin.bassblog.ui.MainActivity
 
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
@@ -60,13 +60,17 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         registerCallback(this)
     }
 
-    override fun updatePlayList(cursor: Cursor?) {
-        mPlayer?.updatePlayList(cursor)
+//    override fun updatePlayList(cursor: Cursor?) {
+//        mPlayer?.updatePlayList(cursor)
+//    }
+
+    override fun updatePlayList(list: RealmResults<Mix>?) {
+        mPlayer?.updatePlayList(list)
     }
 
     override fun toggle() = mPlayer!!.toggle()
 
-    override fun play(post: BlogPost) = mPlayer!!.play(post)
+    override fun play(mix: Mix) = mPlayer!!.play(mix)
 
     override fun playLast() {
         mPlayer?.playLast()
@@ -83,7 +87,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun getBuffered(): Int = mPlayer!!.getBuffered()
 
-    override fun getPlayingSong(): BlogPost? = mPlayer!!.getPlayingSong()
+    override fun getPlayingSong(): Mix? = mPlayer!!.getPlayingSong()
 
     override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
 
@@ -157,9 +161,9 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     private fun updateRemoteViews(remoteView: RemoteViews) {
-        val blogPost = mPlayer!!.getPlayingSong()
-        remoteView.setTextViewText(R.id.text_view_name, blogPost?.title)
-        remoteView.setTextViewText(R.id.text_view_artist, blogPost?.label)
+        val mix = mPlayer!!.getPlayingSong()
+        remoteView.setTextViewText(R.id.text_view_name, mix?.title)
+        remoteView.setTextViewText(R.id.text_view_artist, mix?.label)
         remoteView.setImageViewResource(R.id.image_view_play_toggle,
                 if (mPlayer!!.isPlaying()) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
     }

@@ -1,23 +1,25 @@
 package pixel.kotlin.bassblog.service
 
-import android.database.Cursor
+import io.realm.RealmResults
 import pixel.kotlin.bassblog.network.Mix
-import pixel.kotlin.bassblog.storage.BlogPost
 
 interface IPlayback {
     fun toggle()
-    fun updatePlayList(cursor: Cursor?)
-    fun play(post: BlogPost)
-//    fun play(mix: Mix)
+//    fun updatePlayList(cursor: Cursor?)
+    fun updatePlayList(list: RealmResults<Mix>?)
+    //    fun play(post: BlogPost)
+    fun play(mix: Mix)
+
     fun playLast()
+
     fun playNext()
     fun isPlaying(): Boolean
     fun getProgress(): Int
     fun getDuration(): Int
     fun getBuffered(): Int
-    fun getPlayingSong(): BlogPost?
+    fun getPlayingSong(): Mix?
     fun seekTo(progress: Int)
-    fun nextPlayMode() : Int
+    fun nextPlayMode(): Int
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)
     fun releasePlayer()
