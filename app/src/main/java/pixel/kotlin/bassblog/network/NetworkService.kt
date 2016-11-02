@@ -50,7 +50,6 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         if (response.isSuccessful) {
             val body = response.body()
             val list = body.items
-//            list?.let { applyBatch(it) }
             list?.let { saveRealmList(it) }
         } else {
             throw IOException("Unsuccessful result")
@@ -73,29 +72,6 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         }
         realm.commitTransaction()
     }
-
-//    private fun applyBatch(list: List<PostsResponse.RawPost>) {
-//        val ops = ArrayList<ContentProviderOperation>()
-//        for (item in list) {
-//            ops.add(ContentProviderOperation.newInsert(IoContract.Post.CONTENT_URI)
-//                    .withValue(IoContract.Post.COL_POST_ID, item.id)
-//                    .withValue(IoContract.Post.COL_TITLE, item.title)
-//                    .withValue(IoContract.Post.COL_PUBLISHED, getTime(item.published))
-//                    .withValue(IoContract.Post.COL_LABEL, TextUtils.join(", ", item.labels))
-//                    .withValue(IoContract.Post.COL_IMAGE, getImageUrl(item))
-//                    .withValue(IoContract.Post.COL_TRACK, getTrack(item))
-//                    .build())
-//        }
-//        try {
-//            val result = contentResolver.applyBatch(IoContract.AUTHORITY, ops)
-//            Log.e("NetworkService", " result " + result.size)
-//        } catch (e: RemoteException) {
-//            Log.e("NetworkService", "apply batch error", e)
-//        } catch (e: OperationApplicationException) {
-//            Log.e("NetworkService", "apply batch error", e)
-//        }
-//
-//    }
 
     private fun getTrack(item: PostsResponse.RawPost): String? {
         var trackUrl: String? = null
@@ -138,6 +114,3 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         }
     }
 }
-/**
- * Creates an IntentService.  Invoked by your subclass's constructor.
- */

@@ -22,6 +22,10 @@ internal class MixAdapter constructor(context: Context, val callback: MixSelectC
         fun onMixSelected(mix: Mix?)
     }
 
+    init {
+        setHasStableIds(true)
+    }
+
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val mixList = ArrayList<Mix>()
 
@@ -60,5 +64,9 @@ internal class MixAdapter constructor(context: Context, val callback: MixSelectC
             mixList.addAll(it)
         }
         notifyDataSetChanged()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return mixList[position].mixId
     }
 }

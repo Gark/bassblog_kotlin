@@ -5,7 +5,7 @@ internal class PostsResponse {
     val items: List<RawPost>? = null
 
     inner class RawPost {
-        var id: String? = null
+        var id: Long = 0L
         var title: String? = null
         var content: String? = null
         var published: String? = null

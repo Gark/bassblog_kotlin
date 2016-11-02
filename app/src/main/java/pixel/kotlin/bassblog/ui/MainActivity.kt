@@ -23,8 +23,9 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback {
         setContentView(R.layout.activity_main)
 
         mMixAdapter = MixAdapter(applicationContext, this)
-        all_posts_recycler.layoutManager = LinearLayoutManager(applicationContext)
-        all_posts_recycler.adapter = mMixAdapter
+        all_mixes_recycler.layoutManager = LinearLayoutManager(applicationContext)
+        all_mixes_recycler.adapter = mMixAdapter
+        all_mixes_recycler.addOnScrollListener(MixScrollListener())
 
         initBottomSheet()
         NetworkService.start(this)
@@ -49,30 +50,10 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback {
         mMixAdapter?.updateMixList(mMixResults)
         mPlaybackService?.updatePlayList(mMixResults)
 
-                // TODO
+        // TODO
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
         fragment.updateSongData()
     }
-
-//    override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
-//        mAdapter?.swapCursor(data)
-//        mPlaybackService?.updatePlayList(data)
-//        // TODO
-//        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
-//        fragment.updateSongData()
-//    }
-//
-//    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-//        return PostUtils.createLoader(this)
-//    }
-//
-//    override fun onLoaderReset(loader: Loader<Cursor>?) {
-//        mAdapter?.swapCursor(null)
-//    }
-//
-//    override fun onPostSelected(blogPost: BlogPost) {
-//        mPlaybackService?.play(blogPost)
-//    }
 
     override fun onMixSelected(mix: Mix?) {
         mix?.let { mPlaybackService?.play(it) }
