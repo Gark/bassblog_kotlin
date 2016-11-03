@@ -19,6 +19,7 @@ internal interface BassBlogApi {
             @Query("pageToken") pageToken: String?,
             @Query("fields") items: String,
             @Query("key") key: String,
+            @Query("startDate") startDate: String?,
             @Query("maxResults") maxResults: Int): Call<PostsResponse>
 
     companion object {

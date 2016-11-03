@@ -16,7 +16,7 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 
 
-internal class MixAdapter constructor(context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<MixAdapter.MixHolder>() {
+internal class MixAdapter (context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<MixAdapter.MixHolder>() {
 
     interface MixSelectCallback {
         fun onMixSelected(mix: Mix?)

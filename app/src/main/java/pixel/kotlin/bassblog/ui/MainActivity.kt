@@ -4,51 +4,44 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import io.realm.Realm
 import io.realm.RealmResults
-import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_main.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
-import pixel.kotlin.bassblog.network.NetworkService
+import pixel.kotlin.bassblog.network.Presenter
+import pixel.kotlin.bassblog.network.Presenter.MixCallback
 
-class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback {
+class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixCallback {
 
     private var mMixAdapter: MixAdapter? = null
     private var mBehavior: BottomSheetBehavior<View>? = null
-    private var mMixResults: RealmResults<Mix>? = null
+    private var mPresenter: Presenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        mPresenter = Presenter(applicationContext, this)
         mMixAdapter = MixAdapter(applicationContext, this)
         all_mixes_recycler.layoutManager = LinearLayoutManager(applicationContext)
         all_mixes_recycler.adapter = mMixAdapter
         all_mixes_recycler.addOnScrollListener(MixScrollListener())
 
         initBottomSheet()
-        NetworkService.start(this)
     }
 
     override fun onStart() {
         super.onStart()
-        requestDataAsync()
+        mPresenter?.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        mMixResults?.removeChangeListeners()
+        mPresenter?.onStop()
     }
 
-    private fun requestDataAsync() {
-        mMixResults = Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
-        mMixResults?.addChangeListener { handleChanges() }
-    }
-
-    private fun handleChanges() {
-        mMixAdapter?.updateMixList(mMixResults)
-        mPlaybackService?.updatePlayList(mMixResults)
+    override fun onDataChanged(list: RealmResults<Mix>?) {
+        mMixAdapter?.updateMixList(list)
+        mPlaybackService?.updatePlayList(list)
 
         // TODO
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment

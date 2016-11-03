@@ -17,6 +17,7 @@ import java.util.regex.Pattern
 
 open class NetworkService : IntentService(NetworkService::class.java.name) {
 
+
     private val pattern = Pattern.compile("http(.*?)mp3")
     private var mApi: BassBlogApi? = null
 
@@ -36,16 +37,27 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
     }
 
     override fun onHandleIntent(intent: Intent?) {
+        if (intent == null) return
         try {
-            handleRequest()
+            var startTime: String? = null
+            val startTimeLong = intent.getLongExtra(START_TIME, DEFAULT_TIME)
+            val count = intent.getIntExtra(COUNT, DEFAULT_COUNT)
+
+            if (startTimeLong != DEFAULT_TIME) {
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = startTimeLong
+                startTime = FORMATTER.format(calendar.time)
+            }
+
+            handleRequest(count, startTime)
         } catch (e: IOException) {
             if (BuildConfig.DEBUG) Log.e(TAG, "network request error", e)
         }
     }
 
     @Throws(IOException::class)
-    private fun handleRequest() {
-        val call = mApi!!.posts(BuildConfig.BLOG_ID, true, true, null, BassBlogApi.ITEMS, BuildConfig.API_KEY, MAX_RESULT)
+    private fun handleRequest(count: Int, startTime: String?) {
+        val call = mApi!!.posts(BuildConfig.BLOG_ID, true, true, null, BassBlogApi.ITEMS, BuildConfig.API_KEY, startTime, count)
         val response = call.execute()
         if (response.isSuccessful) {
             val body = response.body()
@@ -100,16 +112,22 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
     }
 
     companion object {
+        protected val DEFAULT_TIME = 0L
         protected val FORMATTER = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        protected val START_TIME = "START_TIME"
+        protected val COUNT = "COUNT"
 
         init {
             FORMATTER.timeZone = TimeZone.getTimeZone("UTC")
         }
 
+        private val DEFAULT_COUNT = 5
         private val TAG = NetworkService::class.java.name
-        private val MAX_RESULT = 5
-        fun start(context: Context) {
+
+        fun start(context: Context, startTime: Long? = null, count: Int = DEFAULT_COUNT) {
             val intent = Intent(context, NetworkService::class.java)
+            intent.putExtra(START_TIME, startTime)
+            intent.putExtra(COUNT, count)
             context.startService(intent)
         }
     }
