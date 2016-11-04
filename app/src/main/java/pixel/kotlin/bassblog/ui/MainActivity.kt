@@ -3,6 +3,7 @@ package pixel.kotlin.bassblog.ui
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +17,7 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixC
     private var mMixAdapter: MixAdapter? = null
     private var mBehavior: BottomSheetBehavior<View>? = null
     private var mPresenter: Presenter? = null
+    private var mLayoutManager : LinearLayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,16 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixC
         all_mixes_recycler.addOnScrollListener(MixScrollListener())
 
         initBottomSheet()
+    }
+
+    inner class MixScrollListener : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            val linearManager = recyclerView?.layoutManager as LinearLayoutManager
+
+            val lastVisible = linearManager.findLastVisibleItemPosition()
+            val totalCount = linearManager.itemCount
+            mPresenter?.loadMoreIfNeed(lastVisible, totalCount)
+        }
     }
 
     override fun onStart() {

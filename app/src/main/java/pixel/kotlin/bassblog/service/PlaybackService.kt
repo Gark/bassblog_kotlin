@@ -60,10 +60,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         registerCallback(this)
     }
 
-//    override fun updatePlayList(cursor: Cursor?) {
-//        mPlayer?.updatePlayList(cursor)
-//    }
-
     override fun updatePlayList(list: RealmResults<Mix>?) {
         mPlayer?.updatePlayList(list)
     }

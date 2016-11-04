@@ -121,7 +121,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
             FORMATTER.timeZone = TimeZone.getTimeZone("UTC")
         }
 
-        private val DEFAULT_COUNT = 5
+        private val DEFAULT_COUNT = 20
         private val TAG = NetworkService::class.java.name
 
         fun start(context: Context, startTime: Long? = null, count: Int = DEFAULT_COUNT) {

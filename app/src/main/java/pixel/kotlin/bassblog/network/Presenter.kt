@@ -2,6 +2,7 @@ package pixel.kotlin.bassblog.network
 
 
 import android.content.Context
+import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
@@ -38,6 +39,12 @@ class Presenter(val context: Context, val callback: MixCallback) {
                 // TODO instead of 100 use nextPageToken
                 NetworkService.start(context, mMixResults.first().published, 100)
             }
+        }
+    }
+
+    fun loadMoreIfNeed(lastVisible: Int, totalCount: Int) {
+        if (totalCount - lastVisible <= 3) {
+            Toast.makeText(context, "bottom", Toast.LENGTH_SHORT).show()
         }
     }
 }
