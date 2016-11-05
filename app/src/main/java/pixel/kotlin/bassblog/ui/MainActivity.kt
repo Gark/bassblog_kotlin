@@ -82,11 +82,11 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixC
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             // TODO
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
-            when (newState) {
-                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
-                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
-            }
+//            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
+//            when (newState) {
+//                BottomSheetBehavior.STATE_EXPANDED -> fragment.setPanelVisibility(View.INVISIBLE)
+//                BottomSheetBehavior.STATE_COLLAPSED -> fragment.setPanelVisibility(View.VISIBLE)
+//            }
         }
     }
 

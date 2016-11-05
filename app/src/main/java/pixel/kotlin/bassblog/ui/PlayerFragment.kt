@@ -25,18 +25,12 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        top_panel.setOnClickListener { handleClick() }
         button_play_toggle.setOnClickListener { handleToggleClick() }
-        button_play_toggle_top.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
         button_play_last.setOnClickListener { handlePlayLast() }
         button_play_mode_toggle.setOnClickListener { handlePlayModeClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     private fun handlePlayModeClick() {
@@ -69,18 +63,6 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
         image_view_album.pauseRotateAnimation()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    fun setPanelVisibility(visibility: Int) {
-        top_panel.visibility = visibility
-    }
-
     private fun scheduleUpdater() {
         mHandler.postDelayed(runnable, INTERVAL)
         if (mPlaybackService == null || activity == null) return
@@ -99,12 +81,6 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
     private fun handleToggleClick() {
         if (mPlaybackService == null) return
         mPlaybackService!!.toggle()
-    }
-
-    private fun handleClick() {
-        if (activity is MainActivity) {
-            (activity as MainActivity).toggle()
-        }
     }
 
     override fun onPlayStatusChanged(isPlaying: Boolean) {
@@ -126,7 +102,6 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
 
         val song = mPlaybackService!!.getPlayingSong()
         text_view_name.text = song?.title
-        text_view_name_top.text = song?.title
         text_view_artist.text = song?.label
 
         Picasso.with(activity)
@@ -137,15 +112,10 @@ class PlayerFragment : BinderFragment(), SeekBar.OnSeekBarChangeListener {
                 .error(R.drawable.default_record_album)
                 .transform(CIRCLE_TRANSFORMATION)
                 .into(image_view_album)
-
-        Picasso.with(activity)
-                .load(song?.image)
-                .into(image_view_album_top)
     }
 
     fun updatePlayToggle(play: Boolean) {
         button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
-        button_play_toggle_top.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
     }
 
     fun convertSecondsToHMmSs(seconds: Int): String {

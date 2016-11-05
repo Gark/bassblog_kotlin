@@ -4,4 +4,7 @@
     <string name="favourites">Favourites</string>
     <string name="all_posts">All posts</string>
     <string name="search">Search</string>
+    <string name="now_playing">Now playing</string>
+
+    <string name="mix_text_transition" translatable="false">mix_text_transition</string>
 </resources>
