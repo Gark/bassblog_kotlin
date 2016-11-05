@@ -45,7 +45,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
             return
         }
         if (!mPlayList.isEmpty()) {
-            val mix = mPlayList.getCurrentPost()
+            val mix = mPlayList.getCurrentMix()
             mix?.let {
                 try {
                     mPlayer.reset()
@@ -75,7 +75,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     override fun play(mix: Mix) {
-        val currentMix = mPlayList.getCurrentPost()
+        val currentMix = mPlayList.getCurrentMix()
         if (mix == currentMix) {
             if (!isPaused) {
                 play()
@@ -124,11 +124,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun getDuration(): Int = mPlayer.duration
 
-    override fun getPlayingSong(): Mix? = mPlayList.getCurrentPost()
+    override fun getPlayingSong(): Mix? = mPlayList.getCurrentMix()
 
     override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
-
-//    override fun updatePlayList(cursor: Cursor?) = mPlayList.updatePlayList(cursor)
 
     override fun updatePlayList(list: RealmResults<Mix>?) = mPlayList.updatePlayList(list)
 

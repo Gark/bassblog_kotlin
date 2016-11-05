@@ -11,11 +11,11 @@ class BassBlogApplication : Application() {
         super.onCreate()
         Realm.init(applicationContext)
 
-        // TODO clear data on conflict.
-        val realmConfiguration = RealmConfiguration.Builder()
-                .name(Realm.DEFAULT_REALM_NAME)
-                .deleteRealmIfMigrationNeeded()
-                .build()
-        Realm.getInstance(realmConfiguration)
+//        // TODO clear data on conflict.
+//        val realmConfiguration = RealmConfiguration.Builder()
+//                .name(Realm.DEFAULT_REALM_NAME)
+//                .deleteRealmIfMigrationNeeded()
+//                .build()
+//        Realm.getInstance(realmConfiguration)
     }
 }

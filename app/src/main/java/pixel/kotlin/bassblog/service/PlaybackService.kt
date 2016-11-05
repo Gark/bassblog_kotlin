@@ -40,9 +40,14 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         when (action) {
             ACTION_PLAY_LAST -> playLast()
             ACTION_PLAY_NEXT -> playNext()
-            ACTION_STOP_SERVICE -> stopSelf()
+            ACTION_STOP_SERVICE -> stopThePlanet()
             ACTION_PLAY_TOGGLE -> toggle()
         }
+    }
+
+    private fun stopThePlanet() {
+        mPlayer?.pause()
+        System.exit(1)
     }
 
     override fun onDestroy() {

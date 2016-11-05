@@ -1,6 +1,8 @@
 package pixel.kotlin.bassblog.ui
 
+import android.content.ComponentName
 import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,7 +19,6 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixC
     private var mMixAdapter: MixAdapter? = null
     private var mBehavior: BottomSheetBehavior<View>? = null
     private var mPresenter: Presenter? = null
-    private var mLayoutManager : LinearLayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +52,19 @@ class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixC
         mPresenter?.onStop()
     }
 
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        super.onServiceConnected(name, service)
+        mPresenter?.onStart()
+        updateCurrentMixData()
+    }
+
     override fun onDataChanged(list: RealmResults<Mix>?) {
         mMixAdapter?.updateMixList(list)
         mPlaybackService?.updatePlayList(list)
+        updateCurrentMixData()
+    }
 
+    private fun updateCurrentMixData() {
         // TODO
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_ooo) as PlayerFragment
         fragment.updateSongData()

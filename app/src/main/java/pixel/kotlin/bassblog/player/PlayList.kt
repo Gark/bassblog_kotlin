@@ -18,28 +18,12 @@ class PlayList {
         }
     }
 
-//    fun updatePlayList(cursor: Cursor?) {
-//        if (cursor != null && cursor.moveToFirst()) {
-//            if (mPlayList.size == cursor.count) {
-//                return
-//            }
-//            do {
-//                val post = PostUtils.getBlogPost(cursor)
-//                mPlayList.add(post)
-//            } while (cursor.moveToNext())
-//        }
-//    }
-//
-//    fun updateCurrent(post: BlogPost) {
-//        mCurrentPosition = mPlayList.indexOf(post)
-//    }
-
     fun updateCurrent(mix: Mix) {
         mCurrentPosition = mPlayList.indexOf(mix)
     }
 
     // TODO optimise it.
-    fun getCurrentPost(): Mix? {
+    fun getCurrentMix(): Mix? {
         if (isEmpty()) {
             return null
         } else {

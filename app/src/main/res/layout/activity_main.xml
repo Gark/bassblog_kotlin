@@ -26,6 +26,7 @@
             android:id="@+id/all_mixes_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="vertical"
             tools:context=".ui.MainActivity"
             tools:listitem="@layout/item_post_list" />
 
@@ -36,7 +37,7 @@
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         app:behavior_peekHeight="@dimen/bottom_margin"
         app:elevation="4dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">

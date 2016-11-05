@@ -5,15 +5,18 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 
+    <color name="text_color">#565656</color>
+
     <!-- Theme - Dark Blue -->
     <color name="background">#3C5F78</color>
     <color name="mp.theme.dark_blue.gradientColor">#507E9F</color>
     <color name="colorControlActivated">#7AFFFFFF</color>
     <color name="colorControlHighlight">#7AFFFFFF</color>
 
-    <color name="colorPrimary">#3C5F78</color>
-    <color name="colorPrimaryDark">#3C5F78</color>
+    <color name="colorPrimary">#f24f4f</color>
+    <color name="colorPrimaryDark">#f24f4f</color>
     <color name="colorAccent">#DDF9FF</color>
+
     <color name="textColorPrimary">#DDF9FF</color>
     <color name="textColorSecondary">#3C5F78</color>
 
