@@ -16,22 +16,29 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 
 
-internal class MixAdapter (context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<MixAdapter.MixHolder>() {
+internal class MixAdapter(context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<MixAdapter.MixHolder>() {
 
     interface MixSelectCallback {
         fun onMixSelected(mix: Mix?)
     }
 
+    val picasso: Picasso
+
     init {
         setHasStableIds(true)
+        picasso = Picasso.with(context)
     }
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val mixList = ArrayList<Mix>()
 
+    override fun onViewRecycled(holder: MixHolder?) {
+        holder?.onViewRecycled()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MixHolder(mInflater.inflate(R.layout.item_post_list, parent, false))
 
-    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mixList[position])
+    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mixList[position], position)
 
     override fun getItemCount(): Int = mixList.size
 
@@ -49,11 +56,15 @@ internal class MixAdapter (context: Context, val callback: MixSelectCallback) : 
             callback.onMixSelected(mMix)
         }
 
-        fun displayData(mix: Mix) {
+        fun displayData(mix: Mix, position: Int) {
             mMix = mix
-            mPostTitle.text = mix.title
+            mPostTitle.text = "$position ${mix.title}"
             mPostLabel.text = mix.label
             Picasso.with(itemView.context).load(mix.image).into(mPostImage)
+        }
+
+        fun onViewRecycled() {
+            picasso.cancelRequest(mPostImage)
         }
     }
 

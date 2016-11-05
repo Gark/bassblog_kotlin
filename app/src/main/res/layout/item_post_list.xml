@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:singleLine="true"
+            android:maxLines="2"
             android:textColor="@color/text_color"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -41,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textColor="@color/text_color"
             android:textSize="12sp"
             tools:text="post labels" />

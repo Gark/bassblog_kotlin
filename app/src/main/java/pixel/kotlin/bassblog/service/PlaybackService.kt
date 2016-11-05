@@ -7,6 +7,7 @@ import android.os.Binder
 import android.os.IBinder
 import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
+import com.squareup.picasso.Picasso
 import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
@@ -33,7 +34,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         handleRemoteAction(intent?.action)
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     private fun handleRemoteAction(action: String?) {
@@ -119,14 +120,27 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         // The PendingIntent to launch our activity if the user selects this notification
         val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), 0)
         // Set the info for the views that show in the notification panel.
+
+        val small = getSmallContentView()
+        val big = getBigContentView()
         val notification = NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .setCustomContentView(getSmallContentView())
-                .setCustomBigContentView(getBigContentView())
+                .setCustomContentView(small)
+                .setCustomBigContentView(big)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOngoing(true)
                 .build()
+
+        val mix = mPlayer!!.getPlayingSong()
+
+        Picasso.with(applicationContext)
+                .load(mix?.image)
+                .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
+
+        Picasso.with(applicationContext)
+                .load(mix?.image)
+                .into(big, R.id.image_view_album, NOTIFICATION_ID, notification)
 
         // Send the notification.
         startForeground(NOTIFICATION_ID, notification)
@@ -169,6 +183,5 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
                 if (mPlayer!!.isPlaying()) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
     }
 
-    // PendingIntent
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)
 }

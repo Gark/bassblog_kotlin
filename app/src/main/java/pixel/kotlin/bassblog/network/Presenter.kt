@@ -47,7 +47,7 @@ class Presenter(val context: Context, val callback: MixCallback) {
                 NetworkService.start(context, mReceiver)
             } else {
                 // load from published to now.
-                NetworkService.start(context, mReceiver, mMixResults.first().published, 200)
+                NetworkService.start(context, mReceiver, mMixResults.first().published, null, 200)
             }
         }
     }

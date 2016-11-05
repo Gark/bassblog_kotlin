@@ -5,16 +5,8 @@
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="@color/white"
+    android:padding="2dp"
     tools:ignore="RtlHardcoded">
-
-    <ImageView
-        android:id="@+id/image_view_album"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
 
     <FrameLayout
         android:id="@+id/button_close"
@@ -40,15 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/image_view_album"
         android:layout_toLeftOf="@+id/button_close"
         android:layout_toRightOf="@+id/image_view_album"
         android:layout_toStartOf="@+id/button_close"
-        android:singleLine="true"
+        android:maxLines="2"
+        android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="16sp"
         tools:text="Saycet" />
@@ -61,6 +50,8 @@
         android:layout_alignStart="@+id/text_view_name"
         android:layout_below="@id/text_view_name"
         android:layout_marginBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:singleLine="true"
         android:textColor="#AB000000"
         android:textSize="14sp"
@@ -132,7 +123,6 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/button_play_toggle"
             android:layout_toRightOf="@+id/button_play_toggle"
-
             android:background="@drawable/selector_remote_views_action_background"
             android:clickable="true">
 
@@ -141,7 +131,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 app:srcCompat="@drawable/ic_remote_view_play_next" />
         </FrameLayout>
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image_view_album"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
 </RelativeLayout>
