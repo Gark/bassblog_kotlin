@@ -54,6 +54,9 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
                 } catch (e: IOException) {
                     if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)
                     notifyPlayStatusChanged(false)
+                } catch (ex: IllegalStateException) {
+                    if (BuildConfig.DEBUG) Log.e(TAG, "play: ", ex)
+                    notifyPlayStatusChanged(false)
                 }
             }
         }
@@ -83,7 +86,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         } else {
             stop()
             mPlayList.updateCurrent(mix)
-//            notifyPlayStatusChanged(false)
             play()
         }
     }
