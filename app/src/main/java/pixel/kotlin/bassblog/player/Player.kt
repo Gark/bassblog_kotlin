@@ -83,7 +83,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         } else {
             stop()
             mPlayList.updateCurrent(mix)
-            notifyPlayStatusChanged(false)
+//            notifyPlayStatusChanged(false)
             play()
         }
     }

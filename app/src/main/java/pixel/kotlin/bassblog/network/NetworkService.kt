@@ -86,6 +86,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
     private fun saveRealmList(list: List<PostsResponse.RawPost>) {
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
+        val mixList = ArrayList<Mix>()
         for (item in list) {
             val mix = Mix().apply {
                 mixId = item.id
@@ -95,8 +96,9 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
                 label = TextUtils.join(", ", item.labels)
                 published = getTime(item.published)
             }
-            realm.copyToRealmOrUpdate(mix)
+            mixList.add(mix)
         }
+        realm.copyToRealmOrUpdate(mixList)
         realm.commitTransaction()
     }
 

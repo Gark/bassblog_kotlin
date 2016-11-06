@@ -8,10 +8,11 @@ import android.os.Handler
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import com.squareup.picasso.Picasso
+import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_fragmnet.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.widget.CircleTransform
 import java.util.concurrent.TimeUnit
 
@@ -26,8 +27,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         fun start(activity: Activity, view: View, text: String) {
             val intent = Intent(activity, MusicPlayerActivity::class.java)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, text)
-//            activity.startActivity(intent, options.toBundle())
-            activity.startActivity(intent)
+            activity.startActivity(intent, options.toBundle())
         }
     }
 
@@ -45,7 +45,18 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     }
 
     private fun handleFavouriteClick() {
-        Toast.makeText(applicationContext, "Favourite", Toast.LENGTH_SHORT).show()
+        mPlaybackService?.let {
+            val mix = it.getPlayingSong()
+            mix?.let {
+
+                val realm = Realm.getDefaultInstance()
+                realm.beginTransaction()
+                mix.favourite = !mix.favourite;
+                realm.copyToRealmOrUpdate(mix)
+                realm.commitTransaction()
+                updateFavouriteButton(mix.favourite)
+            }
+        }
     }
 
     private fun handlePlayModeClick() {
@@ -110,15 +121,25 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         }
     }
 
+    private fun updateFavouriteButton(favourite: Boolean) {
+        if (favourite) {
+            button_favorite_toggle.setImageResource(R.drawable.ic_favorite_yes)
+        } else {
+            button_favorite_toggle.setImageResource(R.drawable.ic_favorite_no)
+        }
+    }
+
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val song = mPlaybackService!!.getPlayingSong()
-        text_view_name.text = song?.title
-        text_view_artist.text = song?.label
+        val mix = mPlaybackService!!.getPlayingSong()
+        text_view_name.text = mix?.title
+        text_view_artist.text = mix?.label
+        //button_favorite_toggle
+        updateFavouriteButton(mix?.favourite ?: true)
 
         Picasso.with(applicationContext)
-                .load(song?.image)
+                .load(mix?.image)
                 .resizeDimen(R.dimen.circle_image_size, R.dimen.circle_image_size)
                 .centerCrop()
                 .placeholder(R.drawable.default_record_album)
@@ -126,6 +147,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
                 .transform(CIRCLE_TRANSFORMATION)
                 .into(image_view_album)
     }
+
 
     fun updatePlayToggle(play: Boolean) {
         button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)

@@ -12,7 +12,7 @@ import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
-import pixel.kotlin.bassblog.ui.MainActivity
+import pixel.kotlin.bassblog.ui.PagerActivity
 
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
@@ -118,7 +118,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     private fun showNotification() {
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, PagerActivity::class.java), 0)
         // Set the info for the views that show in the notification panel.
 
         val small = getSmallContentView()

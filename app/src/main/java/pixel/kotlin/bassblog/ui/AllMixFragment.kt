@@ -29,7 +29,7 @@ class AllMixFragment : BinderFragment(), MixAdapter.MixSelectCallback, Presenter
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.all_mix, container, false)
+        return inflater?.inflate(R.layout.all_mix, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -83,6 +83,8 @@ class AllMixFragment : BinderFragment(), MixAdapter.MixSelectCallback, Presenter
     }
 
     override fun onMixSelected(mix: Mix?) {
-        mix?.let { mPlaybackService?.play(it) }
+        mix?.let {
+            mPlaybackService?.play(it)
+        }
     }
 }

@@ -22,7 +22,7 @@ class Presenter(val context: Context, val callback: MixCallback) {
     private var mLoadingState = NetworkService.IDLE
 
     init {
-        mMixResults = Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
+        mMixResults = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
         mMixResults.addChangeListener { handleChanges() }
     }
 
