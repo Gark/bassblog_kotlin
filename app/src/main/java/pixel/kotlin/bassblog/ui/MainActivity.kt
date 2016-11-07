@@ -47,9 +47,9 @@
 //        mPresenter?.onStart()
 //    }
 //
-//    override fun onStop() {
-//        super.onStop()
-//        mPresenter?.onStop()
+//    override fun onFragmentDestroyed() {
+//        super.onFragmentDestroyed()
+//        mPresenter?.onFragmentDestroyed()
 //    }
 //
 //    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {

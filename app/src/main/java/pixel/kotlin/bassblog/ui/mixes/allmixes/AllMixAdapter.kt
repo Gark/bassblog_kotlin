@@ -35,7 +35,7 @@
 //        mAllMix.addChangeListener { handleChanges() }
 //    }
 //
-//    fun onStop() {
+//    fun onFragmentDestroyed() {
 //        mAllMix.removeChangeListeners()
 //    }
 //

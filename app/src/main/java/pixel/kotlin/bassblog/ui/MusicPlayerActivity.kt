@@ -42,6 +42,8 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
+
+
     }
 
     private fun handleFavouriteClick() {
@@ -131,6 +133,8 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
     fun updateSongData() {
         if (mPlaybackService == null) return
+
+        button_play_mode_toggle.setImageResource(mPlaybackService!!.getPlayMode())
 
         val mix = mPlaybackService!!.getPlayingSong()
         text_view_name.text = mix?.title

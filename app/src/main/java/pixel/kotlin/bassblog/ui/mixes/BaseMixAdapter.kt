@@ -33,7 +33,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     abstract fun getLayout(): Int
 
-    fun onStop() {
+    fun onFragmentDestroyed() {
         mAllMix.removeChangeListeners()
     }
 
@@ -67,7 +67,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, position: Int) {
             mMix = mix
-            mPostTitle.text = "$position ${mix.title}"
+//            mPostTitle.text = "$position ${mix.title}"
+            mPostTitle.text = mix.title
             mPostLabel.text = mix.label
             Picasso.with(itemView.context).load(mix.image).into(mPostImage)
         }

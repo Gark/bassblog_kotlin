@@ -30,4 +30,8 @@ class PlayerMode {
     fun getCurrentMode(): Int {
         return mIndex % ARRAY_MODE.size
     }
+
+    fun getCurrentModeResource(): Int {
+        return ARRAY_MODE[mIndex % ARRAY_MODE.size]
+    }
 }

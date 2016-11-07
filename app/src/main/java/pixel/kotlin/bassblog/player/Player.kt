@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
+
+
     private val mCallbacks = ArrayList<IPlayback.Callback>()
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()
@@ -117,6 +119,8 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun getPlayingSong(): Mix? = mPlayList.getCurrentMix()
 
     override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
+
+    override fun getPlayMode(): Int = mPlayList.getCurrentPlayMode()
 
     override fun seekTo(progress: Int) {
         if (mPlayList.isEmpty()) return

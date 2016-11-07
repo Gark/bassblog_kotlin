@@ -12,7 +12,7 @@ import pixel.kotlin.bassblog.ui.BinderFragment
 
 abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback {
 
-    private var mMixAdapter: BaseMixAdapter? = null
+    private var mBaseMixAdapter: BaseMixAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.all_mix, container, false)
@@ -20,18 +20,18 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mMixAdapter = getAdapter()
+        mBaseMixAdapter = getAdapter()
         all_mixes_recycler.layoutManager = LinearLayoutManager(activity)
-        all_mixes_recycler.adapter = mMixAdapter
+        all_mixes_recycler.adapter = mBaseMixAdapter
     }
 
     abstract fun getAdapter(): BaseMixAdapter
 
-    abstract fun getTabId () : Int
+    abstract fun getTabId(): Int
 
-    override fun onStop() {
-        super.onStop()
-        mMixAdapter?.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
+        mBaseMixAdapter?.onFragmentDestroyed()
     }
 
     override fun onMixSelected(mix: Mix?) {
