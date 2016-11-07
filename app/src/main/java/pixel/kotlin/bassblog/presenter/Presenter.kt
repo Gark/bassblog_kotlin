@@ -1,4 +1,4 @@
-package pixel.kotlin.bassblog.network
+package pixel.kotlin.bassblog.presenter
 
 
 import android.content.Context
@@ -9,12 +9,10 @@ import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
+import pixel.kotlin.bassblog.network.Mix
+import pixel.kotlin.bassblog.network.NetworkService
 
-class Presenter(val context: Context, val callback: MixCallback) {
-
-    interface MixCallback {
-        fun onDataChanged(list: RealmResults<Mix>?)
-    }
+class Presenter(val context: Context) {
 
     private val mReceiver = NetworkResultReceiver()
     private val mMixResults: RealmResults<Mix>
@@ -26,18 +24,12 @@ class Presenter(val context: Context, val callback: MixCallback) {
         mMixResults.addChangeListener { handleChanges() }
     }
 
-
     fun onStop() {
         mMixResults.removeChangeListeners()
     }
 
-    fun onStart() {
-        callback.onDataChanged(mMixResults)
-    }
-
     private fun handleChanges() {
         loadMixesOnFirstLaunch()
-        callback.onDataChanged(mMixResults)
     }
 
     fun loadMixesOnFirstLaunch() {
@@ -46,14 +38,13 @@ class Presenter(val context: Context, val callback: MixCallback) {
             if (mMixResults.isEmpty()) {
                 NetworkService.start(context, mReceiver)
             } else {
-                // load from published to now.
                 NetworkService.start(context, mReceiver, mMixResults.first().published, null, 200)
             }
         }
     }
 
     fun loadMoreIfNeed(lastVisible: Int, totalCount: Int) {
-        if (totalCount - lastVisible <= 3 && mLoadingState == NetworkService.IDLE) {
+        if (totalCount - lastVisible <= 5 && mLoadingState == NetworkService.IDLE) {
             Toast.makeText(context, "" + mMixResults.size, Toast.LENGTH_SHORT).show()
             mLoadingState = NetworkService.LOADING
             NetworkService.start(context, mReceiver, null, mMixResults.last().published)

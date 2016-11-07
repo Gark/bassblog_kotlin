@@ -4,8 +4,7 @@ import pixel.kotlin.bassblog.network.Mix
 
 interface IPlayback {
     fun toggle()
-//    fun updatePlayList(list: RealmResults<Mix>?)
-    fun play(mix: Mix)
+    fun play(mix: Mix, tab: Int)
     fun playLast()
     fun playNext()
     fun isPlaying(): Boolean

@@ -9,6 +9,9 @@ import android.view.MenuItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_activity.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.ui.mixes.allmixes.AllMixFragment
+import pixel.kotlin.bassblog.ui.mixes.favourite.FavouriteFragment
+import pixel.kotlin.bassblog.ui.search.SearchFragment
 
 class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
 
@@ -80,7 +83,7 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
         updateSongData()
     }
 
-    // TODO need progress loading
+    // TODO: need progress loading
     fun updatePlayToggle(play: Boolean) {
         button_play_toggle_bottom.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
     }

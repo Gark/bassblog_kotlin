@@ -66,13 +66,9 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         registerCallback(this)
     }
 
-//    override fun updatePlayList(list: RealmResults<Mix>?) {
-//        mPlayer?.updatePlayList(list)
-//    }
-
     override fun toggle() = mPlayer!!.toggle()
 
-    override fun play(mix: Mix) = mPlayer!!.play(mix)
+    override fun play(mix: Mix, tab: Int) = mPlayer!!.play(mix, tab)
 
     override fun playLast() {
         mPlayer?.playLast()

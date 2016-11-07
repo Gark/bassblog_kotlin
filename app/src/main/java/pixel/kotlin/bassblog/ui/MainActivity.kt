@@ -11,12 +11,12 @@
 //import kotlinx.android.synthetic.main.activity_main.*
 //import pixel.kotlin.bassblog.R
 //import pixel.kotlin.bassblog.network.Mix
-//import pixel.kotlin.bassblog.network.Presenter
-//import pixel.kotlin.bassblog.network.Presenter.MixCallback
+//import pixel.kotlin.bassblog.presenter.Presenter
+//import pixel.kotlin.bassblog.presenter.Presenter.MixCallback
 //
-//class MainActivity : CommunicationActivity(), MixAdapter.MixSelectCallback, MixCallback {
+//class MainActivity : CommunicationActivity(), AllMixAdapter.MixSelectCallback, MixCallback {
 //
-//    private var mMixAdapter: MixAdapter? = null
+//    private var mMixAdapter: AllMixAdapter? = null
 //    private var mBehavior: BottomSheetBehavior<View>? = null
 //    private var mPresenter: Presenter? = null
 //
@@ -24,7 +24,7 @@
 //        super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 //        mPresenter = Presenter(applicationContext, this)
-//        mMixAdapter = MixAdapter(applicationContext, this)
+//        mMixAdapter = AllMixAdapter(applicationContext, this)
 //        all_mixes_recycler.layoutManager = LinearLayoutManager(applicationContext)
 //        all_mixes_recycler.adapter = mMixAdapter
 //        all_mixes_recycler.addOnScrollListener(MixScrollListener())

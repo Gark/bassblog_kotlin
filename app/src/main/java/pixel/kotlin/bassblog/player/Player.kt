@@ -11,19 +11,17 @@ import java.util.concurrent.TimeUnit
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
+    private val mCallbacks = ArrayList<IPlayback.Callback>()
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()
     private val mPlayer: MediaPlayer
 
-    private var isPaused = false // TODO make states
     private var mBuffered = 0
-    // Default size 2: for service and UI
-    private val mCallbacks = ArrayList<IPlayback.Callback>(2)
 
     init {
         mPlayer = MediaPlayer()
         mPlayer.setOnCompletionListener { handleOnComplete() }
-        mPlayer.setOnPreparedListener { mp -> handlePrepare(mp) }
+        mPlayer.setOnPreparedListener { mp -> handlePrepare() }
         mPlayer.setOnBufferingUpdateListener { mediaPlayer, i -> handleBuffering(i) }
     }
 
@@ -38,54 +36,27 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun onCompletion(mp: MediaPlayer) = playNext()
 
     fun play() {
-        if (isPaused) {
-            mPlayer.start()
-            notifyPlayStatusChanged(true)
-            return
-        }
-        if (!mPlayList.isEmpty()) {
-            val mix = mPlayList.getCurrentMix()
-            mix?.let {
-                try {
-                    mPlayer.reset()
-                    mPlayer.setDataSource(it.track)
-                    mPlayer.prepareAsync()
-                } catch (e: IOException) {
-                    if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)
-                    notifyPlayStatusChanged(false)
-                } catch (ex: IllegalStateException) {
-                    if (BuildConfig.DEBUG) Log.e(TAG, "play: ", ex)
-                    notifyPlayStatusChanged(false)
-                }
-            }
-        }
+        mPlayer.start()
+        notifyPlayStatusChanged(true)
     }
 
     fun pause() {
-        if (mPlayer.isPlaying) {
-            mPlayer.pause()
-            isPaused = true
-            notifyPlayStatusChanged(false)
-        }
+        mPlayer.pause()
+        notifyPlayStatusChanged(false)
     }
 
-    private fun handlePrepare(mp: MediaPlayer?) {
-        mp?.start()
-        if (mp != null) {
-            notifyPlayStatusChanged(true)
-        }
+    private fun handlePrepare() {
+        play()
     }
 
-    override fun play(mix: Mix) {
+    override fun play(mix: Mix, tab: Int) {
         val currentMix = mPlayList.getCurrentMix()
         if (mix == currentMix) {
-            if (!isPaused) {
-                play()
-            }
+            toggle()
         } else {
             stop()
-            mPlayList.updateCurrent(mix)
-            play()
+            mPlayList.updateCurrent(mix, tab)
+            prepareAdnPlay()
         }
     }
 
@@ -97,9 +68,27 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         }
     }
 
+    private fun prepareAdnPlay() {
+        val currentMix = mPlayList.getCurrentMix()
+        currentMix?.let {
+            try {
+                mPlayer.reset()
+                mPlayer.setDataSource(currentMix.track)
+                mPlayer.prepareAsync()
+                // TODO notifyPlayStatusChanged(true) notify loading
+            } catch (e: IOException) {
+                if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)
+                notifyPlayStatusChanged(false)
+            } catch (ex: IllegalStateException) {
+                if (BuildConfig.DEBUG) Log.e(TAG, "play: ", ex)
+                notifyPlayStatusChanged(false)
+            }
+        }
+    }
+
     private fun stop() {
-        pause()
-        isPaused = false
+        mPlayer.stop()
+        notifyPlayStatusChanged(false)
     }
 
     override fun playLast() {
@@ -116,7 +105,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun playNext() {
         stop()
         mPlayList.moveToNext()
-        play()
+        prepareAdnPlay()
     }
 
     override fun isPlaying(): Boolean = mPlayer.isPlaying
@@ -128,9 +117,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun getPlayingSong(): Mix? = mPlayList.getCurrentMix()
 
     override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
-
-//    override fun updatePlayList(list: RealmResults<Mix>?) = mPlayList.updatePlayList(list)
-
 
     override fun seekTo(progress: Int) {
         if (mPlayList.isEmpty()) return

@@ -36,11 +36,11 @@
         android:layout_toLeftOf="@+id/button_close"
         android:layout_toRightOf="@+id/image_view_album"
         android:layout_toStartOf="@+id/button_close"
-        android:maxLines="2"
         android:padding="10dp"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="16sp"
-        tools:text="Saycet" />
+        tools:text="Saycetdf gdf gdf gdf gdf gdf gdf gdf gdf g" />
 
     <TextView
         android:id="@+id/text_view_artist"
@@ -57,20 +57,6 @@
         android:textSize="14sp"
         tools:text="Through the window" />
 
-    <!--
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_alignLeft="@+id/text_view_name"
-        android:layout_alignStart="@+id/text_view_name"
-        android:layout_below="@id/text_view_artist"
-        android:visibility="gone"
-        android:max="1000"
-        tools:progress="500"
-        />
-    -->
 
     <RelativeLayout
         android:id="@+id/layout_play_controls"
