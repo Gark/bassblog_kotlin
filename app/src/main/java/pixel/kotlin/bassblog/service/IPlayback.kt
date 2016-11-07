@@ -1,11 +1,10 @@
 package pixel.kotlin.bassblog.service
 
-import io.realm.RealmResults
 import pixel.kotlin.bassblog.network.Mix
 
 interface IPlayback {
     fun toggle()
-    fun updatePlayList(list: RealmResults<Mix>?)
+//    fun updatePlayList(list: RealmResults<Mix>?)
     fun play(mix: Mix)
     fun playLast()
     fun playNext()

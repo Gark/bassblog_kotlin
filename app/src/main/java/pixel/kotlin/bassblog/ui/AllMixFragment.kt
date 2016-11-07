@@ -69,7 +69,7 @@ class AllMixFragment : BinderFragment(), MixAdapter.MixSelectCallback, Presenter
 
     override fun onDataChanged(list: RealmResults<Mix>?) {
         mMixAdapter?.updateMixList(list)
-        mPlaybackService?.updatePlayList(list)
+//        mPlaybackService?.updatePlayList(list)
         updateCurrentMixData()
     }
 

@@ -2,7 +2,6 @@ package pixel.kotlin.bassblog.player
 
 import android.media.MediaPlayer
 import android.util.Log
-import io.realm.RealmResults
 import pixel.kotlin.bassblog.BuildConfig
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.service.IPlayback
@@ -130,7 +129,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
 
-    override fun updatePlayList(list: RealmResults<Mix>?) = mPlayList.updatePlayList(list)
+//    override fun updatePlayList(list: RealmResults<Mix>?) = mPlayList.updatePlayList(list)
 
 
     override fun seekTo(progress: Int) {
