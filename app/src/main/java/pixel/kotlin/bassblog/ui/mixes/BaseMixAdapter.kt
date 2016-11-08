@@ -16,6 +16,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     interface MixSelectCallback {
         fun onMixSelected(mix: Mix?)
+
+        fun onDataUpdated(showEmptyView: Boolean)
     }
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -38,6 +40,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     }
 
     private fun handleChanges() {
+        callback.onDataUpdated(mAllMix.isEmpty())
         notifyDataSetChanged()
     }
 

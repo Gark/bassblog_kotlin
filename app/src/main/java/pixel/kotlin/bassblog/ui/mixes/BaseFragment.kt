@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.all_mix.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.ui.BinderFragment
@@ -37,6 +37,14 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
     override fun onMixSelected(mix: Mix?) {
         mix?.let {
             mPlaybackService?.play(it, getTabId())
+        }
+    }
+
+    override fun onDataUpdated(showEmptyView: Boolean) {
+        if (showEmptyView) {
+            empty_view.visibility = View.VISIBLE
+        } else {
+            empty_view.visibility = View.GONE
         }
     }
 }

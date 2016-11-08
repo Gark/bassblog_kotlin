@@ -3,7 +3,7 @@
     <item
         android:id="@+id/action_all"
         android:icon="@drawable/ic_view_carousel_black_24dp"
-        android:title="@string/all_posts" />
+        android:title="@string/all_mixes" />
     <item
         android:id="@+id/action_favourite"
         android:icon="@drawable/ic_favorite_no"
