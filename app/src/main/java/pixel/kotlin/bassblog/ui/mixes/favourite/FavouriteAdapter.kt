@@ -15,6 +15,6 @@ class FavouriteAdapter(context: Context, callback: MixSelectCallback) : BaseMixA
     }
 
     override fun getLayout(): Int {
-        return R.layout.item_post_list
+        return R.layout.item_favourite_item
     }
 }

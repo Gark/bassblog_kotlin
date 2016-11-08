@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_all"
-        android:icon="@drawable/ic_view_carousel_black_24dp"
+        android:icon="@drawable/ic_bb_mixes"
         android:title="@string/all_mixes" />
     <item
         android:id="@+id/action_favourite"
-        android:icon="@drawable/ic_favorite_no"
+        android:icon="@drawable/ic_bb_favorites"
         android:title="@string/favourites" />
 
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_bb_search"
         android:title="@string/search" />
 
 </menu>
