@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
-//apply plugin: 'android-apt'
 
 def int currentVersionCode = 1;
 def String currentVersionName = "1.0";
@@ -37,14 +36,12 @@ android {
 }
 
 dependencies {
-//    compile project(':network')
-//    compile project(':storage')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile "com.android.support:appcompat-v7:${rootProject.androidSupportVersion}"
     compile "com.android.support:design:${rootProject.androidSupportVersion}"
     compile "com.android.support:recyclerview-v7:${rootProject.androidSupportVersion}"
-//    compile 'com.devbrackets.android:recyclerext:1.1.1'
+
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     // Image loader

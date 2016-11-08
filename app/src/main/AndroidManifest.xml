@@ -15,7 +15,8 @@
             android:name=".ui.PagerActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
