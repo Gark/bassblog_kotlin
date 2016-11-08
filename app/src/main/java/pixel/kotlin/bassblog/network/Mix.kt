@@ -3,7 +3,7 @@ package pixel.kotlin.bassblog.network
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-// TODO covert to pojo
+// TODO: make immutable
 open class Mix : RealmObject() {
     @PrimaryKey
     var mixId: Long = 0L

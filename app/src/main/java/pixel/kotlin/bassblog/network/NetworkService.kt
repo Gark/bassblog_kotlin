@@ -18,7 +18,6 @@ import java.util.regex.Pattern
 
 open class NetworkService : IntentService(NetworkService::class.java.name) {
 
-
     private val pattern = Pattern.compile("http(.*?)mp3")
     private var mApi: BassBlogApi? = null
     private var mReceiver: ResultReceiver? = null

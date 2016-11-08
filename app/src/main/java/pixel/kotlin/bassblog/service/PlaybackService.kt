@@ -16,7 +16,6 @@ import pixel.kotlin.bassblog.ui.PagerActivity
 
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
-
     private val ACTION_PLAY_TOGGLE = "pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE"
     private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
     private val ACTION_PLAY_NEXT = "pixel.kotlin.bassblog.ACTION.PLAY_NEXT"
