@@ -7,7 +7,7 @@
 //import android.view.ViewGroup
 //import android.widget.SeekBar
 //import com.squareup.picasso.Picasso
-//import kotlinx.android.synthetic.main.play_music_fragmnet.*
+//import kotlinx.android.synthetic.main.play_music_activity.*
 //import pixel.kotlin.bassblog.R
 //import pixel.kotlin.bassblog.widget.CircleTransform
 //import java.util.concurrent.TimeUnit
@@ -20,7 +20,7 @@
 //    private val CIRCLE_TRANSFORMATION = CircleTransform()
 //
 //    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        return inflater!!.inflate(R.layout.play_music_fragmnet, container)
+//        return inflater!!.inflate(R.layout.play_music_activity, container)
 //    }
 //
 //    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

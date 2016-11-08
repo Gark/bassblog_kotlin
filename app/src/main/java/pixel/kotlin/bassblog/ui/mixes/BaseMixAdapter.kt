@@ -70,7 +70,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 //            mPostTitle.text = "$position ${mix.title}"
             mPostTitle.text = mix.title
             mPostLabel.text = mix.label
-            Picasso.with(itemView.context).load(mix.image).into(mPostImage)
+            Picasso.with(itemView.context).load(mix.image).resizeDimen(R.dimen.image_width, R.dimen.image_height).into(mPostImage)
         }
 
         fun onViewRecycled() {

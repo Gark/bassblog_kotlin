@@ -5,4 +5,7 @@
 
     <dimen name="circle_image_size">260dp</dimen>
     <dimen name="bottom_margin">50dp</dimen>
+    
+    <dimen name="image_width">100dp</dimen>
+    <dimen name="image_height">60dp</dimen>
 </resources>

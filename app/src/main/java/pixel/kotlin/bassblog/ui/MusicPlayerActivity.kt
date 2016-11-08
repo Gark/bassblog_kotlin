@@ -6,14 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.ActivityOptionsCompat
+import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import kotlinx.android.synthetic.main.play_music_fragmnet.*
+import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.R
-import pixel.kotlin.bassblog.network.Mix
-import pixel.kotlin.bassblog.widget.CircleTransform
 import java.util.concurrent.TimeUnit
 
 class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
@@ -21,7 +20,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
     private val mHandler = Handler()
     private val runnable = Runnable { scheduleUpdater() }
-    private val CIRCLE_TRANSFORMATION = CircleTransform()
 
     companion object {
         fun start(activity: Activity, view: View, text: String) {
@@ -33,7 +31,9 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.play_music_fragmnet)
+        setContentView(R.layout.play_music_activity)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         button_play_toggle.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
@@ -42,9 +42,19 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
-
-
     }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+    }
+
 
     private fun handleFavouriteClick() {
         mPlaybackService?.let {
@@ -81,14 +91,12 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         if (mPlaybackService == null) return
         if (mPlaybackService!!.isPlaying()) {
             mHandler.post(runnable)
-            image_view_album.resumeRotateAnimation()
         }
     }
 
     override fun onPause() {
         super.onPause()
         mHandler.removeCallbacks(runnable)
-        image_view_album.pauseRotateAnimation()
     }
 
     private fun scheduleUpdater() {
@@ -116,10 +124,8 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         updateSongData()
         if (isPlaying) {
             mHandler.post(runnable)
-            image_view_album.resumeRotateAnimation()
         } else {
             mHandler.removeCallbacks(runnable)
-            image_view_album.pauseRotateAnimation()
         }
     }
 
@@ -139,17 +145,13 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         val mix = mPlaybackService!!.getPlayingSong()
         text_view_name.text = mix?.title
         text_view_artist.text = mix?.label
-        //button_favorite_toggle
         updateFavouriteButton(mix?.favourite ?: true)
 
         Picasso.with(applicationContext)
                 .load(mix?.image)
-                .resizeDimen(R.dimen.circle_image_size, R.dimen.circle_image_size)
-                .centerCrop()
-                .placeholder(R.drawable.default_record_album)
-                .error(R.drawable.default_record_album)
-                .transform(CIRCLE_TRANSFORMATION)
-                .into(image_view_album)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(mix_image)
     }
 
 

@@ -11,8 +11,6 @@ import java.util.concurrent.TimeUnit
 
 class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
-
-
     private val mCallbacks = ArrayList<IPlayback.Callback>()
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()

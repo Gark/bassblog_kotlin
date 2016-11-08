@@ -49,7 +49,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
             val endTime = convertTime(endTimeLong)
 
             val startTimeLong = intent.getLongExtra(START_TIME, DEFAULT_TIME)
-            val startTime = convertTime(startTimeLong)
+            val startTime = convertTime(startTimeLong, 1)
 
             handleRequest(count, startTime, endTime)
             mReceiver?.send(IDLE, null)
@@ -59,11 +59,14 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
         }
     }
 
-    private fun convertTime(time: Long): String? {
+    private fun convertTime(time: Long, trick: Int = 0): String? {
         var result: String? = null
         if (time != DEFAULT_TIME) {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = time
+            if (trick > 0) {
+                calendar.add(Calendar.MINUTE, trick)// TODO: to avoid override update first item
+            }
             result = FORMATTER.format(calendar.time)
         }
         return result

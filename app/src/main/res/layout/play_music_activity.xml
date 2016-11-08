@@ -13,12 +13,16 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <pixel.kotlin.bassblog.widget.ShadowImageView
-            android:id="@+id/image_view_album"
-            android:layout_width="@dimen/circle_image_size"
-            android:layout_height="@dimen/circle_image_size"
+
+        <ImageView
+            android:id="@+id/mix_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/default_record_album" />
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:src="@mipmap/ic_launcher" />
+
     </RelativeLayout>
 
     <TextView
