@@ -58,9 +58,10 @@
             android:id="@+id/button_play_toggle_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="5dp"
-            app:srcCompat="@drawable/ic_play" />
+            app:srcCompat="@drawable/ic_icon_play_player" />
 
 
     </LinearLayout>

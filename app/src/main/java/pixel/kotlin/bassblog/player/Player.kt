@@ -116,10 +116,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun getPlayingSong(): Mix? = mPlayList.getCurrentMix()
 
-    override fun nextPlayMode(): Int = mPlayList.nextPlayMode()
-
-    override fun getPlayMode(): Int = mPlayList.getCurrentPlayMode()
-
     override fun seekTo(progress: Int) {
         if (mPlayList.isEmpty()) return
         mPlayer.seekTo(progress * mPlayer.duration / 100)

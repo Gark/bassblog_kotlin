@@ -13,8 +13,6 @@ interface IPlayback {
     fun getBuffered(): Int
     fun getPlayingSong(): Mix?
     fun seekTo(progress: Int)
-    fun nextPlayMode(): Int
-    fun getPlayMode(): Int
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)
     fun releasePlayer()

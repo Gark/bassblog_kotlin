@@ -18,7 +18,6 @@ class PlayList {
     private var mCurrentPosition = 0
     private var mCurrentMix: Mix? = null
 
-    private val mPlayMode = PlayerMode()
     private var mCurrentList: RealmResults<Mix>
     private val mAllMix: RealmResults<Mix>
     private val mFavouriteMix: RealmResults<Mix>
@@ -56,24 +55,12 @@ class PlayList {
     fun clear() = mAllMix.removeChangeListeners()
 
     fun moveToNext() {
-        mCurrentPosition = when (mPlayMode.getCurrentMode()) {
-            PlayerMode.LIST -> if (mCurrentPosition == mCurrentList.size - 1) 0 else mCurrentPosition + 1
-            PlayerMode.SHUFFLE -> Random().nextInt(mCurrentList.size)
-            else -> mCurrentPosition
-        }
+        mCurrentPosition = if (mCurrentPosition == mCurrentList.size - 1) 0 else mCurrentPosition + 1
         mCurrentMix = mCurrentList[mCurrentPosition]
     }
 
     fun moveToPrevious() {
-        mCurrentPosition = when (mPlayMode.getCurrentMode()) {
-            PlayerMode.LIST -> Math.max(0, mCurrentPosition - 1)
-            PlayerMode.SHUFFLE -> Random().nextInt(mCurrentList.size)
-            else -> mCurrentPosition
-        }
+        Math.max(0, mCurrentPosition - 1)
         mCurrentMix = mCurrentList[mCurrentPosition]
     }
-
-    fun nextPlayMode() = mPlayMode.nextMode()
-
-    fun getCurrentPlayMode() = mPlayMode.getCurrentModeResource()
 }

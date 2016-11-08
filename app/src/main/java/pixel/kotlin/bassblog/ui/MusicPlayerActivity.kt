@@ -38,7 +38,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         button_play_toggle.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
         button_play_last.setOnClickListener { handlePlayLast() }
-        button_play_mode_toggle.setOnClickListener { handlePlayModeClick() }
+        button_share.setOnClickListener { handleShareClick() }
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
@@ -55,7 +55,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         }
     }
 
-
     private fun handleFavouriteClick() {
         mPlaybackService?.let {
             val mix = it.getPlayingSong()
@@ -71,9 +70,9 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         }
     }
 
-    private fun handlePlayModeClick() {
+    private fun handleShareClick() {
         if (mPlaybackService == null) return
-        button_play_mode_toggle.setImageResource(mPlaybackService!!.nextPlayMode())
+        // TODO
     }
 
     private fun handlePlayLast() {
@@ -131,16 +130,14 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
     private fun updateFavouriteButton(favourite: Boolean) {
         if (favourite) {
-            button_favorite_toggle.setImageResource(R.drawable.ic_favorite_yes)
+            button_favorite_toggle.setImageResource(R.drawable.ic_favorite)
         } else {
-            button_favorite_toggle.setImageResource(R.drawable.ic_favorite_no)
+            button_favorite_toggle.setImageResource(R.drawable.ic_add_to_favorites)
         }
     }
 
     fun updateSongData() {
         if (mPlaybackService == null) return
-
-        button_play_mode_toggle.setImageResource(mPlaybackService!!.getPlayMode())
 
         val mix = mPlaybackService!!.getPlayingSong()
         text_view_name.text = mix?.title
@@ -149,8 +146,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
         Picasso.with(applicationContext)
                 .load(mix?.image)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+                .fit()
                 .into(mix_image)
     }
 

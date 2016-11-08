@@ -85,7 +85,7 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
 
     // TODO: need progress loading
     fun updatePlayToggle(play: Boolean) {
-        button_play_toggle_bottom.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
+        button_play_toggle_bottom.setImageResource(if (play) R.drawable.ic_icon_pause_player else R.drawable.ic_icon_play_player)
     }
 
     fun updateSongData() {

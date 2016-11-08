@@ -17,7 +17,6 @@ import pixel.kotlin.bassblog.ui.PagerActivity
 class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
 
-
     private val ACTION_PLAY_TOGGLE = "pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE"
     private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
     private val ACTION_PLAY_NEXT = "pixel.kotlin.bassblog.ACTION.PLAY_NEXT"
@@ -78,8 +77,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun playNext() = mPlayer!!.playNext()
 
-    override fun getPlayMode(): Int = mPlayer!!.getPlayMode()
-
     override fun isPlaying(): Boolean = mPlayer!!.isPlaying()
 
     override fun getProgress(): Int = mPlayer!!.getProgress()
@@ -91,8 +88,6 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     override fun getPlayingSong(): Mix? = mPlayer!!.getPlayingSong()
 
     override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
-
-    override fun nextPlayMode(): Int = mPlayer!!.nextPlayMode()
 
     override fun registerCallback(callback: IPlayback.Callback) {
         mPlayer?.registerCallback(callback)

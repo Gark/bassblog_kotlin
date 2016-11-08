@@ -35,6 +35,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     abstract fun getLayout(): Int
 
+    abstract fun needResize(): Boolean
+
     fun onFragmentDestroyed() {
         mAllMix.removeChangeListeners()
     }
@@ -50,7 +52,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MixHolder(mInflater.inflate(getLayout(), parent, false))
 
-    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mAllMix[position], position)
+    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mAllMix[position])
 
     override fun getItemCount(): Int = mAllMix.size
 
@@ -68,12 +70,18 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             callback.onMixSelected(mMix)
         }
 
-        fun displayData(mix: Mix, position: Int) {
+        fun displayData(mix: Mix) {
             mMix = mix
-//            mPostTitle.text = "$position ${mix.title}"
             mPostTitle.text = mix.title
             mPostLabel.text = mix.label
-            Picasso.with(itemView.context).load(mix.image).resizeDimen(R.dimen.image_width, R.dimen.image_height).into(mPostImage)
+
+            val requestCreator = Picasso.with(itemView.context).load(mix.image)
+            if (needResize()) {
+                requestCreator.resizeDimen(R.dimen.image_width, R.dimen.image_height)
+            } else {
+                requestCreator.fit()
+            }
+            requestCreator.into(mPostImage)
         }
 
         fun onViewRecycled() {

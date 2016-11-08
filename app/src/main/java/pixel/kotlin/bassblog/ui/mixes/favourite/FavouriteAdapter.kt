@@ -10,11 +10,10 @@ import pixel.kotlin.bassblog.ui.mixes.BaseMixAdapter
 
 class FavouriteAdapter(context: Context, callback: MixSelectCallback) : BaseMixAdapter(context, callback) {
 
-    override fun getRealmMixes(): RealmResults<Mix> {
-        return Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
-    }
+    override fun needResize(): Boolean = false
 
-    override fun getLayout(): Int {
-        return R.layout.item_favourite_item
-    }
+    override fun getRealmMixes(): RealmResults<Mix>
+            = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
+
+    override fun getLayout(): Int = R.layout.item_favourite_item
 }
