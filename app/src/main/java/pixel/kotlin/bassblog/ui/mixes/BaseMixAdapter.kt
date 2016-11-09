@@ -24,6 +24,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     private val mAllMix: RealmResults<Mix>
     private val picasso: Picasso
 
+    private var mCurrentMix: Mix? = null
+
     init {
         setHasStableIds(true)
         picasso = Picasso.with(context)
@@ -59,7 +61,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     inner class MixHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val mPostTitle = itemView.findViewById(R.id.post_title) as TextView
         private val mPostLabel = itemView.findViewById(R.id.post_label) as TextView
-        private val mPostImage = itemView.findViewById(R.id.post_image) as ImageView
+        private val mPostImage = itemView.findViewById(R.id.mix_image) as ImageView
+        private val mNowPlayingImage = itemView.findViewById(R.id.now_playing) as ImageView
         private var mMix: Mix? = null
 
         init {
@@ -74,6 +77,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             mMix = mix
             mPostTitle.text = mix.title
             mPostLabel.text = mix.label
+            mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.INVISIBLE
 
             val requestCreator = Picasso.with(itemView.context).load(mix.image)
             if (needResize()) {
@@ -91,5 +95,10 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     override fun getItemId(position: Int): Long {
         return mAllMix[position].mixId
+    }
+
+    fun updatePlayingMix(mix: Mix?) {
+        mCurrentMix = mix
+        notifyDataSetChanged()
     }
 }

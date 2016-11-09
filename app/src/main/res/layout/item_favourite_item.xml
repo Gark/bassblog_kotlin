@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +9,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/post_image"
+        android:id="@+id/mix_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:adjustViewBounds="true"
@@ -27,15 +28,33 @@
         android:textStyle="bold"
         tools:text="post title" />
 
-    <TextView
-        android:id="@+id/post_label"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:textColor="@color/text_color"
-        android:textSize="12sp"
-        tools:text="post labels" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/post_label"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textColor="@color/text_color"
+            android:textSize="12sp"
+            tools:text="post labels" />
+
+        <ImageView
+            android:id="@+id/now_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_bb_now_playing_icon" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

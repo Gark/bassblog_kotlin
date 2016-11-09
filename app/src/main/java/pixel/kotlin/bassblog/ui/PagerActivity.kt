@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.MenuItem
+import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_activity.*
 import pixel.kotlin.bassblog.R
@@ -91,9 +92,9 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val song = mPlaybackService!!.getPlayingSong()
+        val song = mPlaybackService!!.getPlayingMix()
+        bottom_control.visibility = if (song == null) View.GONE else View.VISIBLE
         text_view_name_bottom.text = song?.title
-
         Picasso.with(this)
                 .load(song?.image)
                 .into(image_view_album_bottom)

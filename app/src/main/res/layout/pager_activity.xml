@@ -60,9 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="5dp"
+            android:padding="15dp"
             app:srcCompat="@drawable/ic_icon_play_player" />
-
 
     </LinearLayout>
 

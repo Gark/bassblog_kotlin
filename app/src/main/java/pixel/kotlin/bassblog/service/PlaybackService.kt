@@ -84,7 +84,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun getBuffered(): Int = mPlayer!!.getBuffered()
 
-    override fun getPlayingSong(): Mix? = mPlayer!!.getPlayingSong()
+    override fun getPlayingMix(): Mix? = mPlayer!!.getPlayingMix()
 
     override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
 
@@ -125,7 +125,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
                 .setOngoing(true)
                 .build()
 
-        val mix = mPlayer!!.getPlayingSong()
+        val mix = mPlayer!!.getPlayingMix()
 
         Picasso.with(applicationContext)
                 .load(mix?.image)
@@ -159,8 +159,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     private fun setUpRemoteView(remoteView: RemoteViews?) {
         remoteView?.setImageViewResource(R.id.image_view_close, R.drawable.ic_remote_view_close)
-        remoteView?.setImageViewResource(R.id.image_view_play_last, R.drawable.ic_remote_view_play_last)
-        remoteView?.setImageViewResource(R.id.image_view_play_next, R.drawable.ic_remote_view_play_next)
+        remoteView?.setImageViewResource(R.id.image_view_play_last, R.drawable.ic_previous_mix)
+        remoteView?.setImageViewResource(R.id.image_view_play_next, R.drawable.ic_next_mix)
 
         remoteView?.setOnClickPendingIntent(R.id.button_close, getPendingIntent(ACTION_STOP_SERVICE))
         remoteView?.setOnClickPendingIntent(R.id.button_play_last, getPendingIntent(ACTION_PLAY_LAST))
@@ -169,11 +169,11 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     private fun updateRemoteViews(remoteView: RemoteViews) {
-        val mix = mPlayer!!.getPlayingSong()
+        val mix = mPlayer!!.getPlayingMix()
         remoteView.setTextViewText(R.id.text_view_name, mix?.title)
         remoteView.setTextViewText(R.id.text_view_artist, mix?.label)
         remoteView.setImageViewResource(R.id.image_view_play_toggle,
-                if (mPlayer!!.isPlaying()) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
+                if (mPlayer!!.isPlaying()) R.drawable.ic_pause else R.drawable.ic_play)
     }
 
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)

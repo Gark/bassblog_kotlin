@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
@@ -8,9 +9,10 @@
     android:padding="2dp">
 
     <ImageView
-        android:id="@+id/post_image"
+        android:id="@+id/mix_image"
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_height"
+        android:layout_alignParentLeft="true"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerInside"
@@ -20,6 +22,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/now_playing"
+        android:layout_toRightOf="@+id/mix_image"
         android:orientation="vertical"
         android:padding="2dp">
 
@@ -46,4 +50,15 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/now_playing"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_bb_now_playing_icon" />
+
+</RelativeLayout>

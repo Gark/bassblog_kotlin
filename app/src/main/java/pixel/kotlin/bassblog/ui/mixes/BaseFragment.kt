@@ -12,7 +12,7 @@ import pixel.kotlin.bassblog.ui.BinderFragment
 
 abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback {
 
-    private var mBaseMixAdapter: BaseMixAdapter? = null
+    protected var mBaseMixAdapter: BaseMixAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.all_mix, container, false)
@@ -46,5 +46,10 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
         } else {
             empty_view.visibility = View.GONE
         }
+    }
+
+    override fun onPlayStatusChanged(isPlaying: Boolean) {
+        val mix = mPlaybackService?.getPlayingMix()
+        mBaseMixAdapter?.updatePlayingMix(mix)
     }
 }

@@ -56,6 +56,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
         } else {
             stop()
             mPlayList.updateCurrent(mix, tab)
+            notifyPlayStatusChanged(false)
             prepareAdnPlay()
         }
     }
@@ -114,7 +115,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     override fun getDuration(): Int = mPlayer.duration
 
-    override fun getPlayingSong(): Mix? = mPlayList.getCurrentMix()
+    override fun getPlayingMix(): Mix? = mPlayList.getCurrentMix()
 
     override fun seekTo(progress: Int) {
         if (mPlayList.isEmpty()) return

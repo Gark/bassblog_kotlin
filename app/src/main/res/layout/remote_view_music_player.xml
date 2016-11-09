@@ -53,7 +53,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:singleLine="true"
-        android:textColor="#AB000000"
+        android:textColor="@color/text_color"
         android:textSize="14sp"
         tools:text="Through the window" />
 
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_remote_view_play" />
+                app:srcCompat="@drawable/ic_play" />
         </FrameLayout>
 
         <FrameLayout
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_remote_view_play_last" />
+                app:srcCompat="@drawable/ic_previous_mix" />
         </FrameLayout>
 
         <FrameLayout
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_remote_view_play_next" />
+                app:srcCompat="@drawable/ic_next_mix" />
         </FrameLayout>
     </RelativeLayout>
 

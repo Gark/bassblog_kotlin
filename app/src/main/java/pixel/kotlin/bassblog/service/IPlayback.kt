@@ -11,7 +11,7 @@ interface IPlayback {
     fun getProgress(): Int
     fun getDuration(): Int
     fun getBuffered(): Int
-    fun getPlayingSong(): Mix?
+    fun getPlayingMix(): Mix?
     fun seekTo(progress: Int)
     fun registerCallback(callback: Callback)
     fun unregisterCallback(callback: Callback)
