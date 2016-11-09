@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.os.ResultReceiver
-import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
@@ -45,7 +44,6 @@ class Presenter(val context: Context) {
 
     fun loadMoreIfNeed(lastVisible: Int, totalCount: Int) {
         if (totalCount - lastVisible <= 5 && mLoadingState == NetworkService.IDLE) {
-            Toast.makeText(context, "" + mMixResults.size, Toast.LENGTH_SHORT).show()
             mLoadingState = NetworkService.LOADING
             NetworkService.start(context, mReceiver, null, mMixResults.last().published)
         }
