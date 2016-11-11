@@ -23,17 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.MusicPlayerActivity"
             android:exported="false"
             android:label="@string/now_playing"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.playlist.TrackListActivity"
+            android:exported="false"
+            android:label="@string/tracklist"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".network.NetworkService"
             android:exported="false" />
-
         <service
             android:name=".service.PlaybackService"
             android:exported="false">

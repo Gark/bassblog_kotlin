@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            tools:context=".ui.MainActivity"
+            tools:activity=".ui.MainActivity"
             tools:listitem="@layout/item_post_list" />
 
     </LinearLayout>

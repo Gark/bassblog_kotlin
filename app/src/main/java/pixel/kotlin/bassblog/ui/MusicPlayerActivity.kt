@@ -5,15 +5,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.ActivityOptionsCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
 import java.util.concurrent.TimeUnit
 
 class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
@@ -47,20 +47,14 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         seek_bar.setOnSeekBarChangeListener(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.tracklist, menu)
-        return true
-    }
 
-    override fun onContextItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.track_list -> handleTrackListClick()
-        }
-        return true
-    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean = initMenu(R.menu.tracklist, menu)
 
     private fun handleTrackListClick() {
-
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.content?.let {
+            TrackListActivity.start(this, it)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -69,6 +63,11 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
                 finish()
                 return true
             }
+            R.id.track_list -> {
+                handleTrackListClick()
+                return true
+            }
+
             else -> return super.onContextItemSelected(item)
         }
     }
@@ -196,4 +195,10 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
 
     }
+}
+
+
+fun AppCompatActivity.initMenu(menuResource: Int, menu: Menu?): Boolean {
+    menuInflater.inflate(menuResource, menu)
+    return true
 }

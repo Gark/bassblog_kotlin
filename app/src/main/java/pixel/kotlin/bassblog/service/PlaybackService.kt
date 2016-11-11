@@ -47,6 +47,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     private fun stopThePlanet() {
         mPlayer?.pause()
+        stopForeground(true)
+        stopSelf()
         android.os.Process.killProcess(android.os.Process.myPid())
     }
 
