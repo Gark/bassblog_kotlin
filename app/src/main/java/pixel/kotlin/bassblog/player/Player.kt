@@ -52,7 +52,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun play(mix: Mix, tab: Int) {
         val currentMix = mPlayList.getCurrentMix()
         if (mix == currentMix) {
-            toggle()
+            // do nothing
         } else {
             stop()
             mPlayList.updateCurrent(mix, tab)
@@ -76,6 +76,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
                 mPlayer.reset()
                 mPlayer.setDataSource(currentMix.track)
                 mPlayer.prepareAsync()
+                notifyPlayStatusChanged(false)
                 // TODO notifyPlayStatusChanged(true) notify loading
             } catch (e: IOException) {
                 if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)

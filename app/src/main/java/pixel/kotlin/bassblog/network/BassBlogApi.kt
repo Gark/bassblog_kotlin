@@ -1,5 +1,6 @@
 package pixel.kotlin.bassblog.network
 
+import pixel.kotlin.bassblog.BuildConfig
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -35,11 +36,12 @@ internal interface BassBlogApi {
     // API
     //GET https://www.googleapis.com/blogger/v3/blogs/4928216501086861761/posts/search?q=total&fetchBodies=true&key={YOUR_API_KEY}
     //
-    //    @GET("blogger/v3/blogs/{BlogId}/posts/search")
-    //    Call<PostsResponse> search(
-    //            @Path("BlogId") String id,
-    //            @Query("q") String query,
-    //            @Query("fields") String items,
-    //            @Query("fetchBodies") boolean fetchBodies,
-    //            @Query("key") String key);
+    @GET("blogger/v3/blogs/{BlogId}/posts/search")
+    fun search(
+            @Path("BlogId") id: String = BuildConfig.BLOG_ID,
+            @Query("q") query: String,
+            @Query("fields") items: String = ITEMS,
+            @Query("fetchBodies") fetchBodies: Boolean = true,
+            @Query("fetchImages") fetchImages: Boolean = true,
+            @Query("key") key: String = BuildConfig.API_KEY): Call<PostsResponse>
 }

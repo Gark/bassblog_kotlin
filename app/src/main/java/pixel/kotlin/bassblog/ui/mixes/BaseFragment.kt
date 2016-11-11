@@ -6,24 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.all_mix.*
-import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.ui.BinderFragment
+import pixel.kotlin.bassblog.ui.MusicPlayerActivity
 
 abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback {
 
     protected var mBaseMixAdapter: BaseMixAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.all_mix, container, false)
+        return inflater?.inflate(getLayout(), container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBaseMixAdapter = getAdapter()
-        all_mixes_recycler.layoutManager = LinearLayoutManager(activity)
-        all_mixes_recycler.adapter = mBaseMixAdapter
+        mixes_recycler.layoutManager = LinearLayoutManager(activity)
+        mixes_recycler.adapter = mBaseMixAdapter
     }
+
+    abstract fun getLayout(): Int
 
     abstract fun getAdapter(): BaseMixAdapter
 
@@ -37,6 +39,7 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
     override fun onMixSelected(mix: Mix?) {
         mix?.let {
             mPlaybackService?.play(it, getTabId())
+            MusicPlayerActivity.start(activity)
         }
     }
 

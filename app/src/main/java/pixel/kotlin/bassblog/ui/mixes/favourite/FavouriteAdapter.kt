@@ -12,8 +12,20 @@ class FavouriteAdapter(context: Context, callback: MixSelectCallback) : BaseMixA
 
     override fun needResize(): Boolean = false
 
-    override fun getRealmMixes(): RealmResults<Mix>
-            = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
-
     override fun getLayout(): Int = R.layout.item_favourite_item
+
+    val mFavoriteMixes: RealmResults<Mix>
+
+    init {
+        mFavoriteMixes = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
+        mFavoriteMixes.addChangeListener { updateChanges() }
+    }
+
+    private fun updateChanges() {
+        updateMixList(mFavoriteMixes)
+    }
+
+    override fun onFragmentDestroyed() {
+        mFavoriteMixes.removeChangeListeners()
+    }
 }

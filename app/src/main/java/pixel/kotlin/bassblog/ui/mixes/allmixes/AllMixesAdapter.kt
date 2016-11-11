@@ -12,8 +12,20 @@ class AllMixesAdapter(context: Context, callback: MixSelectCallback) : BaseMixAd
 
     override fun needResize(): Boolean = true
 
-    override fun getRealmMixes(): RealmResults<Mix> =
-            Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
-
     override fun getLayout(): Int = R.layout.item_post_list
+
+    val mAllMixes: RealmResults<Mix>
+
+    init {
+        mAllMixes = Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
+        mAllMixes.addChangeListener { handleUpdates() }
+    }
+
+    private fun handleUpdates() {
+        updateMixList(mAllMixes)
+    }
+
+    override fun onFragmentDestroyed() {
+        mAllMixes.removeChangeListeners()
+    }
 }

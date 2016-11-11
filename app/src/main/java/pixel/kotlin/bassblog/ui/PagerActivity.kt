@@ -27,12 +27,11 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
         pager.addOnPageChangeListener(this)
         button_play_toggle_bottom.setOnClickListener { handleToggleClick() }
         bottom_control.setOnClickListener { handleBottomPanelClick() }
-
-
     }
 
     private fun handleBottomPanelClick() {
-        MusicPlayerActivity.start(this, text_view_name_bottom, getString(R.string.mix_text_transition))
+//        MusicPlayerActivity.start(this, text_view_name_bottom, getString(R.string.mix_text_transition))
+        MusicPlayerActivity.start(this)
     }
 
     private fun handleToggleClick() {
@@ -92,11 +91,12 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val song = mPlaybackService!!.getPlayingMix()
-        bottom_control.visibility = if (song == null) View.GONE else View.VISIBLE
-        text_view_name_bottom.text = song?.title
+        val mix = mPlaybackService!!.getPlayingMix()
+        bottom_control.visibility = if (mix == null) View.GONE else View.VISIBLE
+        text_view_name_bottom.text = mix?.title
+
         Picasso.with(this)
-                .load(song?.image)
+                .load(mix?.image)
                 .into(image_view_album_bottom)
     }
 }

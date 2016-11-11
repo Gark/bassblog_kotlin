@@ -8,7 +8,6 @@ import android.os.IBinder
 import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
-import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
@@ -117,7 +116,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         val small = getSmallContentView()
         val big = getBigContentView()
         val notification = NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
+                .setSmallIcon(R.drawable.ic_bb_mixes)  // TODO the status icon
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(small)
                 .setCustomBigContentView(big)
@@ -125,15 +124,17 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
                 .setOngoing(true)
                 .build()
 
-        val mix = mPlayer!!.getPlayingMix()
+        val mix = mPlayer?.getPlayingMix()
 
-        Picasso.with(applicationContext)
-                .load(mix?.image)
-                .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
+        mix?.image?.let {
+            Picasso.with(applicationContext)
+                    .load(mix.image)
+                    .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
 
-        Picasso.with(applicationContext)
-                .load(mix?.image)
-                .into(big, R.id.image_view_album, NOTIFICATION_ID, notification)
+            Picasso.with(applicationContext)
+                    .load(mix.image)
+                    .into(big, R.id.image_view_album, NOTIFICATION_ID, notification)
+        }
 
         // Send the notification.
         startForeground(NOTIFICATION_ID, notification)

@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.PlayList
 import pixel.kotlin.bassblog.presenter.Presenter
 import pixel.kotlin.bassblog.ui.mixes.BaseFragment
@@ -19,6 +20,8 @@ class AllMixFragment : BaseFragment() {
         mPresenter = Presenter(activity)
     }
 
+    override fun getLayout(): Int = R.layout.all_mix
+
     override fun onStop() {
         super.onStop()
         mPresenter?.onStop()
@@ -30,7 +33,7 @@ class AllMixFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        all_mixes_recycler.addOnScrollListener(MixScrollListener())
+        mixes_recycler.addOnScrollListener(MixScrollListener())
     }
 
     inner class MixScrollListener : RecyclerView.OnScrollListener() {
