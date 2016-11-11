@@ -83,7 +83,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun getBuffered(): Int = mPlayer!!.getBuffered()
 
-    override fun getPlayingSong(): Mix? = mPlayer!!.getPlayingSong()
+    override fun getPlayingMix(): Mix? = mPlayer!!.getPlayingMix()
 
     override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
 
@@ -124,7 +124,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
                 .setOngoing(true)
                 .build()
 
-        val mix = mPlayer?.getPlayingSong()
+        val mix = mPlayer?.getPlayingMix()
 
         mix?.let {
             Picasso.with(applicationContext)
@@ -170,7 +170,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
     }
 
     private fun updateRemoteViews(remoteView: RemoteViews) {
-        val mix = mPlayer!!.getPlayingSong()
+        val mix = mPlayer!!.getPlayingMix()
         remoteView.setTextViewText(R.id.text_view_name, mix?.title)
         remoteView.setTextViewText(R.id.text_view_artist, mix?.label)
         remoteView.setImageViewResource(R.id.image_view_play_toggle,

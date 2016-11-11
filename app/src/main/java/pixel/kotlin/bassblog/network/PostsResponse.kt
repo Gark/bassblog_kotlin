@@ -1,6 +1,6 @@
 package pixel.kotlin.bassblog.network
 
-internal class PostsResponse {
+class PostsResponse {
     val nextPageToken: String? = null
     val items: List<RawPost>? = null
 
@@ -11,7 +11,10 @@ internal class PostsResponse {
         var published: String? = null
         var labels: List<String>? = null
         var images: List<RawImages>? = null
+
+//        fun getImage(item: PostsResponse.RawPost): String? = item.images?.get(0)?.url
     }
+
     inner class RawImages {
         var url: String? = null
     }

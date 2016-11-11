@@ -4,21 +4,18 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.v4.os.ResultReceiver
-import android.text.TextUtils
 import android.util.Log
 import io.realm.Realm
 import pixel.kotlin.bassblog.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Pattern
 
 open class NetworkService : IntentService(NetworkService::class.java.name) {
 
-    private val pattern = Pattern.compile("http(.*?)mp3")
+
     private var mApi: BassBlogApi? = null
     private var mReceiver: ResultReceiver? = null
 
@@ -88,45 +85,26 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
     private fun saveRealmList(list: List<PostsResponse.RawPost>) {
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
-        val mixList = ArrayList<Mix>()
-        for (item in list) {
-            val mix = Mix().apply {
-                mixId = item.id
-                title = item.title
-                image = getImageUrl(item)
-                track = getTrack(item)
-                label = TextUtils.join(", ", item.labels)
-                published = getTime(item.published)
+
+        val mixList = list.map {
+            Mix().apply {
+                mixId = it.id
+                title = it.title
+                image = it.getImage()
+                track = it.getTrack()
+                label = it.getLabel()
+                content = it.content
+                published = it.getTime(FORMATTER)
             }
-            mixList.add(mix)
         }
         realm.copyToRealmOrUpdate(mixList)
         realm.commitTransaction()
     }
 
-    private fun getTrack(item: PostsResponse.RawPost): String? {
-        var trackUrl: String? = null
-        val matcher = pattern.matcher(item.content)
-        if (matcher.find()) {
-            trackUrl = "http" + (matcher.group(1) + "mp3")
-        }
-        return trackUrl
-    }
-
-    private fun getTime(published: String?): Long {
-        try {
-            return FORMATTER.parse(published).time
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return 0L
-    }
-
-    private fun getImageUrl(item: PostsResponse.RawPost): String = item.images?.get(0)?.url ?: ""
 
     companion object {
         protected val DEFAULT_TIME = 0L
-        protected val FORMATTER = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val FORMATTER = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         protected val START_TIME = "START_TIME"
         protected val END_TIME = "END_TIME"
         protected val COUNT = "COUNT"

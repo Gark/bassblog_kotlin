@@ -91,13 +91,13 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val song = mPlaybackService!!.getPlayingSong()
+        val mix = mPlaybackService!!.getPlayingMix()
 
-        bottom_control.visibility = if (song == null) View.GONE else View.VISIBLE
-        text_view_name_bottom.text = song?.title
+        bottom_control.visibility = if (mix == null) View.GONE else View.VISIBLE
+        text_view_name_bottom.text = mix?.title
 
         Picasso.with(this)
-                .load(song?.image)
+                .load(mix?.image)
                 .into(image_view_album_bottom)
     }
 }

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
+import java.util.*
 
 abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<BaseMixAdapter.MixHolder>() {
 
@@ -21,27 +21,28 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     }
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
-    private val mAllMix: RealmResults<Mix>
+    private val mAllMix: ArrayList<Mix>
     private val picasso: Picasso
 
     init {
         setHasStableIds(true)
         picasso = Picasso.with(context)
-        mAllMix = getRealmMixes()
-        mAllMix.addChangeListener { handleChanges() }
+        mAllMix = ArrayList()
     }
 
-    abstract fun getRealmMixes(): RealmResults<Mix>
+    fun updateMixList(list: List<Mix>) {
+        mAllMix.clear()
+        mAllMix.addAll(list)
+        handleChanges()
+    }
 
     abstract fun getLayout(): Int
 
     abstract fun needResize(): Boolean
 
-    fun onFragmentDestroyed() {
-        mAllMix.removeChangeListeners()
-    }
+    abstract fun onFragmentDestroyed()
 
-    private fun handleChanges() {
+    fun handleChanges() {
         callback.onDataUpdated(mAllMix.isEmpty())
         notifyDataSetChanged()
     }

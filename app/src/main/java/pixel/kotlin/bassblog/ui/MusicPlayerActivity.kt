@@ -59,7 +59,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
 
     private fun handleFavouriteClick() {
         mPlaybackService?.let {
-            val mix = it.getPlayingSong()
+            val mix = it.getPlayingMix()
             mix?.let {
 
                 val realm = Realm.getDefaultInstance()
@@ -141,7 +141,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val mix = mPlaybackService!!.getPlayingSong()
+        val mix = mPlaybackService!!.getPlayingMix()
         text_view_name.text = mix?.title
         text_view_artist.text = mix?.label
         updateFavouriteButton(mix?.favourite ?: true)
