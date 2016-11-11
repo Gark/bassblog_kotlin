@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.all_mix.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.ui.BinderFragment
+import pixel.kotlin.bassblog.ui.MusicPlayerActivity
 
 abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback {
 
@@ -37,6 +38,7 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
     override fun onMixSelected(mix: Mix?) {
         mix?.let {
             mPlaybackService?.play(it, getTabId())
+            MusicPlayerActivity.start(activity)
         }
     }
 

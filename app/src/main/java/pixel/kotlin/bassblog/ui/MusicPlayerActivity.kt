@@ -22,10 +22,12 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     private val runnable = Runnable { scheduleUpdater() }
 
     companion object {
-        fun start(activity: Activity, view: View, text: String) {
+        //        fun start(activity: Activity, view: View, text: String) {
+        fun start(activity: Activity) {
             val intent = Intent(activity, MusicPlayerActivity::class.java)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, text)
-            activity.startActivity(intent, options.toBundle())
+//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, text)
+//            activity.startActivity(intent, options.toBundle())
+            activity.startActivity(intent)
         }
     }
 

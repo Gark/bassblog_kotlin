@@ -8,7 +8,6 @@ import android.os.IBinder
 import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
-import io.realm.RealmResults
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
@@ -117,7 +116,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         val small = getSmallContentView()
         val big = getBigContentView()
         val notification = NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)  // the status icon
+                .setSmallIcon(R.drawable.ic_bb_mixes)  // TODO the status icon
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(small)
                 .setCustomBigContentView(big)
@@ -125,15 +124,17 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
                 .setOngoing(true)
                 .build()
 
-        val mix = mPlayer!!.getPlayingSong()
+        val mix = mPlayer?.getPlayingSong()
 
-        Picasso.with(applicationContext)
-                .load(mix?.image)
-                .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
+        mix?.let {
+            Picasso.with(applicationContext)
+                    .load(mix.image)
+                    .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
 
-        Picasso.with(applicationContext)
-                .load(mix?.image)
-                .into(big, R.id.image_view_album, NOTIFICATION_ID, notification)
+            Picasso.with(applicationContext)
+                    .load(mix.image)
+                    .into(big, R.id.image_view_album, NOTIFICATION_ID, notification)
+        }
 
         // Send the notification.
         startForeground(NOTIFICATION_ID, notification)
@@ -159,8 +160,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     private fun setUpRemoteView(remoteView: RemoteViews?) {
         remoteView?.setImageViewResource(R.id.image_view_close, R.drawable.ic_remote_view_close)
-        remoteView?.setImageViewResource(R.id.image_view_play_last, R.drawable.ic_remote_view_play_last)
-        remoteView?.setImageViewResource(R.id.image_view_play_next, R.drawable.ic_remote_view_play_next)
+        remoteView?.setImageViewResource(R.id.image_view_play_last, R.drawable.ic_previous_mix)
+        remoteView?.setImageViewResource(R.id.image_view_play_next, R.drawable.ic_next_mix)
 
         remoteView?.setOnClickPendingIntent(R.id.button_close, getPendingIntent(ACTION_STOP_SERVICE))
         remoteView?.setOnClickPendingIntent(R.id.button_play_last, getPendingIntent(ACTION_PLAY_LAST))
@@ -173,7 +174,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         remoteView.setTextViewText(R.id.text_view_name, mix?.title)
         remoteView.setTextViewText(R.id.text_view_artist, mix?.label)
         remoteView.setImageViewResource(R.id.image_view_play_toggle,
-                if (mPlayer!!.isPlaying()) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
+                if (mPlayer!!.isPlaying()) R.drawable.ic_pause else R.drawable.ic_play)
     }
 
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)

@@ -3,7 +3,6 @@ package pixel.kotlin.bassblog.network
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-// TODO: make immutable
 open class Mix : RealmObject() {
     @PrimaryKey
     var mixId: Long = 0L

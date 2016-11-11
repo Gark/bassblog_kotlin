@@ -31,9 +31,9 @@ class PlayList {
     }
 
     private fun handleChanges() {
-        if (mCurrentMix == null && !mAllMix.isEmpty()) {
-            mCurrentMix = mAllMix.first()
-        }
+//        if (mCurrentMix == null && !mAllMix.isEmpty()) {
+//            mCurrentMix = mAllMix.first()
+//        }
     }
 
     fun updateCurrent(mix: Mix, tab: Int) {

@@ -75,6 +75,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
                 mPlayer.reset()
                 mPlayer.setDataSource(currentMix.track)
                 mPlayer.prepareAsync()
+                notifyPlayStatusChanged(false)
                 // TODO notifyPlayStatusChanged(true) notify loading
             } catch (e: IOException) {
                 if (BuildConfig.DEBUG) Log.e(TAG, "play: ", e)

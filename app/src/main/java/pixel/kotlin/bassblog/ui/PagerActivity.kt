@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.MenuItem
+import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_activity.*
 import pixel.kotlin.bassblog.R
@@ -26,12 +27,11 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
         pager.addOnPageChangeListener(this)
         button_play_toggle_bottom.setOnClickListener { handleToggleClick() }
         bottom_control.setOnClickListener { handleBottomPanelClick() }
-
-
     }
 
     private fun handleBottomPanelClick() {
-        MusicPlayerActivity.start(this, text_view_name_bottom, getString(R.string.mix_text_transition))
+//        MusicPlayerActivity.start(this, text_view_name_bottom, getString(R.string.mix_text_transition))
+        MusicPlayerActivity.start(this)
     }
 
     private fun handleToggleClick() {
@@ -92,6 +92,8 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
         if (mPlaybackService == null) return
 
         val song = mPlaybackService!!.getPlayingSong()
+
+        bottom_control.visibility = if (song == null) View.GONE else View.VISIBLE
         text_view_name_bottom.text = song?.title
 
         Picasso.with(this)

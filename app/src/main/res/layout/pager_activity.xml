@@ -29,8 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_margin"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:background="#5a5a5a"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/image_view_album_bottom"
