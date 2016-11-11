@@ -126,7 +126,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
         val mix = mPlayer?.getPlayingMix()
 
-        mix?.let {
+        mix?.image?.let {
             Picasso.with(applicationContext)
                     .load(mix.image)
                     .into(small, R.id.image_view_album, NOTIFICATION_ID, notification)
