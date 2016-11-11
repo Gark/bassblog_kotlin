@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchFragment : BaseFragment(), TextWatcher, Callback<PostsResponse> {
 
+
     private var mCall: Call<PostsResponse>? = null
     private var mApi: BassBlogApi? = null
 
@@ -29,6 +30,8 @@ class SearchFragment : BaseFragment(), TextWatcher, Callback<PostsResponse> {
         val retrofit = builder.build()
         mApi = retrofit.create(BassBlogApi::class.java)
     }
+
+    override fun getEmptyText(): Int = R.string.no_results
 
     override fun getLayout(): Int = R.layout.search_layout
 

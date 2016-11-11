@@ -77,8 +77,9 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:padding="10dp"
-        android:progressTint="@color/colorPrimary"
-        android:thumbTint="@color/colorPrimaryDark"
+        android:progressTint="@color/colorPrimaryDark"
+        android:secondaryProgressTint="@color/colorPrimary"
+        android:thumbTint="@color/colorPrimary"
         tools:progress="50"
         tools:secondaryProgress="75" />
 
@@ -93,36 +94,36 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/button_share"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_share" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/button_play_last"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_previous_mix" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/button_play_toggle"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_play" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/button_play_next"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_next_mix" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/button_favorite_toggle"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="center"
             app:srcCompat="@drawable/ic_add_to_favorites" />

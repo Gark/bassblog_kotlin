@@ -12,4 +12,6 @@ class FavouriteFragment : BaseFragment() {
     override fun getAdapter(): BaseMixAdapter = FavouriteAdapter(activity, this)
 
     override fun getLayout(): Int = R.layout.all_mix
+
+    override fun getEmptyText(): Int = R.string.no_favourites
 }

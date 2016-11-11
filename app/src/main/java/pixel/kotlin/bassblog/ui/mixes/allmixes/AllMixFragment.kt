@@ -47,4 +47,6 @@ class AllMixFragment : BaseFragment() {
     }
 
     override fun getTabId(): Int = PlayList.ALL_MIX
+
+    override fun getEmptyText(): Int = R.string.no_results
 }

@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/no_results"
+        android:textAllCaps="true"
         android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView

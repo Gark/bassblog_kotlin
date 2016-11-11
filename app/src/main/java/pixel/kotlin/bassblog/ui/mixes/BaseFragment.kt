@@ -23,7 +23,10 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
         mBaseMixAdapter = getAdapter()
         mixes_recycler.layoutManager = LinearLayoutManager(activity)
         mixes_recycler.adapter = mBaseMixAdapter
+        empty_view?.setText(getEmptyText())
     }
+
+    abstract fun getEmptyText(): Int
 
     abstract fun getLayout(): Int
 
