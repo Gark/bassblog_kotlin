@@ -8,4 +8,5 @@
 
     <string name="mix_text_transition" translatable="false">mix_text_transition</string>
     <string name="no_results">No results</string>
+    <string name="track_list">track list</string>
 </resources>
