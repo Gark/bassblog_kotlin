@@ -10,6 +10,7 @@ import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_activity.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.mixes.allmixes.AllMixFragment
 import pixel.kotlin.bassblog.ui.mixes.favourite.FavouriteFragment
 import pixel.kotlin.bassblog.ui.search.SearchFragment
@@ -35,8 +36,7 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
     }
 
     private fun handleToggleClick() {
-        if (mPlaybackService == null) return
-        mPlaybackService!!.toggle()
+        mPlaybackService?.toggle()
     }
 
     private fun onSelected(item: MenuItem): Boolean {
@@ -78,14 +78,25 @@ class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
         }
     }
 
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
-        updatePlayToggle(isPlaying)
+    override fun onPlayStatusChanged(state: Int) {
+        updatePlayToggle(state)
         updateSongData()
     }
 
+    override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
+        progressBar.progress = 100 * progress / duration
+    }
+
     // TODO: need progress loading
-    fun updatePlayToggle(play: Boolean) {
-        button_play_toggle_bottom.setImageResource(if (play) R.drawable.ic_icon_pause_player else R.drawable.ic_icon_play_player)
+    fun updatePlayToggle(state: Int) {
+        button_play_toggle_bottom.setImageResource(
+                when (state) {
+                    Player.NOT_PLAYING -> R.drawable.ic_icon_play_player
+                    Player.PLAYING -> R.drawable.ic_icon_pause_player
+                    else -> R.drawable.ic_bb_mixes
+                }
+
+        )
     }
 
     fun updateSongData() {

@@ -7,17 +7,16 @@ interface IPlayback {
     fun play(mix: Mix, tab: Int)
     fun playLast()
     fun playNext()
-    fun isPlaying(): Boolean
-    fun getProgress(): Int
-    fun getDuration(): Int
-    fun getBuffered(): Int
+    fun getPlayingState(): Int
     fun getPlayingMix(): Mix?
     fun seekTo(progress: Int)
-    fun registerCallback(callback: Callback)
-    fun unregisterCallback(callback: Callback)
+    fun registerCallback(callback: PlayerCallback)
+    fun unregisterCallback(callback: PlayerCallback)
     fun releasePlayer()
+    fun requestDataOnBind()
 
-    interface Callback {
-        fun onPlayStatusChanged(isPlaying: Boolean)
+    interface PlayerCallback {
+        fun onPlayStatusChanged(state: Int)
+        fun onTick(progress: Int, duration: Int, secondaryProgress: Int)
     }
 }

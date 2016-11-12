@@ -4,7 +4,6 @@ package pixel.kotlin.bassblog.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -13,14 +12,10 @@ import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
-import java.util.concurrent.TimeUnit
 
 class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
-
-    private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
-    private val mHandler = Handler()
-    private val runnable = Runnable { scheduleUpdater() }
 
     companion object {
         //        fun start(activity: Activity, view: View, text: String) {
@@ -76,7 +71,6 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         mPlaybackService?.let {
             val mix = it.getPlayingMix()
             mix?.let {
-
                 val realm = Realm.getDefaultInstance()
                 realm.beginTransaction()
                 mix.favourite = !mix.favourite;
@@ -102,47 +96,20 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
         mPlaybackService!!.playNext()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (mPlaybackService == null) return
-        if (mPlaybackService!!.isPlaying()) {
-            mHandler.post(runnable)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mHandler.removeCallbacks(runnable)
-    }
-
-    private fun scheduleUpdater() {
-        mHandler.postDelayed(runnable, INTERVAL)
-        if (mPlaybackService == null) return
-
-        val progress = mPlaybackService?.getProgress() ?: 0
-        val duration = mPlaybackService?.getDuration() ?: 1
-
+    override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
+        text_view_progress.text = convertSecondsToHMmSs(progress)
         text_view_duration.text = convertSecondsToHMmSs(duration)
-        if (mPlaybackService!!.isPlaying()) {
-            text_view_progress.text = convertSecondsToHMmSs(progress)
-            seek_bar.progress = 100 * progress / duration
-            seek_bar.secondaryProgress = mPlaybackService!!.getBuffered()
-        }
+        seek_bar.progress = 100 * progress / duration
+        seek_bar.secondaryProgress = secondaryProgress
     }
 
     private fun handleToggleClick() {
-        if (mPlaybackService == null) return
-        mPlaybackService!!.toggle()
+        mPlaybackService?.toggle()
     }
 
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
-        updatePlayToggle(isPlaying)
+    override fun onPlayStatusChanged(state: Int) {
+        updatePlayToggle(state)
         updateSongData()
-        if (isPlaying) {
-            mHandler.post(runnable)
-        } else {
-            mHandler.removeCallbacks(runnable)
-        }
     }
 
     private fun updateFavouriteButton(favourite: Boolean) {
@@ -156,7 +123,7 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     fun updateSongData() {
         if (mPlaybackService == null) return
 
-        val mix = mPlaybackService!!.getPlayingMix()
+        val mix = mPlaybackService?.getPlayingMix()
         text_view_name.text = mix?.title
         text_view_artist.text = mix?.label
         updateFavouriteButton(mix?.favourite ?: true)
@@ -168,8 +135,15 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     }
 
 
-    fun updatePlayToggle(play: Boolean) {
-        button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
+    fun updatePlayToggle(state: Int) {
+        // TODO loading
+        button_play_toggle.setImageResource(
+                when (state) {
+                    Player.NOT_PLAYING -> R.drawable.ic_play
+                    Player.PLAYING -> R.drawable.ic_pause
+                    else -> R.drawable.ic_bb_mixes
+                }
+        )
     }
 
     fun convertSecondsToHMmSs(seconds: Int): String {

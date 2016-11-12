@@ -31,9 +31,7 @@ class PlayList {
     }
 
     private fun handleChanges() {
-//        if (mCurrentMix == null && !mAllMix.isEmpty()) {
-//            mCurrentMix = mAllMix.first()
-//        }
+        // do nothing
     }
 
     fun updateCurrent(mix: Mix, tab: Int) {
@@ -55,12 +53,16 @@ class PlayList {
     fun clear() = mAllMix.removeChangeListeners()
 
     fun moveToNext() {
-        mCurrentPosition = if (mCurrentPosition == mCurrentList.size - 1) 0 else mCurrentPosition + 1
-        mCurrentMix = mCurrentList[mCurrentPosition]
+        if (mCurrentList.size > 0) {
+            mCurrentPosition = if (mCurrentPosition == mCurrentList.size - 1) 0 else mCurrentPosition + 1
+            mCurrentMix = mCurrentList[mCurrentPosition]
+        }
     }
 
     fun moveToPrevious() {
-        Math.max(0, mCurrentPosition - 1)
-        mCurrentMix = mCurrentList[mCurrentPosition]
+        if (mCurrentList.size > 0) {
+            Math.max(0, mCurrentPosition - 1)
+            mCurrentMix = mCurrentList[mCurrentPosition]
+        }
     }
 }

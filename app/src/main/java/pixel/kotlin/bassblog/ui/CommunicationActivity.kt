@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import pixel.kotlin.bassblog.service.IPlayback
 import pixel.kotlin.bassblog.service.PlaybackService
 
-open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlayback.Callback {
+abstract class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlayback.PlayerCallback {
 
     protected var mPlaybackService: IPlayback? = null
 
@@ -33,11 +33,7 @@ open class CommunicationActivity : AppCompatActivity(), ServiceConnection, IPlay
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         mPlaybackService = (service as PlaybackService.LocalBinder).service
         mPlaybackService?.registerCallback(this)
-        onPlayStatusChanged(mPlaybackService!!.isPlaying())
+        mPlaybackService?.requestDataOnBind()
+        onPlayStatusChanged(mPlaybackService!!.getPlayingState())
     }
-
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
-
-    }
-
 }

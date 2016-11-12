@@ -54,8 +54,12 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
         }
     }
 
-    override fun onPlayStatusChanged(isPlaying: Boolean) {
+    override fun onPlayStatusChanged(state: Int) {
         val mix = mPlaybackService?.getPlayingMix()
         mBaseMixAdapter?.updatePlayingMix(mix)
+    }
+
+    override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
+        
     }
 }

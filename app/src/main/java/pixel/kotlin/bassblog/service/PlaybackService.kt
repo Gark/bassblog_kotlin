@@ -13,7 +13,7 @@ import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.PagerActivity
 
-class PlaybackService : Service(), IPlayback, IPlayback.Callback {
+class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
     private val ACTION_PLAY_TOGGLE = "pixel.kotlin.bassblog.ACTION.PLAY_TOGGLE"
     private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
@@ -43,6 +43,10 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
             ACTION_STOP_SERVICE -> stopThePlanet()
             ACTION_PLAY_TOGGLE -> toggle()
         }
+    }
+
+    override fun requestDataOnBind() {
+        mPlayer?.requestData()
     }
 
     private fun stopThePlanet() {
@@ -77,23 +81,17 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
 
     override fun playNext() = mPlayer!!.playNext()
 
-    override fun isPlaying(): Boolean = mPlayer!!.isPlaying()
-
-    override fun getProgress(): Int = mPlayer!!.getProgress()
-
-    override fun getDuration(): Int = mPlayer!!.getDuration()
-
-    override fun getBuffered(): Int = mPlayer!!.getBuffered()
+    override fun getPlayingState(): Int = mPlayer!!.getPlayingState()
 
     override fun getPlayingMix(): Mix? = mPlayer!!.getPlayingMix()
 
     override fun seekTo(progress: Int) = mPlayer!!.seekTo(progress)
 
-    override fun registerCallback(callback: IPlayback.Callback) {
+    override fun registerCallback(callback: IPlayback.PlayerCallback) {
         mPlayer?.registerCallback(callback)
     }
 
-    override fun unregisterCallback(callback: IPlayback.Callback) {
+    override fun unregisterCallback(callback: IPlayback.PlayerCallback) {
         mPlayer?.unregisterCallback(callback)
     }
 
@@ -101,7 +99,11 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         // do nothing
     }
 
-    override fun onPlayStatusChanged(isPlaying: Boolean) = showNotification()
+    override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
+        // do nothing
+    }
+
+    override fun onPlayStatusChanged(state: Int) = showNotification()
 
     // Notification
     /**
@@ -176,7 +178,11 @@ class PlaybackService : Service(), IPlayback, IPlayback.Callback {
         remoteView.setTextViewText(R.id.text_view_name, mix?.title)
         remoteView.setTextViewText(R.id.text_view_artist, mix?.label)
         remoteView.setImageViewResource(R.id.image_view_play_toggle,
-                if (mPlayer!!.isPlaying()) R.drawable.ic_pause else R.drawable.ic_play)
+                when (mPlayer!!.getPlayingState()) {
+                    Player.PLAYING -> R.drawable.ic_pause
+                    Player.NOT_PLAYING -> R.drawable.ic_play
+                    else -> R.drawable.ic_bb_mixes
+                }) // TODO icon for loading
     }
 
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)
