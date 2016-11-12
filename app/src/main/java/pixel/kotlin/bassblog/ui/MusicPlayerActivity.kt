@@ -2,8 +2,10 @@ package pixel.kotlin.bassblog.ui
 
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -15,7 +17,7 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
 
-class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeListener {
+class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 
     companion object {
         //        fun start(activity: Activity, view: View, text: String) {
@@ -94,6 +96,11 @@ class MusicPlayerActivity : CommunicationActivity(), SeekBar.OnSeekBarChangeList
     private fun handleNextClick() {
         if (mPlaybackService == null) return
         mPlaybackService!!.playNext()
+    }
+
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        super.onServiceConnected(name, service)
+        mPlaybackService?.requestDataOnBind()
     }
 
     override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {

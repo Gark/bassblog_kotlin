@@ -32,9 +32,6 @@ abstract class BinderFragment : Fragment(), ServiceConnection, IPlayback.PlayerC
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         mPlaybackService = (service as PlaybackService.LocalBinder).service
         mPlaybackService?.registerCallback(this)
-        mPlaybackService?.requestDataOnBind()
         onPlayStatusChanged(mPlaybackService!!.getPlayingState())
     }
-
-
 }

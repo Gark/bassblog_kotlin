@@ -15,7 +15,7 @@ import pixel.kotlin.bassblog.ui.mixes.allmixes.AllMixFragment
 import pixel.kotlin.bassblog.ui.mixes.favourite.FavouriteFragment
 import pixel.kotlin.bassblog.ui.search.SearchFragment
 
-class PagerActivity : CommunicationActivity(), ViewPager.OnPageChangeListener {
+class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

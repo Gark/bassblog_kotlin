@@ -10,7 +10,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player : IPlayback, MediaPlayer.OnCompletionListener {
+class Player : IPlayback {
 
     companion object {
         val PLAYING = 0
@@ -33,8 +33,7 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
 
     init {
         mPlayer = MediaPlayer()
-//        mPlayer.setOnCompletionListener { handleOnComplete() }
-        mPlayer.setOnCompletionListener(this)
+        mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare() }
         mPlayer.setOnBufferingUpdateListener { mediaPlayer, i -> handleBuffering(i) }
     }
@@ -44,10 +43,6 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     }
 
     private fun handleOnComplete() {
-        playNext()
-    }
-
-    override fun onCompletion(mp: MediaPlayer) {
         playNext()
     }
 
@@ -171,11 +166,10 @@ class Player : IPlayback, MediaPlayer.OnCompletionListener {
     override fun requestDataOnBind() = requestData()
 
     fun requestData() {
-        Log.e("", "")
-//        mPlayList.getCurrentMix()?.let {
-//            val duration = Math.max(1, mPlayer.duration)
-//            notifyTick(mPlayer.currentPosition, duration, mBuffered)
-//        }
+        mPlayList.getCurrentMix()?.let {
+            val duration = Math.max(1, mPlayer.duration)
+            notifyTick(mPlayer.currentPosition, duration, mBuffered)
+        }
     }
 
     private fun notifyTick(progress: Int, duration: Int, secondaryProgress: Int) {
