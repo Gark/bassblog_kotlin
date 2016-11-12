@@ -2,6 +2,7 @@ package pixel.kotlin.bassblog.service
 
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
@@ -12,6 +13,7 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.PagerActivity
+import android.net.wifi.WifiManager
 
 class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
@@ -67,7 +69,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
     override fun onCreate() {
         super.onCreate()
-        mPlayer = Player()
+        val wifi = getSystemService(Context.WIFI_SERVICE)
+        mPlayer = Player(wifi as WifiManager)
         registerCallback(this)
     }
 

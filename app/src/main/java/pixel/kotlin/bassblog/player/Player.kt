@@ -1,6 +1,7 @@
 package pixel.kotlin.bassblog.player
 
 import android.media.MediaPlayer
+import android.net.wifi.WifiManager
 import android.os.Handler
 import android.util.Log
 import pixel.kotlin.bassblog.BuildConfig
@@ -10,7 +11,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player : IPlayback {
+class Player(val wifi: WifiManager) : IPlayback {
 
     companion object {
         val PLAYING = 0
@@ -22,7 +23,7 @@ class Player : IPlayback {
     private val mHandler = Handler()
     private val runnable = Runnable { tick() }
 
-
+    private val mWifiLock: WifiManager.WifiLock
     private val mCallbacks = ArrayList<IPlayback.PlayerCallback>()
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()
@@ -31,7 +32,9 @@ class Player : IPlayback {
     private var mCurrentState = NOT_PLAYING
     private var mBuffered = 0
 
+
     init {
+        mWifiLock = wifi.createWifiLock("LOCK")
         mPlayer = MediaPlayer()
         mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare() }
@@ -153,9 +156,24 @@ class Player : IPlayback {
 
     private fun handlePlayingState() {
         when (mCurrentState) {
-            PLAYING -> mHandler.postDelayed(runnable, INTERVAL)
-            else -> mHandler.removeCallbacks(runnable)
+            PLAYING -> handlePlaying()
+            NOT_PLAYING -> handleNotPlaying()
+            else -> {
+                // do nothing
+            }
         }
+    }
+
+    private fun handleNotPlaying() {
+        mHandler.removeCallbacks(runnable)
+        if (mWifiLock.isHeld) {
+            mWifiLock.release()
+        }
+    }
+
+    private fun handlePlaying() {
+        mHandler.postDelayed(runnable, INTERVAL)
+        mWifiLock.acquire()
     }
 
     private fun tick() {
