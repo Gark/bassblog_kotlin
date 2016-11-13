@@ -1,5 +1,6 @@
 package pixel.kotlin.bassblog.player
 
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.wifi.WifiManager
 import android.os.Handler
@@ -11,7 +12,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player(val wifi: WifiManager) : IPlayback {
+class Player(wifi: WifiManager) : IPlayback {
 
     companion object {
         val PLAYING = 0
@@ -46,7 +47,7 @@ class Player(val wifi: WifiManager) : IPlayback {
     }
 
     private fun handleOnComplete() {
-        playNext()
+//        playNext()
     }
 
     fun play() {
@@ -85,10 +86,11 @@ class Player(val wifi: WifiManager) : IPlayback {
 
     private fun prepareAdnPlay() {
         val currentMix = mPlayList.getCurrentMix()
-        currentMix?.let {
+        currentMix?.track?.let {
             try {
                 mPlayer.reset()
                 mPlayer.setDataSource(currentMix.track)
+                mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
                 mPlayer.prepareAsync()
                 notifyPlayStatusChanged(LOADING)
             } catch (e: IOException) {

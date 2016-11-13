@@ -1,64 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal"
-    android:padding="2dp">
-
-    <ImageView
-        android:id="@+id/mix_image"
-        android:layout_width="@dimen/image_width"
-        android:layout_height="@dimen/image_height"
-        android:layout_alignParentLeft="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:scaleType="centerInside"
-        tools:src="@mipmap/ic_launcher" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/header_date"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/now_playing"
-        android:layout_toRightOf="@+id/mix_image"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textAllCaps="true"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="SEPTEMBER 2016" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="2dp">
 
-        <TextView
-            android:id="@+id/post_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="post title" />
+        <ImageView
+            android:id="@+id/mix_image"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_height"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            tools:src="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/post_label"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@color/text_color"
-            android:textSize="12sp"
-            tools:text="post labels" />
+            android:layout_toLeftOf="@+id/now_playing"
+            android:layout_toRightOf="@+id/mix_image"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/post_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="post title" />
 
-    <ImageView
-        android:id="@+id/now_playing"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_bb_now_playing_icon" />
+            <TextView
+                android:id="@+id/post_label"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/text_color"
+                android:textSize="12sp"
+                tools:text="post labels" />
 
-</RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/now_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_bb_now_playing_icon" />
+
+    </RelativeLayout>
+
+</LinearLayout>

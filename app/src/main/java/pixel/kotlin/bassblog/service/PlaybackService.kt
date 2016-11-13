@@ -26,12 +26,14 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
     private var mPlayer: Player? = null
 
+    private val mBinder = LocalBinder()
+
     inner class LocalBinder : Binder() {
         val service: PlaybackService
             get() = this@PlaybackService
     }
 
-    override fun onBind(intent: Intent?): IBinder? = LocalBinder()
+    override fun onBind(intent: Intent?): IBinder? = mBinder
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         handleRemoteAction(intent?.action)

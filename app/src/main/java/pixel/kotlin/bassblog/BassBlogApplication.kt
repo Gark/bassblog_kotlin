@@ -5,7 +5,6 @@ import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import io.realm.Realm
-import io.realm.RealmConfiguration
 
 
 class BassBlogApplication : Application() {
@@ -21,7 +20,7 @@ class BassBlogApplication : Application() {
                 .setAction("Application start")
                 .build())
 
-
+//        iniCanary()
 //        // TODO clear data on conflict.
 //        val realmConfiguration = RealmConfiguration.Builder()
 //                .name(Realm.DEFAULT_REALM_NAME)
@@ -29,6 +28,13 @@ class BassBlogApplication : Application() {
 //                .build()
 //        Realm.getInstance(realmConfiguration)
     }
+
+//    fun iniCanary() {
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return
+//        }
+//        LeakCanary.install(this)
+//    }
 
     fun getDefaultTracker(): Tracker? {
         mTracker.let {
