@@ -95,7 +95,6 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
                     Player.PLAYING -> R.drawable.ic_icon_pause_player
                     else -> R.drawable.ic_bb_mixes
                 }
-
         )
     }
 

@@ -11,4 +11,6 @@
     <string name="no_favourites">No favourites</string>
     <string name="track_list">track list</string>
     <string name="tracklist">Tracklist</string>
+
+    <string name="google_analytics">put value here...</string>
 </resources>
