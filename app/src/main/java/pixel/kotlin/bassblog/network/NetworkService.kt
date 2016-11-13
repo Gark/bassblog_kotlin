@@ -90,6 +90,7 @@ open class NetworkService : IntentService(NetworkService::class.java.name) {
             Mix().apply {
                 mixId = it.id
                 title = it.title
+                url = it.url
                 image = it.getImage()
                 track = it.getTrack()
                 label = it.getLabel()

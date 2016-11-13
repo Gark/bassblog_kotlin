@@ -17,6 +17,7 @@ import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
 
+
 class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 
     companion object {
@@ -84,8 +85,14 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun handleShareClick() {
-        if (mPlaybackService == null) return
-        // TODO
+        mPlaybackService?.getPlayingMix()?.url?.let {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, it)
+            shareIntent.resolveActivity(this.packageManager)?.let {
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.app_name)))
+            }
+        }
     }
 
     private fun handlePlayLast() {

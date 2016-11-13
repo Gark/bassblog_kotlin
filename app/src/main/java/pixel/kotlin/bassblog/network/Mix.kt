@@ -17,6 +17,7 @@ open class Mix : RealmObject() {
     var content: String? = null
     var published = 0L
     var favourite: Boolean = false
+    var url: String? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

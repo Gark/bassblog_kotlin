@@ -29,7 +29,7 @@ internal interface BassBlogApi {
         //labels=deep&
         // fields=items(id%2Cimages%2Clabels%2Ctitle)%2CnextPageToken&key={YOUR_API_KEY}
 
-        val ITEMS = "items(content,id,images,labels,published,title),nextPageToken"
+        val ITEMS = "items(content,id,images,labels,published,title,url),nextPageToken"
     }
 
 
