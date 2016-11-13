@@ -12,7 +12,8 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player(wifi: WifiManager) : IPlayback {
+class Player(wifi: WifiManager) : IPlayback, MediaPlayer.OnErrorListener {
+
 
     companion object {
         val PLAYING = 0
@@ -37,9 +38,15 @@ class Player(wifi: WifiManager) : IPlayback {
     init {
         mWifiLock = wifi.createWifiLock("LOCK")
         mPlayer = MediaPlayer()
+        mPlayer.setOnErrorListener(this)
         mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare() }
         mPlayer.setOnBufferingUpdateListener { mediaPlayer, i -> handleBuffering(i) }
+    }
+
+    override fun onError(p0: MediaPlayer?, p1: Int, p2: Int): Boolean {
+        //True if the method handled the error, false if it didn't. Returning false, or not having an OnErrorListener at all, will cause the OnCompletionListener to be called.
+        return true
     }
 
     private fun handleBuffering(i: Int) {
@@ -47,7 +54,7 @@ class Player(wifi: WifiManager) : IPlayback {
     }
 
     private fun handleOnComplete() {
-//        playNext()
+        playNext()
     }
 
     fun play() {
@@ -109,8 +116,8 @@ class Player(wifi: WifiManager) : IPlayback {
     }
 
     override fun playLast() {
-        val duration = mPlayer.currentPosition
-        if (duration > TimeUnit.SECONDS.toMillis(20)) {
+        val currentPosition = mPlayer.currentPosition
+        if (currentPosition > TimeUnit.SECONDS.toMillis(20)) {
             seekTo(0)
         } else {
             stop()
