@@ -1,7 +1,6 @@
 package pixel.kotlin.bassblog.ui.mixes.allmixes
 
 import android.content.Context
-import android.widget.Toast
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
@@ -23,7 +22,6 @@ class AllMixesAdapter(val context: Context, callback: MixSelectCallback) : BaseM
     }
 
     private fun handleUpdates() {
-        Toast.makeText(context, "${mAllMixes.size}", Toast.LENGTH_SHORT).show()
         updateMixList(mAllMixes)
     }
 

@@ -59,7 +59,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MixHolder(mInflater.inflate(getLayout(), parent, false))
 
-    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mAllMix[position], showHeader(position))
+    override fun onBindViewHolder(holder: MixHolder, position: Int) = holder.displayData(mAllMix[position], showHeader(position), position)
 
     private fun showHeader(position: Int): Boolean {
         if (position == 0) {
@@ -93,9 +93,9 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             callback.onMixSelected(mMix)
         }
 
-        fun displayData(mix: Mix, showHeader: Boolean) {
+        fun displayData(mix: Mix, showHeader: Boolean, position: Int) {
             mMix = mix
-            mPostTitle.text = mix.title
+            mPostTitle.text = "$position ${mix.title}"
             mPostLabel.text = mix.label
             mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.INVISIBLE
             mCalendar.timeInMillis = mix.published
