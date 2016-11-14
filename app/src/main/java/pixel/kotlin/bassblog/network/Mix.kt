@@ -46,7 +46,9 @@ fun PostsResponse.RawPost.getTrack(): String? {
     return trackUrl
 }
 
-fun PostsResponse.RawPost.getLabel(): String? = TextUtils.join(", ", labels)
+fun PostsResponse.RawPost.getLabel(): String? {
+    return labels?.let { TextUtils.join(", ", labels) }
+}
 
 
 fun PostsResponse.RawPost.getTime(formatter: SimpleDateFormat): Long {

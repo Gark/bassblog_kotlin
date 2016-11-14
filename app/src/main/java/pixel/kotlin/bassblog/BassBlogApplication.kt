@@ -5,6 +5,7 @@ import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import io.realm.Realm
+import pixel.kotlin.bassblog.network.GcmUpdateService
 
 
 class BassBlogApplication : Application() {
@@ -19,6 +20,8 @@ class BassBlogApplication : Application() {
                 .setCategory("Application start")
                 .setAction("Application start")
                 .build())
+
+        GcmUpdateService.start(applicationContext)
 
 //        iniCanary()
 //        // TODO clear data on conflict.

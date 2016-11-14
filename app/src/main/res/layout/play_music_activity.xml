@@ -132,7 +132,7 @@
     <ImageView
         android:id="@+id/mix_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         tools:src="@mipmap/ic_launcher" />

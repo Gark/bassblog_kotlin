@@ -20,6 +20,7 @@ android {
         resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        // TODO blogId and api key to local properties.
         buildConfigField 'String', 'BLOG_ID', '\"4928216501086861761\"'
         buildConfigField 'String', 'API_KEY', '\"AIzaSyB-ZPijkunpFb6Lu5BUDNMhensnto_fB-o\"'
         buildConfigField 'String', 'BASE_URL', '\"https://www.googleapis.com/\"'
@@ -47,6 +48,7 @@ dependencies {
     // Image loader
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.gms:play-services-analytics:9.8.0'
+    compile 'com.google.android.gms:play-services:9.8.0'
 
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
