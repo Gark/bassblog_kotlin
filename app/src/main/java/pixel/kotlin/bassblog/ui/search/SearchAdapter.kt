@@ -10,7 +10,7 @@ class SearchAdapter(context: Context, callback: MixSelectCallback) : BaseMixAdap
         // do nothing
     }
 
-    override fun getLayout(): Int = R.layout.item_post_list
+    override fun getLayout(): Int = R.layout.item_search
 
     override fun needResize() = true
 

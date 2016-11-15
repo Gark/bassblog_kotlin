@@ -9,7 +9,7 @@
         android:id="@+id/search_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search"
+        android:hint="@string/search_mix"
         android:padding="15dp" />
 
     <FrameLayout
@@ -22,13 +22,76 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_results"
+            android:textAllCaps="true"
             android:visibility="gone" />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mixes_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:id="@+id/categories_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="50dp"
+            android:paddingTop="50dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/_320_kbps"
+                style="@style/Category"
+                android:tag="@string/_320_kbps"
+                android:text="@string/_320_kbps" />
+
+            <TextView
+                android:id="@+id/deep"
+                style="@style/Category"
+                android:tag="@string/deep"
+                android:text="@string/deep" />
+
+            <TextView
+                android:id="@+id/drumfunk"
+                style="@style/Category"
+                android:tag="@string/drumfunk"
+                android:text="@string/drumfunk" />
+
+            <TextView
+                android:id="@+id/hard"
+                style="@style/Category"
+                android:tag="@string/hard"
+                android:text="@string/hard" />
+
+            <TextView
+                android:id="@+id/liquid"
+                style="@style/Category"
+                android:tag="@string/liquid"
+                android:text="@string/liquid" />
+
+            <TextView
+                android:id="@+id/neurofunk"
+                style="@style/Category"
+                android:tag="@string/neurofunk"
+                android:text="@string/neurofunk" />
+
+            <TextView
+                android:id="@+id/oldschool"
+                style="@style/Category"
+                android:tag="@string/oldschool"
+                android:text="@string/oldschool" />
+
+            <TextView
+                android:id="@+id/ragga_jungle"
+                style="@style/Category"
+                android:tag="@string/ragga_jungle"
+                android:text="@string/ragga_jungle" />
+
+        </LinearLayout>
+
 
     </FrameLayout>
 

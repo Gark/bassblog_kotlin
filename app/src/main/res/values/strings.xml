@@ -4,6 +4,7 @@
     <string name="favourites">Favourites</string>
     <string name="all_mixes">All mixes</string>
     <string name="search">Search</string>
+    <string name="search_mix">Search Mix</string>
     <string name="now_playing">Now playing</string>
 
     <string name="mix_text_transition" translatable="false">mix_text_transition</string>
@@ -13,4 +14,12 @@
     <string name="tracklist">Tracklist</string>
 
     <string name="google_analytics">put value here...</string>
+    <string name="_320_kbps">320 kbps</string>
+    <string name="deep">deep</string>
+    <string name="drumfunk">drumfunk</string>
+    <string name="hard">hard</string>
+    <string name="liquid">liquid</string>
+    <string name="neurofunk">neurofunk</string>
+    <string name="oldschool">oldschool</string>
+    <string name="ragga_jungle">ragga-jungle</string>
 </resources>

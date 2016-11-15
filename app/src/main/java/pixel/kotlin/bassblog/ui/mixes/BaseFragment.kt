@@ -48,9 +48,9 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
 
     override fun onDataUpdated(showEmptyView: Boolean) {
         if (showEmptyView) {
-            empty_view.visibility = View.VISIBLE
+            empty_view?.visibility = View.VISIBLE
         } else {
-            empty_view.visibility = View.GONE
+            empty_view?.visibility = View.GONE
         }
     }
 

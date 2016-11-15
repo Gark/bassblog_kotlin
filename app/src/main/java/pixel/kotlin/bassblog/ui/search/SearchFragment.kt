@@ -4,28 +4,28 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.TextView
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.search_layout.*
-import pixel.kotlin.bassblog.BuildConfig
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.*
 import pixel.kotlin.bassblog.player.PlayList
 import pixel.kotlin.bassblog.ui.mixes.BaseFragment
 import pixel.kotlin.bassblog.ui.mixes.BaseMixAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+
 
 class SearchFragment : BaseFragment(), TextWatcher {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         search_edit_text.addTextChangedListener(this)
+
+        val array = arrayListOf(_320_kbps, deep, drumfunk, hard, liquid, neurofunk, oldschool, ragga_jungle)
+        for (item in array) item.setOnClickListener { search_edit_text.setText(it.tag as String) }
     }
 
     fun query(filter: String) {
@@ -43,8 +43,25 @@ class SearchFragment : BaseFragment(), TextWatcher {
 
     override fun afterTextChanged(text: Editable?) {
         val filter = search_edit_text.text.toString().trim()
-        if (filter.length > 2) {
+        if (filter.isNotEmpty()) {
             query(filter)
+        } else {
+            mBaseMixAdapter?.updateMixList(Collections.emptyList())
+        }
+    }
+
+    override fun onDataUpdated(showEmptyView: Boolean) {
+        if (showEmptyView) {
+            if (search_edit_text.text.toString().isEmpty()) {
+                categories_panel.visibility = View.VISIBLE
+                empty_view.visibility = View.GONE
+            } else {
+                categories_panel.visibility = View.GONE
+                empty_view.visibility = View.VISIBLE
+            }
+        } else {
+            categories_panel.visibility = View.GONE
+            empty_view.visibility = View.GONE
         }
     }
 
