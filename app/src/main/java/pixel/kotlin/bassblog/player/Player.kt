@@ -1,9 +1,11 @@
 package pixel.kotlin.bassblog.player
 
+import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.wifi.WifiManager
 import android.os.Handler
+import android.os.PowerManager
 import android.util.Log
 import pixel.kotlin.bassblog.BuildConfig
 import pixel.kotlin.bassblog.network.Mix
@@ -12,7 +14,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Player(wifi: WifiManager) : IPlayback, MediaPlayer.OnErrorListener {
+class Player(wifi: WifiManager, context: Context) : IPlayback, MediaPlayer.OnErrorListener {
 
 
     companion object {
@@ -38,6 +40,7 @@ class Player(wifi: WifiManager) : IPlayback, MediaPlayer.OnErrorListener {
     init {
         mWifiLock = wifi.createWifiLock("LOCK")
         mPlayer = MediaPlayer()
+        mPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
         mPlayer.setOnErrorListener(this)
         mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare() }

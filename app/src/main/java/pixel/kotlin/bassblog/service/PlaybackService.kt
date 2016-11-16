@@ -72,7 +72,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
     override fun onCreate() {
         super.onCreate()
         val wifi = getSystemService(Context.WIFI_SERVICE)
-        mPlayer = Player(wifi as WifiManager)
+        mPlayer = Player(wifi as WifiManager, applicationContext)
         registerCallback(this)
     }
 
