@@ -15,7 +15,7 @@ class GcmUpdateService : GcmTaskService() {
         fun start(context: Context) {
             val myTask = OneoffTask.Builder()
                     .setService(GcmUpdateService::class.java)
-                    .setExecutionWindow(20, 50)
+                    .setExecutionWindow(0, 50)
                     .setTag("mix-download")
                     .build()
             GcmNetworkManager.getInstance(context).schedule(myTask)
