@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: 'io.fabric'
 
+
 def int currentVersionCode = 1;
 def String currentVersionName = "1.00";
 
@@ -44,6 +45,7 @@ android {
         debug {
 //            minifyEnabled false
 //            shrinkResources false
+            applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
         }
         release {
@@ -90,3 +92,4 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
 }
+

@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "214109792366",
+    "firebase_url": "https://bass-blog.firebaseio.com",
+    "project_id": "bass-blog",
+    "storage_bucket": "bass-blog.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214109792366:android:6c169b9ba6c44a51",
+        "android_client_info": {
+          "package_name": "pixel.kotlin.bassblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "214109792366-0uqg09ucnms1ntt59rq2k7nmpuuqt3st.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

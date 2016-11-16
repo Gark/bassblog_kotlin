@@ -1,13 +1,13 @@
 package pixel.kotlin.bassblog
 
 import android.app.Application
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
+import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import pixel.kotlin.bassblog.network.GcmUpdateService
-import io.fabric.sdk.android.Fabric
-import com.crashlytics.android.Crashlytics
 
 
 class BassBlogApplication : Application() {
@@ -25,6 +25,8 @@ class BassBlogApplication : Application() {
                 .build())
 
         GcmUpdateService.start(applicationContext)
+
+//        FirebaseCrash.report(Exception("My first Android non-fatal error"))
 
 //        iniCanary()
 //        // TODO clear data on conflict.
