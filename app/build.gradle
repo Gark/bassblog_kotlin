@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
+apply plugin: 'io.fabric'
 
 def int currentVersionCode = 1;
 def String currentVersionName = "1.0";
@@ -53,6 +54,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
+
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 //    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
@@ -60,4 +65,5 @@ dependencies {
 
 repositories {
     mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
 }

@@ -6,6 +6,8 @@ import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import io.realm.Realm
 import pixel.kotlin.bassblog.network.GcmUpdateService
+import io.fabric.sdk.android.Fabric
+import com.crashlytics.android.Crashlytics
 
 
 class BassBlogApplication : Application() {
@@ -14,6 +16,7 @@ class BassBlogApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Fabric.with(this, Crashlytics())
         Realm.init(applicationContext)
         mTracker = getDefaultTracker()
         mTracker?.send(HitBuilders.EventBuilder()
