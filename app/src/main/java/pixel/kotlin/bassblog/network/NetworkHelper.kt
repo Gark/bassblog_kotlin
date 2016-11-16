@@ -69,7 +69,7 @@ class NetworkHelper() {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = time
             if (trick > 0) {
-                calendar.add(Calendar.MINUTE, trick)// TODO: to avoid override update first item
+                calendar.add(Calendar.MINUTE, trick)
             }
             result = NetworkService.FORMATTER.format(calendar.time)
         }

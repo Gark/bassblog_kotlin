@@ -186,8 +186,8 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
                 when (mPlayer!!.getPlayingState()) {
                     Player.PLAYING -> R.drawable.ic_pause
                     Player.NOT_PLAYING -> R.drawable.ic_play
-                    else -> R.drawable.ic_bb_mixes
-                }) // TODO icon for loading
+                    else -> R.drawable.ic_play // TODO
+                })
     }
 
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)

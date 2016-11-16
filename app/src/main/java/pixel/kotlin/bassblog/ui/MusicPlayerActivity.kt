@@ -155,7 +155,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
                 when (state) {
                     Player.NOT_PLAYING -> R.drawable.ic_play
                     Player.PLAYING -> R.drawable.ic_pause
-                    else -> R.drawable.ic_bb_mixes
+                    else -> R.drawable.ic_pause
                 }
         )
     }
