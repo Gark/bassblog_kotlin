@@ -15,3 +15,30 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# BEGIN retrofit #------------------------------------
+-keep class com.squareup.okhttp.** { *; }
+-keep class retrofit2.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+-dontwarn retrofit2.**
+
+-keepattributes Signature
+-keepattributes Exceptions
+# END Retrofit #------------------------------------
+
+# BEGIN: PICASSO #------------------------------------
+-dontwarn com.squareup.picasso.**
+# END: PICASSO #--------------------------------------
+
+
+# Realm
+#-keep class io.realm.annotations.RealmModule
+#-keep @io.realm.annotations.RealmModule class *
+#-keep class io.realm.internal.Keep
+#-keep @io.realm.internal.Keep class *
+#-dontwarn javax.**
+#-dontwarn io.realm.**
+# Realm

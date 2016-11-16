@@ -5,7 +5,12 @@ apply plugin: 'realm-android'
 apply plugin: 'io.fabric'
 
 def int currentVersionCode = 1;
-def String currentVersionName = "1.0";
+def String currentVersionName = "1.00";
+
+// Load keystore
+def keystorePropertiesFile = rootProject.file("keystore.properties");
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -21,16 +26,34 @@ android {
         resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        // TODO blogId and api key to local properties.
-        buildConfigField 'String', 'BLOG_ID', '\"4928216501086861761\"'
-        buildConfigField 'String', 'API_KEY', '\"AIzaSyB-ZPijkunpFb6Lu5BUDNMhensnto_fB-o\"'
+        buildConfigField 'String', 'BLOG_ID', BLOG_ID
+        buildConfigField 'String', 'API_KEY', API_KEY
         buildConfigField 'String', 'BASE_URL', '\"https://www.googleapis.com/\"'
     }
-    buildTypes {
+
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
+    }
+
+    buildTypes {
+        debug {
+//            minifyEnabled false
+//            shrinkResources false
+            versionNameSuffix ".debug"
+        }
+        release {
+//            shrinkResources false
+//            minifyEnabled false
+//            useProguard false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
