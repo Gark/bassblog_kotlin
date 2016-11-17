@@ -13,7 +13,7 @@
     <string name="track_list">track list</string>
     <string name="tracklist">Tracklist</string>
 
-    <string name="google_analytics">put value here...</string>
+    <string name="google_analytics">UA-87577525-1</string>
     <string name="_320_kbps">320 kbps</string>
     <string name="deep">deep</string>
     <string name="drumfunk">drumfunk</string>
