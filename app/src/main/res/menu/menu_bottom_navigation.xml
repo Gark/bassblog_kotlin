@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_all"
-        android:icon="@drawable/ic_bb_mixes"
+        android:icon="@drawable/ic_bb_mixes_new"
         android:title="@string/all_mixes" />
     <item
         android:id="@+id/action_favourite"

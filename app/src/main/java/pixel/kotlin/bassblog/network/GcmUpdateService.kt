@@ -30,8 +30,6 @@ class GcmUpdateService : GcmTaskService() {
 
         try {
             val resultCount = helper.requestMixes(400, NetworkService.DEFAULT_TIME, time)
-            println("GcmNetworkManager $resultCount")
-            println("GcmNetworkManager ${list.last().published}")
 
             if (resultCount > 0) {
                 GcmUpdateService.start(applicationContext)

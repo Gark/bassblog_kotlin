@@ -5,8 +5,7 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 25
     buildToolsVersion = "25.0.0"
-    androidSupportVersion = "25.0.1"
-//    flywayVersion = '4.0.3'
+    androidSupportVersion = "25.0.0"
 }
 
 buildscript {

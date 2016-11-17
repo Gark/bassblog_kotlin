@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
+import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
@@ -74,12 +75,21 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         mPlaybackService?.let {
             val mix = it.getPlayingMix()
             mix?.let {
+
+
                 val realm = Realm.getDefaultInstance()
                 realm.beginTransaction()
                 mix.favourite = !mix.favourite;
                 realm.copyToRealmOrUpdate(mix)
                 realm.commitTransaction()
                 updateFavouriteButton(mix.favourite)
+
+                mix.title?.let {
+                    if (mix.favourite) {
+                        val app = application as BassBlogApplication
+                        app.fireEventFavourite(it)
+                    }
+                }
             }
         }
     }

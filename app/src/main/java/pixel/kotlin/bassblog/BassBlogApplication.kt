@@ -19,10 +19,7 @@ class BassBlogApplication : Application() {
         Fabric.with(this, Crashlytics())
         Realm.init(applicationContext)
         mTracker = getDefaultTracker()
-        mTracker?.send(HitBuilders.EventBuilder()
-                .setCategory("Application start")
-                .setAction("Application start")
-                .build())
+        mTracker?.send(HitBuilders.EventBuilder().setCategory("Application start").setAction("Application start").build())
 
         GcmUpdateService.start(applicationContext)
 
@@ -51,4 +48,16 @@ class BassBlogApplication : Application() {
         }
         return mTracker
     }
+
+    fun fireEventPlay(mixName: String) {
+        val event = HitBuilders.EventBuilder().setAction("Selected mix").setLabel(mixName).build()
+        getDefaultTracker()?.send(event)
+    }
+
+    fun fireEventFavourite(mixName: String) {
+        val event = HitBuilders.EventBuilder().setAction("Favourite mix").setLabel(mixName).build()
+        getDefaultTracker()?.send(event)
+    }
 }
+
+

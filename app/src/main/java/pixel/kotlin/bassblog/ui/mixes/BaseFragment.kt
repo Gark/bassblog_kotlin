@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.all_mix.*
+import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.ui.BinderFragment
 import pixel.kotlin.bassblog.ui.MusicPlayerActivity
@@ -41,6 +42,12 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
 
     override fun onMixSelected(mix: Mix?) {
         mix?.let {
+
+            it.title?.let {
+                val app = activity.application as BassBlogApplication
+                app.fireEventPlay(it)
+            }
+
             mPlaybackService?.play(it, getTabId())
             MusicPlayerActivity.start(activity)
         }
@@ -60,6 +67,6 @@ abstract class BaseFragment : BinderFragment(), BaseMixAdapter.MixSelectCallback
     }
 
     override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
-        
+
     }
 }
