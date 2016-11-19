@@ -25,7 +25,9 @@ class SearchFragment : BaseFragment(), TextWatcher {
         search_edit_text.addTextChangedListener(this)
 
         val array = arrayListOf(_320_kbps, deep, drumfunk, hard, liquid, neurofunk, oldschool, ragga_jungle)
-        for (item in array) item.setOnClickListener { search_edit_text.setText(it.tag as String) }
+        for (item in array) item.setOnClickListener {
+            search_edit_text.append(it.tag as String)
+        }
     }
 
     fun query(filter: String) {
