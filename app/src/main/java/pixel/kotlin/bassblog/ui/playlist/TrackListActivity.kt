@@ -4,8 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Html
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_play_list.*
+import kotlinx.android.synthetic.main.activity_track_list.*
 import pixel.kotlin.bassblog.R
 
 class TrackListActivity : AppCompatActivity() {
@@ -32,16 +33,31 @@ class TrackListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_play_list)
+//        setContentView(R.layout.activity_play_list)
+        setContentView(R.layout.activity_track_list)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val content = intent.getStringExtra(CONTENT)
+        val arr = content.split("Tracklist:")
 
-        playlist_detail.settings.loadWithOverviewMode = true
-        playlist_detail.settings.useWideViewPort = true
-        playlist_detail.setInitialScale(200)
-        playlist_detail.isVerticalScrollBarEnabled = false
-        playlist_detail.isHorizontalScrollBarEnabled = false
-        playlist_detail.loadData(content, "text/html; charset=utf-8", "UTF-8")
+        // parse html ))
+        if (arr.size >= 2) {
+            val head = arr[1]
+            val body = head.split("source")
+            if (body.isNotEmpty()) {
+                tracklist.text = Html.fromHtml(body[0])
+            } else {
+                tracklist.text = Html.fromHtml(head)
+            }
+        } else {
+            tracklist.text = getString(R.string.no_tracklist)
+        }
+
+//        playlist_detail.settings.loadWithOverviewMode = true
+//        playlist_detail.settings.useWideViewPort = true
+//        playlist_detail.setInitialScale(200)
+//        playlist_detail.isVerticalScrollBarEnabled = false
+//        playlist_detail.isHorizontalScrollBarEnabled = false
+//        playlist_detail.loadData(content, "text/html; charset=utf-8", "UTF-8")
     }
 }
