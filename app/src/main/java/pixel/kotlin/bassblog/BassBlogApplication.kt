@@ -7,6 +7,7 @@ import com.google.android.gms.analytics.HitBuilders
 import com.google.android.gms.analytics.Tracker
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import pixel.kotlin.bassblog.network.GcmUpdateService
 
 
@@ -23,15 +24,14 @@ class BassBlogApplication : Application() {
 
         GcmUpdateService.start(applicationContext)
 
-//        FirebaseCrash.report(Exception("My first Android non-fatal error"))
+        // TODO migration.
+        val config2 = RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build()
+        val realm = Realm.getInstance(config2)
+        realm.close()
 
-//        iniCanary()
-//        // TODO clear data on conflict.
-//        val realmConfiguration = RealmConfiguration.Builder()
-//                .name(Realm.DEFAULT_REALM_NAME)
-//                .deleteRealmIfMigrationNeeded()
-//                .build()
-//        Realm.getInstance(realmConfiguration)
+
     }
 
 //    fun iniCanary() {

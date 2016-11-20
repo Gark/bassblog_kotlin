@@ -17,7 +17,7 @@ class FavouriteAdapter(context: Context, callback: MixSelectCallback) : BaseMixA
     val mFavoriteMixes: RealmResults<Mix>
 
     init {
-        mFavoriteMixes = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("published", Sort.DESCENDING)
+        mFavoriteMixes = Realm.getDefaultInstance().where(Mix::class.java).equalTo("favourite", true).findAllSortedAsync("favourite_time", Sort.DESCENDING)
         mFavoriteMixes.addChangeListener { updateChanges() }
     }
 

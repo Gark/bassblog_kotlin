@@ -16,6 +16,7 @@ open class Mix : RealmObject() {
     var track: String? = null
     var content: String? = null
     var published = 0L
+    var favourite_time = 0L
     var favourite: Boolean = false
     var url: String? = null
 

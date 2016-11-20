@@ -80,6 +80,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
                 val realm = Realm.getDefaultInstance()
                 realm.beginTransaction()
                 mix.favourite = !mix.favourite;
+                mix.favourite_time = System.currentTimeMillis()
                 realm.copyToRealmOrUpdate(mix)
                 realm.commitTransaction()
                 updateFavouriteButton(mix.favourite)
