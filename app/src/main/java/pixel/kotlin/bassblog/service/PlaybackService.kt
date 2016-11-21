@@ -125,7 +125,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
         val small = getSmallContentView()
         val big = getBigContentView()
         val notification = NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_bb_mixes_new)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(small)
                 .setCustomBigContentView(big)

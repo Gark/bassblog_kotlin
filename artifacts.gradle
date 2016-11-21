@@ -1,0 +1,27 @@
+def configureApkNames(String appName, String version, int versionCode) {
+
+    android.applicationVariants.all { variant ->
+
+        def flavorName = variant.flavorName;
+        println("Flavor: '" + flavorName + "'");
+
+        variant.outputs.each { output ->
+            // On Gradle plugin 2.1.2 and below there are 2 separate APKs generated (aligned and unaligned)
+            // On 2.2 there is only one APK and output.zipAlign equals null
+            if (output.zipAlign == null || output.zipAlign) {
+                final def newApkName;
+                if (flavorName.equals("")) {
+                    newApkName = "${appName}-${version}.${versionCode}-${buildType.name}.apk"
+                } else {
+                    newApkName = "${appName}-${version}.${versionCode}-${buildType.name}-${flavorName}.apk"
+                }
+
+                output.outputFile = new File(output.outputFile.parent, newApkName)
+            }
+        }
+    }
+}
+
+ext {
+    configureApkNames = this.&configureApkNames
+}
