@@ -3,10 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: 'io.fabric'
-//apply from: '../artifacts.gradle'
+apply from: '../artifacts.gradle'
 
 def int currentVersionCode = 3;
 def String currentVersionName = "1.02";
+
+configureApkNames("bassblog", currentVersionName, currentVersionCode)
 
 // Load keystore
 def keystorePropertiesFile = rootProject.file("keystore.properties");
