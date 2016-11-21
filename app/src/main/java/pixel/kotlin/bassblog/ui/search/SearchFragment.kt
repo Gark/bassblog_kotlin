@@ -28,6 +28,12 @@ class SearchFragment : BaseFragment(), TextWatcher {
         for (item in array) item.setOnClickListener {
             search_edit_text.append(it.tag as String)
         }
+        search_edit_text.setOnEditorActionListener({ textView, i, keyEvent -> handleSearch() })
+
+    }
+
+    private fun handleSearch(): Boolean {
+        return true
     }
 
     fun query(filter: String) {
