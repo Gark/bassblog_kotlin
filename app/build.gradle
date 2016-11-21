@@ -5,8 +5,8 @@ apply plugin: 'realm-android'
 apply plugin: 'io.fabric'
 
 
-def int currentVersionCode = 1;
-def String currentVersionName = "1.00";
+def int currentVersionCode = 2;
+def String currentVersionName = "1.01";
 
 // Load keystore
 def keystorePropertiesFile = rootProject.file("keystore.properties");
