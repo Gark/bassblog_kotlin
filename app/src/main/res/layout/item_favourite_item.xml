@@ -6,42 +6,43 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/mix_image"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:scaleType="centerInside"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
         tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/post_title"
+        style="@style/mix_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:padding="5dp"
-        android:textColor="@color/text_color"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
         tools:text="post title" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/post_label"
+            style="@style/mix_label"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:textColor="@color/text_color"
-            android:textSize="12sp"
             tools:text="post labels" />
 
         <ImageView
@@ -50,7 +51,6 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
-            android:padding="5dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_bb_now_playing_icon" />
 

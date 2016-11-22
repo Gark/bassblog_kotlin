@@ -109,7 +109,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             if (needResize()) {
                 requestCreator.resizeDimen(R.dimen.image_width, R.dimen.image_height)
             } else {
-                requestCreator.fit()
+//                requestCreator.fit()
             }
             requestCreator.into(mPostImage)
         }

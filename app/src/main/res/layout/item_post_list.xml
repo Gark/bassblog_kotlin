@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp"
+    android:paddingTop="5dp">
 
 
     <TextView
         android:id="@+id/header_date"
+        style="@style/mix_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
@@ -18,21 +23,20 @@
         android:textAllCaps="true"
         android:textColor="#666666"
         android:textSize="12sp"
-        android:textStyle="bold"
         tools:text="SEPTEMBER 2016" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:orientation="horizontal"
-        android:padding="2dp">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/mix_image"
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_height"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="centerInside"
@@ -45,41 +49,38 @@
             android:layout_toLeftOf="@+id/now_playing"
             android:layout_toRightOf="@+id/mix_image"
             android:orientation="vertical"
-            android:padding="2dp">
+            android:paddingLeft="10dp">
 
             <TextView
                 android:id="@+id/post_title"
+                style="@style/mix_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:maxLines="2"
-                android:textColor="@color/text_color"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="post title" />
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                tools:text="post title post titlepost title post titlepost title" />
 
             <TextView
                 android:id="@+id/post_label"
+                style="@style/mix_label"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                tools:text="post labels" />
+                android:layout_weight="1"
+                tools:text="post labels post labels post labels post labels post labels" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/now_playing"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_bb_now_playing_icon" />
+            app:srcCompat="@drawable/ic_bb_now_playing_icon"
+            tools:visibility="visible" />
 
     </RelativeLayout>
 

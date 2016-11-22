@@ -32,6 +32,8 @@
         android:layout_alignParentStart="true"
         android:background="#5a5a5a"
         android:orientation="horizontal"
+        android:paddingEnd="0dp"
+        android:paddingStart="5dp"
         android:visibility="visible">
 
         <ImageView
@@ -45,15 +47,13 @@
 
         <TextView
             android:id="@+id/text_view_name_bottom"
+            style="@style/mix_title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:lines="2"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:transitionName="@string/mix_text_transition"
-            tools:targetApi="lollipop"
             tools:text="text" />
 
         <FrameLayout
@@ -78,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
                 app:srcCompat="@drawable/ic_icon_play_player" />
 
         </FrameLayout>
