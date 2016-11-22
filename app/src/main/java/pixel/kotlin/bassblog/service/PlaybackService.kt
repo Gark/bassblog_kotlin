@@ -14,6 +14,7 @@ import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.PagerActivity
 import android.net.wifi.WifiManager
+import android.os.Build
 
 class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
@@ -125,7 +126,13 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
         val small = getSmallContentView()
         val big = getBigContentView()
         val notification = NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            R.mipmap.ic_launcher
+                        } else {
+                            R.drawable.ic_bb_mixes_new
+                        }
+                )
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .setCustomContentView(small)
                 .setCustomBigContentView(big)
