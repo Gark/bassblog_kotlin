@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.all_mix.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.PlayList
 import pixel.kotlin.bassblog.presenter.Presenter

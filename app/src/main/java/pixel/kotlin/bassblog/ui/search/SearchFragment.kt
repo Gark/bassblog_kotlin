@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.TextView
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults

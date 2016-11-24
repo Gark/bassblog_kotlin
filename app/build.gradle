@@ -5,8 +5,8 @@ apply plugin: 'realm-android'
 apply plugin: 'io.fabric'
 apply from: '../artifacts.gradle'
 
-def int currentVersionCode = 4;
-def String currentVersionName = "1.03";
+def int currentVersionCode = 5;
+def String currentVersionName = "1.04";
 
 configureApkNames("bassblog", currentVersionName, currentVersionCode)
 

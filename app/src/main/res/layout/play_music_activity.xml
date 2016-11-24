@@ -1,139 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:targetApi="lollipop">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:weightSum="2">
+        tools:targetApi="lollipop">
 
-        <TextView
-            android:id="@+id/text_view_name"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/text_view_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_weight="1"
+                android:gravity="bottom|center_horizontal"
+                android:textColor="@color/text_color"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:transitionName="@string/mix_text_transition"
+                tools:text="ESCHATON - ATMOTEKA 3.11 [NOV 2016]" />
+
+            <TextView
+                android:id="@+id/text_view_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top|center_horizontal"
+                android:textColor="@color/text_color"
+                android:textSize="14sp"
+                tools:text="320 kbps , atmospheric , drum and bass , liquid" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="1"
-            android:gravity="bottom|center_horizontal"
-            android:textColor="@color/text_color"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:transitionName="@string/mix_text_transition"
-            tools:text="ESCHATON - ATMOTEKA 3.11 [NOV 2016]" />
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/text_view_artist"
+            <TextView
+                android:id="@+id/text_view_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="12dp"
+                android:text="@string/_00_00"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/text_view_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:paddingRight="12dp"
+                android:text="@string/_00_00"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                tools:text="03:22" />
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seek_bar"
+            style="@style/Widget.AppCompat.SeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="top|center_horizontal"
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            tools:text="320 kbps , atmospheric , drum and bass , liquid" />
-    </LinearLayout>
+            android:max="100"
+            android:padding="10dp"
+            android:progressTint="@color/colorPrimaryDark"
+            android:secondaryProgressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            tools:progress="50"
+            tools:secondaryProgress="75" />
 
-
-    <LinearLayout
-        android:id="@+id/layout_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/text_view_progress"
+        <LinearLayout
+            android:id="@+id/layout_play_controls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="12dp"
-            android:text="@string/_00_00"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:divider="@drawable/common_divider_xlarge_horizontal"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:showDividers="middle">
 
-        <TextView
-            android:id="@+id/text_view_duration"
-            android:layout_width="wrap_content"
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/button_share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_share" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/button_play_last"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_previous_mix" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/button_play_toggle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_play" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/button_play_next"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_next_mix" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/button_favorite_toggle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_add_to_favorites" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+
+        <ImageView
+            android:id="@+id/mix_image"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:paddingRight="12dp"
-            android:text="@string/_00_00"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            tools:text="03:22" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            tools:src="@mipmap/ic_launcher" />
 
-    <android.support.v7.widget.AppCompatSeekBar
-        android:id="@+id/seek_bar"
-        style="@style/Widget.AppCompat.SeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:padding="10dp"
-        android:progressTint="@color/colorPrimaryDark"
-        android:secondaryProgressTint="@color/colorPrimary"
-        android:thumbTint="@color/colorPrimary"
-        tools:progress="50"
-        tools:secondaryProgress="75" />
+    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_play_controls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/common_divider_xlarge_horizontal"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:showDividers="middle">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/button_share"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_share" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/button_play_last"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_previous_mix" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/button_play_toggle"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_play" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/button_play_next"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_next_mix" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/button_favorite_toggle"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_add_to_favorites" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/mix_image"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        tools:src="@mipmap/ic_launcher" />
 </LinearLayout>

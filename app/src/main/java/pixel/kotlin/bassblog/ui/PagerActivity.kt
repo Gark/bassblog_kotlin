@@ -104,6 +104,7 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
         val mix = mPlaybackService!!.getPlayingMix()
         bottom_control.visibility = if (mix == null) View.GONE else View.VISIBLE
         text_view_name_bottom.text = mix?.title
+        text_view_label_bottom.text = mix?.label
 
         Picasso.with(this)
                 .load(mix?.image)

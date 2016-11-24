@@ -45,16 +45,36 @@
             android:padding="5dp"
             android:scaleType="centerInside" />
 
-        <TextView
-            android:id="@+id/text_view_name_bottom"
-            style="@style/mix_title"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            tools:text="text" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_name_bottom"
+                style="@style/mix_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                tools:text="text" />
+
+            <TextView
+                android:id="@+id/text_view_label_bottom"
+                style="@style/mix_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="top"
+                android:textSize="12sp"
+                tools:text="text" />
+
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"

@@ -76,10 +76,9 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
             val mix = it.getPlayingMix()
             mix?.let {
 
-
                 val realm = Realm.getDefaultInstance()
                 realm.beginTransaction()
-                mix.favourite = !mix.favourite;
+                mix.favourite = !mix.favourite
                 mix.favourite_time = System.currentTimeMillis()
                 realm.copyToRealmOrUpdate(mix)
                 realm.commitTransaction()
@@ -155,7 +154,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 
         Picasso.with(applicationContext)
                 .load(mix?.image)
-                .fit()
+//                .fit()
                 .into(mix_image)
     }
 

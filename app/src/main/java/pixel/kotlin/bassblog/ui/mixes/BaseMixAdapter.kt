@@ -97,7 +97,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             mMix = mix
             mPostTitle.text = mix.title
             mPostLabel.text = mix.label
-            mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.INVISIBLE
+            mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.GONE
             mCalendar.timeInMillis = mix.published
 
             mHeader?.let {

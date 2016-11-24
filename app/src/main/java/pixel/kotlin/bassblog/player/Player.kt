@@ -40,7 +40,7 @@ class Player(wifi: WifiManager, context: Context) : IPlayback, MediaPlayer.OnErr
     init {
         mWifiLock = wifi.createWifiLock("LOCK")
         mPlayer = MediaPlayer()
-        mPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
+        mPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
         mPlayer.setOnErrorListener(this)
         mPlayer.setOnCompletionListener { handleOnComplete() }
         mPlayer.setOnPreparedListener { mp -> handlePrepare() }
