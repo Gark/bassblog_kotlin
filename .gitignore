@@ -44,3 +44,4 @@ captures/
 *.jks
 
 /keystore.properties
+.idea
