@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_activity.*
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.Player
+import pixel.kotlin.bassblog.ui.download.DownloadFragment
 import pixel.kotlin.bassblog.ui.mixes.allmixes.AllMixFragment
 import pixel.kotlin.bassblog.ui.mixes.favourite.FavouriteFragment
 import pixel.kotlin.bassblog.ui.search.SearchFragment
@@ -31,7 +32,6 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
     }
 
     private fun handleBottomPanelClick() {
-//        MusicPlayerActivity.start(this, text_view_name_bottom, getString(R.string.mix_text_transition))
         MusicPlayerActivity.start(this)
     }
 
@@ -43,7 +43,8 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
         when (item.itemId) {
             R.id.action_all -> pager.setCurrentItem(0, true)
             R.id.action_favourite -> pager.setCurrentItem(1, true)
-            R.id.action_search -> pager.setCurrentItem(2, true)
+            R.id.action_download -> pager.setCurrentItem(2, true)
+            R.id.action_search -> pager.setCurrentItem(3, true)
         }
         return true
     }
@@ -57,7 +58,7 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun onPageSelected(position: Int) {
-        for (i in 0..2) {
+        for (i in 0..3) {
             bottom_navigation_view.menu.getItem(i).isChecked = false
         }
         bottom_navigation_view.menu.getItem(position).isChecked = true
@@ -68,13 +69,14 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 1 -> FavouriteFragment()
+                2 -> DownloadFragment()
                 2 -> SearchFragment()
                 else -> AllMixFragment()
             }
         }
 
         override fun getCount(): Int {
-            return 3
+            return 4
         }
     }
 

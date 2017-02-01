@@ -10,6 +10,11 @@
         android:title="@string/favourites" />
 
     <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_bb_downloads"
+        android:title="@string/download" />
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_bb_search"
         android:title="@string/search" />

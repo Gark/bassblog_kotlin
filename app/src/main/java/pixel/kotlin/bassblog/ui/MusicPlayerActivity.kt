@@ -17,16 +17,18 @@ import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 
 
 class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 
     companion object {
-        //        fun start(activity: Activity, view: View, text: String) {
         fun start(activity: Activity) {
             val intent = Intent(activity, MusicPlayerActivity::class.java)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, text)
-//            activity.startActivity(intent, options.toBundle())
             activity.startActivity(intent)
         }
     }
@@ -40,7 +42,8 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         button_play_toggle.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
         button_play_last.setOnClickListener { handlePlayLast() }
-        button_share.setOnClickListener { handleShareClick() }
+//        button_share.setOnClickListener { handleShareClick() }
+        button_download.setOnClickListener { handleDownload() }
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
 
         seek_bar.setOnSeekBarChangeListener(this)
@@ -94,16 +97,38 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         }
     }
 
-    private fun handleShareClick() {
-        mPlaybackService?.getPlayingMix()?.url?.let {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, it)
-            shareIntent.resolveActivity(this.packageManager)?.let {
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.app_name)))
-            }
+    private fun handleDownload() {
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.let {
+            val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val downloadUri = Uri.parse(it.url)
+            val request = DownloadManager.Request(downloadUri)
+            //Restrict the types of networks over which this download may proceed.
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+            //Set whether this download may proceed over a roaming connection.
+            request.setAllowedOverRoaming(false)
+            //Set the title of this download, to be displayed in notifications (if enabled).
+            request.setTitle(it.title)
+            //Set a description of this download, to be displayed in notifications (if enabled)
+            request.setDescription(it.track)
+            //Set the local destination for the downloaded file to a path within the application's external files directory
+            request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "BassBlog")
+
+            //Enqueue a new download and same the referenceId
+            var downloadReference = downloadManager.enqueue(request)
         }
     }
+
+//    private fun handleShareClick() {
+//        mPlaybackService?.getPlayingMix()?.url?.let {
+//            val shareIntent = Intent(Intent.ACTION_SEND)
+//            shareIntent.type = "text/plain"
+//            shareIntent.putExtra(Intent.EXTRA_TEXT, it)
+//            shareIntent.resolveActivity(this.packageManager)?.let {
+//                startActivity(Intent.createChooser(shareIntent, getString(R.string.app_name)))
+//            }
+//        }
+//    }
 
     private fun handlePlayLast() {
         if (mPlaybackService == null) return
