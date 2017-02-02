@@ -1,5 +1,6 @@
 def configureApkNames(String appName, String version, int versionCode) {
 
+    
     android.applicationVariants.all { variant ->
 
         def flavorName = variant.flavorName;

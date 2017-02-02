@@ -22,6 +22,8 @@
 bin/
 gen/
 out/
+.idea*
+../.idea*
 
 
 
