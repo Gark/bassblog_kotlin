@@ -22,6 +22,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import pixel.kotlin.bassblog.download.MixDownloader
 
 
 class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
@@ -98,24 +99,10 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun handleDownload() {
-        val mix = mPlaybackService?.getPlayingMix()
-        mix?.let {
-            val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            val downloadUri = Uri.parse(it.url)
-            val request = DownloadManager.Request(downloadUri)
-            //Restrict the types of networks over which this download may proceed.
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-            //Set whether this download may proceed over a roaming connection.
-            request.setAllowedOverRoaming(false)
-            //Set the title of this download, to be displayed in notifications (if enabled).
-            request.setTitle(it.title)
-            //Set a description of this download, to be displayed in notifications (if enabled)
-            request.setDescription(it.track)
-            //Set the local destination for the downloaded file to a path within the application's external files directory
-            request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "BassBlog")
-
-            //Enqueue a new download and same the referenceId
-            var downloadReference = downloadManager.enqueue(request)
+        val track = mPlaybackService?.getPlayingMix()?.track
+        track?.let {
+            val mixDownloader = MixDownloader(this)
+            mixDownloader.scheduleDonwload(it)
         }
     }
 

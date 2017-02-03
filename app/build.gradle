@@ -71,10 +71,13 @@ dependencies {
     compile "com.android.support:design:${rootProject.androidSupportVersion}"
     compile "com.android.support:recyclerview-v7:${rootProject.androidSupportVersion}"
 
+    // Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    //    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     // Image loader
     compile 'com.squareup.picasso:picasso:2.5.2'
+    // analytics
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
     compile 'com.google.android.gms:play-services-gcm:10.0.1'
 
