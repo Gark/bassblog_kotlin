@@ -26,10 +26,12 @@ class MixDownloader(context: Context) {
                             .body(ProgressResponseBody(originalResponse.body(), MyProgressListener()))
                             .build()
                 }
+//                .header("User-Agent", userAgent)
                 .build()
 
         val request = Request.Builder()
                 .url(url)
+                .header("User-Agent", "android")
                 .build()
 
         mExecutor.submit({
