@@ -18,7 +18,7 @@ public class HttpRedirectExample {
             conn.setInstanceFollowRedirects(false);
             conn.setReadTimeout(50000);
             conn.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
-            conn.addRequestProperty("User-Agent", "Mozilla");
+            conn.addRequestProperty("User-Agent", "Android");
             conn.addRequestProperty("Referer", "google.com");
 
             System.out.println("Request URL ... " + url);
@@ -48,7 +48,7 @@ public class HttpRedirectExample {
                 conn = (HttpURLConnection) new URL(newUrl).openConnection();
                 conn.setRequestProperty("Cookie", cookies);
                 conn.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
-                conn.addRequestProperty("User-Agent", "Mozilla");
+                conn.addRequestProperty("User-Agent", "Android");
                 conn.addRequestProperty("Referer", "google.com");
 
                 System.out.println("Redirect to URL : " + newUrl);

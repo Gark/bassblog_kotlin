@@ -1,6 +1,5 @@
 package pixel.kotlin.bassblog.download;
 
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +15,12 @@ public class OkHttpTest {
 
     public static void main(String[] args) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .followRedirects(false)
-                .followSslRedirects(false)
+//                .followRedirects(false)
+//                .followSslRedirects(false)
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://mixes.bassblog.pro/DJ_B-12_-_Bass_Blog_Guest_MIx_-_February_2017.mp3")
+                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
                 .build();
 
         Response response = client.newCall(request).execute();
@@ -33,9 +32,8 @@ public class OkHttpTest {
         InputStream stream = responseBody.byteStream();
         File file = new File("file");
 
-        FileUtils.copyInputStreamToFile(stream, file);
-
-        System.out.println(file.length());
+//        FileUtils.copyInputStreamToFile(stream, file);
+//        System.out.println(file.length());
 
     }
 

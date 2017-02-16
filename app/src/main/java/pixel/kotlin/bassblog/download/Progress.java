@@ -18,8 +18,8 @@ public final class Progress {
 
     public void run() throws Exception {
         Request request = new Request.Builder()
-                .url("http://mixes.bassblog.pro/DJ_B-12_-_Bass_Blog_Guest_MIx_-_February_2017.mp3")
-                .header("User-Agent", "Android")
+                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+//                .header("User-Agent", "Android")
                 .build();
 
         final ProgressListener progressListener = new ProgressListener() {

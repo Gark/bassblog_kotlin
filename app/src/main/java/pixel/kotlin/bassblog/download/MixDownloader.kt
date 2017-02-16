@@ -1,6 +1,7 @@
 package pixel.kotlin.bassblog.download
 
 import android.content.Context
+import android.support.annotation.WorkerThread
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -18,95 +19,27 @@ class MixDownloader(context: Context) {
     private val mExecutor: ExecutorService = Executors.newFixedThreadPool(2)
     private val mContext: Context = context
 
-    public fun scheduleDonwload(url: String) {
-        val client = OkHttpClient.Builder()
-                .addNetworkInterceptor { chain ->
-                    val originalResponse = chain.proceed(chain.request())
-                    originalResponse.newBuilder()
-                            .body(ProgressResponseBody(originalResponse.body(), MyProgressListener()))
-                            .build()
-                }
-//                .header("User-Agent", userAgent)
-                .build()
-
+    fun scheduleDownload(url: String) {
+        val client = OkHttpClient.Builder().build()
         val request = Request.Builder()
-                .url(url)
-                .header("User-Agent", "android")
+                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
                 .build()
 
         mExecutor.submit({
             val response = client.newCall(request).execute()
-            val responseBody = response.body()
-            val stream = responseBody.byteStream()
+            var responseBody = response.body()
+            responseBody = ProgressResponseBody(responseBody, MyProgressListener())
+
             val file = File(mContext.cacheDir, "file")
-            copyInputStreamToFile(stream, file)
-
-//            StreamUtils.copy(responseBody.byteStream(), destination)
-
-
-//            client.newCall(request).execute()({ response ->
-//                if (!response.isSuccessful()) {
-//                    throw ExceptionUtils.createIoException(response)
-//                }
-//                var responseBody = response.body()
-//                try {
-//                    if (progressListener != null) {
-//                        responseBody = ProgressResponseBody(responseBody, progressListener)
-//                    }
-//                    StreamUtils.copy(responseBody.byteStream(), destination)
-//                } finally {
-//                    if (responseBody !== response.body()) {
-//                        // We need to close our custom progress response manually, otherwise
-//                        // progress handler thread will not be shut down
-//                        responseBody.close()
-//                    }
-//                }
-//            })
-
-
-        }
-        )
+            StreamUtils.copy(responseBody.byteStream(), file)
+            responseBody.close()
+        })
     }
-
-    private fun copyInputStreamToFile(stream: InputStream, file: File) {
-        try {
-            val out = FileOutputStream(file)
-            val buf = ByteArray(1024)
-            var len: Int
-            do {
-                len = stream.read(buf)
-                out.write(buf, 0, len)
-            } while (len > 0)
-
-//            while ((len = stream.read(buf)) > 0) {
-//                out.write(buf, 0, len)
-//            }
-            out.close()
-            stream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-//    @Throws(IOException::class)
-//    fun copy(stream: InputStream, destination: File) {
-//        BufferedOutputStream(FileOutputStream(destination)).use { os -> IOUtils.copy(stream, os) }
-//    }
-//
-//    @Throws(IOException::class)
-//    fun copy(input: InputStream, output: OutputStream): Int {
-//        val count = copyLarge(input, output)
-//        if (count > Integer.MAX_VALUE) {
-//            return -1
-//        }
-//        return count.toInt()
-//    }
 
     private class MyProgressListener : ProgressListener {
 
         override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-            System.out.println("ololololo $bytesRead $contentLength $done")
+            System.out.println("ololololo ${100 * bytesRead / contentLength} $done")
         }
     }
 
@@ -143,6 +76,4 @@ class MixDownloader(context: Context) {
             }
         }
     }
-
-
 }

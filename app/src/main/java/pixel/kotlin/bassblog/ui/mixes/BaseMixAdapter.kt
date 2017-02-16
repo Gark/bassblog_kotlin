@@ -25,15 +25,13 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     private val mCalendar = Calendar.getInstance()
     private var fmt: DateFormat = SimpleDateFormat("MMMM yyyy", Locale.US)
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
-    private val mAllMix: ArrayList<Mix>
-    private val picasso: Picasso
+    private val mAllMix: ArrayList<Mix> = ArrayList()
+    private val picasso: Picasso = Picasso.with(context)
 
     private var mCurrentMix: Mix? = null
 
     init {
         setHasStableIds(true)
-        picasso = Picasso.with(context)
-        mAllMix = ArrayList()
     }
 
     fun updateMixList(list: List<Mix>) {
