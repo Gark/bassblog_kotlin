@@ -22,28 +22,12 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class DownloadManager {
 
-    @Retention(SOURCE)
-    @IntDef({NOT_DOWNLOADED, PENDING, IN_PROGRESS, DOWNLOADED})
-    public @interface DownloadingState {
-    }
-
-    public static final int NOT_DOWNLOADED = 0;
-    public static final int PENDING = 1;
-    public static final int IN_PROGRESS = 2;
-    public static final int DOWNLOADED = 3;
-
-
     private final OkHttpClient mOkHttpClient;
     private final Context mContext;
 
     public DownloadManager(final Context context) {
         mContext = context;
         mOkHttpClient = new OkHttpClient.Builder().build();
-    }
-
-    @DownloadManager.DownloadingState
-    public int getState(final String mixId) {
-        return NOT_DOWNLOADED;
     }
 
     public void scheduleMixDownloading(final String mixId, final String mixUrl) throws IOException {
@@ -56,26 +40,6 @@ public class DownloadManager {
             ResponseBody responseBody = response.body();
             responseBody.byteStream();
         }
-
-
-//        try (Response response = mOkHttpClient.newCall(request).execute()) {
-//            if (!response.isSuccessful()) {
-//                throw new IOException("");
-//            }
-//            ResponseBody responseBody = response.body();
-//            try {
-//                if (progressListener != null) {
-//                    responseBody = new ProgressResponseBody(responseBody, progressListener);
-//                }
-//                StreamUtils.copy(responseBody.byteStream(), destination);
-//            } finally {
-//                if (responseBody != response.body()) {
-//                    // We need to close our custom progress response manually, otherwise
-//                    // progress handler thread will not be shut down
-//                    responseBody.close();
-//                }
-//            }
-//        }
     }
 
     private static class ProgressResponseBody extends ResponseBody {

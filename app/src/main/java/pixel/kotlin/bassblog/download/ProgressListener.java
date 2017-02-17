@@ -1,5 +1,5 @@
 package pixel.kotlin.bassblog.download;
 
-interface ProgressListener {
+public interface ProgressListener {
     void update(long bytesRead, long contentLength, boolean done);
 }

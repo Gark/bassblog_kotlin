@@ -4,6 +4,7 @@ package pixel.kotlin.bassblog.ui
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
@@ -15,17 +16,14 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.download.MixDownloader
+import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.playlist.TrackListActivity
-import android.app.DownloadManager
-import android.content.Context
-import android.net.Uri
-import android.os.Environment
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import pixel.kotlin.bassblog.download.MixDownloader
-
 
 class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
+
+    private var mixDownloader: MixDownloader? = null
 
     companion object {
         fun start(activity: Activity) {
@@ -38,6 +36,8 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music_activity)
 
+        mixDownloader = MixDownloader(applicationContext)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         button_play_toggle.setOnClickListener { handleToggleClick() }
@@ -46,7 +46,6 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 //        button_share.setOnClickListener { handleShareClick() }
         button_download.setOnClickListener { handleDownload() }
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
-
         seek_bar.setOnSeekBarChangeListener(this)
     }
 
@@ -54,8 +53,8 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = initMenu(R.menu.tracklist, menu)
 
     private fun handleTrackListClick() {
-        val mix = mPlaybackService?.getPlayingMix()
-        mix?.content?.let {
+        val content = mPlaybackService?.getPlayingMix()?.content
+        content?.let {
             TrackListActivity.start(this, it)
         }
     }
@@ -76,34 +75,35 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun handleFavouriteClick() {
-        mPlaybackService?.let {
-            val mix = it.getPlayingMix()
-            mix?.let {
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.let {
+            val realm = Realm.getDefaultInstance()
+            realm.beginTransaction()
+            mix.favourite = !mix.favourite
+            mix.favourite_time = System.currentTimeMillis()
+            realm.copyToRealmOrUpdate(mix)
+            realm.commitTransaction()
+            updateFavouriteButton(mix.favourite)
 
-                val realm = Realm.getDefaultInstance()
-                realm.beginTransaction()
-                mix.favourite = !mix.favourite
-                mix.favourite_time = System.currentTimeMillis()
-                realm.copyToRealmOrUpdate(mix)
-                realm.commitTransaction()
-                updateFavouriteButton(mix.favourite)
-
-                mix.title?.let {
-                    if (mix.favourite) {
-                        val app = application as BassBlogApplication
-                        app.fireEventFavourite(it)
-                    }
+            mix.title?.let {
+                if (mix.favourite) {
+                    val app = application as BassBlogApplication
+                    app.fireEventFavourite(it)
                 }
             }
         }
     }
 
     private fun handleDownload() {
-        val track = mPlaybackService?.getPlayingMix()?.track
-        track?.let {
-            val mixDownloader = MixDownloader(this)
-            mixDownloader.scheduleDownload(it)
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.let {
+            mixDownloader?.scheduleDownload(it.mixId, it.track,
+                    ProgressListener { bytesRead, contentLength, done -> printResult(done) })
         }
+    }
+
+    private fun printResult(b: Boolean) {
+        button_download.setColorFilter(if (b) Color.RED else Color.CYAN)
     }
 
 //    private fun handleShareClick() {
@@ -118,18 +118,28 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 //    }
 
     private fun handlePlayLast() {
-        if (mPlaybackService == null) return
-        mPlaybackService!!.playLast()
+        mPlaybackService?.playLast()
     }
 
     private fun handleNextClick() {
-        if (mPlaybackService == null) return
-        mPlaybackService!!.playNext()
+        mPlaybackService?.playNext()
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         super.onServiceConnected(name, service)
         mPlaybackService?.requestDataOnBind()
+
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.mixId?.let {
+            val state = mixDownloader?.getState(it)
+            val color = when (state) {
+                MixDownloader.DOWNLOADED -> Color.RED
+                MixDownloader.IN_PROGRESS -> Color.CYAN
+                MixDownloader.NOT_DOWNLOADED -> Color.BLACK
+                else -> R.color.black
+            }
+            button_download.setColorFilter(color)
+        }
     }
 
     override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {
@@ -166,7 +176,6 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 
         Picasso.with(applicationContext)
                 .load(mix?.image)
-//                .fit()
                 .into(mix_image)
     }
 
