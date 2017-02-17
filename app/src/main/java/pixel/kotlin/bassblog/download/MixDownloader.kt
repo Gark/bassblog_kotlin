@@ -63,7 +63,8 @@ class MixDownloader(context: Context) {
             listener = mixProgress
 
             val request = Request.Builder()
-                    .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+//                    .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+                    .url("http://www.colocenter.nl/speedtest/100mb.bin")
                     .build()
 
             mExecutor.submit {
