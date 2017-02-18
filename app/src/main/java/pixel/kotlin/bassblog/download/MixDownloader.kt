@@ -15,6 +15,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.support.annotation.IntDef
+import pixel.kotlin.bassblog.R
 
 class MixDownloader(context: Context) {
 
@@ -51,6 +52,22 @@ class MixDownloader(context: Context) {
         }
     }
 
+    fun setProgressListener(mixProgress: ProgressListener, mixId: Long) {
+
+    }
+
+    // TODO maybe should not be a part of that class
+    // move to utility class.
+    fun getFileSize(mixId: Long): String {
+        val file = getFile(mixId)
+        if (!file.exists()) {
+            return ""
+        }
+        val sizeInMb = file.length() / (1024 * 1024)
+        return mContext.getString(R.string.download_mb, sizeInMb)
+    }
+
+
     fun scheduleDownload(mixId: Long, url: String?, mixProgress: ProgressListener) {
         val file = getFile(mixId)
         if (file.exists()) {
@@ -63,14 +80,14 @@ class MixDownloader(context: Context) {
             listener = mixProgress
 
             val request = Request.Builder()
-//                    .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
-                    .url("http://www.colocenter.nl/speedtest/100mb.bin")
+                    .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+//                    .url("http://www.colocenter.nl/speedtest/100mb.bin")
                     .build()
 
             mExecutor.submit {
                 val response = mOkHttpClient.newCall(request).execute()
                 val responseBody = response.body()
-                val mixResponseBody = ProgressResponseBody(responseBody, listener!!, mHandler)
+                val mixResponseBody = ProgressResponseBody(mixId, responseBody, listener!!, mHandler)
 
                 StreamUtils.copy(mixResponseBody.byteStream(), file)
                 responseBody.close()
@@ -90,7 +107,11 @@ class MixDownloader(context: Context) {
     }
 
     // TODO move to separate class
-    private class ProgressResponseBody(val responseBody: ResponseBody, val progressListener: ProgressListener, val handler: Handler) : ResponseBody() {
+    private class ProgressResponseBody(
+            val mixId: Long,
+            val responseBody: ResponseBody,
+            val progressListener: ProgressListener,
+            val handler: Handler) : ResponseBody() {
 
         private var bufferedSource: BufferedSource? = null
 
@@ -115,7 +136,7 @@ class MixDownloader(context: Context) {
                     // read() returns the number of bytes read, or -1 if this source is exhausted.
                     totalBytesRead += if (bytesRead != -1L) bytesRead else 0
                     handler.post {
-                        progressListener.update(totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
+                        progressListener.update(mixId, totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
                     }
                     return bytesRead
                 }

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.network.Mix
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -27,7 +29,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val mAllMix: ArrayList<Mix> = ArrayList()
     private val picasso: Picasso = Picasso.with(context)
-
+    private val mMixDownLoader = (context.applicationContext as BassBlogApplication).getMixDownloader()
     private var mCurrentMix: Mix? = null
 
     init {
@@ -80,6 +82,9 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mHeader = itemView.findViewById(R.id.header_date) as TextView?
         private val mPostImage = itemView.findViewById(R.id.mix_image) as ImageView
         private val mNowPlayingImage = itemView.findViewById(R.id.now_playing) as ImageView
+        private val mDownloadIcon = itemView.findViewById(R.id.download_icon) as ImageView?
+        private val mFileSize = itemView.findViewById(R.id.file_size_item) as TextView?
+        private val mProgressPercent = itemView.findViewById(R.id.progress_percent) as TextView?
         private val mCalendar = Calendar.getInstance()
         private var mMix: Mix? = null
 
@@ -97,6 +102,15 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             mPostLabel.text = mix.label
             mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.GONE
             mCalendar.timeInMillis = mix.published
+
+            val state = mMixDownLoader.getState(mix.mixId)
+            if (state == MixDownloader.DOWNLOADED) {
+                mDownloadIcon?.visibility = View.VISIBLE
+            } else {
+                mDownloadIcon?.visibility = View.GONE
+            }
+
+            mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId)
 
             mHeader?.let {
                 it.text = fmt.format(mCalendar.time)

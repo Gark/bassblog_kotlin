@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.all_mix.*
 import pixel.kotlin.bassblog.BassBlogApplication
+import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.ui.BinderFragment
 import pixel.kotlin.bassblog.ui.MusicPlayerActivity

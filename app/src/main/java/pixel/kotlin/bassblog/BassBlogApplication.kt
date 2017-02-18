@@ -8,11 +8,13 @@ import com.google.android.gms.analytics.Tracker
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.network.GcmUpdateService
 
 
 class BassBlogApplication : Application() {
 
+    private var mMixDownloader: MixDownloader? = null
     private var mTracker: Tracker? = null
 
     override fun onCreate() {
@@ -31,8 +33,10 @@ class BassBlogApplication : Application() {
         val realm = Realm.getInstance(config2)
         realm.close()
 
-
+        mMixDownloader = MixDownloader(applicationContext)
     }
+
+    fun getMixDownloader(): MixDownloader = mMixDownloader!!
 
 //    fun iniCanary() {
 //        if (LeakCanary.isInAnalyzerProcess(this)) {

@@ -36,7 +36,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music_activity)
 
-        mixDownloader = MixDownloader(applicationContext)
+        mixDownloader = (application as BassBlogApplication).getMixDownloader()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -98,7 +98,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         val mix = mPlaybackService?.getPlayingMix()
         mix?.let {
             mixDownloader?.scheduleDownload(it.mixId, it.track,
-                    ProgressListener { bytesRead, contentLength, done -> printResult(done) })
+                    ProgressListener { mixId, bytesRead, contentLength, done -> printResult(done) })
         }
     }
 

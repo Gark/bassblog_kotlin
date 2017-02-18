@@ -15,9 +15,9 @@ class AllMixesAdapter(val context: Context, callback: MixSelectCallback) : BaseM
     override fun getLayout(): Int = R.layout.item_post_list
 
     val mAllMixes: RealmResults<Mix>
+            = Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
 
     init {
-        mAllMixes = Realm.getDefaultInstance().where(Mix::class.java).findAllSortedAsync("published", Sort.DESCENDING)
         mAllMixes.addChangeListener { handleUpdates() }
     }
 
