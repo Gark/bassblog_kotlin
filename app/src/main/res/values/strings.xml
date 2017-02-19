@@ -6,7 +6,6 @@
     <string name="search">Search</string>
     <string name="search_mix">Search Mix</string>
     <string name="now_playing">Now playing</string>
-    <string name="download_percent">%1$d %</string>
     <string name="download_mb">%1$d Mb</string>
 
     <string name="mix_text_transition" translatable="false">mix_text_transition</string>

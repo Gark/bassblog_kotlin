@@ -38,26 +38,29 @@ class MixDownloader(context: Context) {
         // constructor body
     }
 
+    // TODO Race condition
     @DownloadingState
     fun getState(mixId: Long): Long {
         val file = getFile(mixId)
-        if (!file.exists()) {
-            return NOT_DOWNLOADED
+        if (file.exists()) {
+            return DOWNLOADED
         } else {
-            if (mMapDownloads.containsKey(mixId)) {
-                return IN_PROGRESS
-            } else {
-                return DOWNLOADED
-            }
+            return NOT_DOWNLOADED
         }
+
+//        if (!file.exists()) {
+//            return NOT_DOWNLOADED
+//        } else {
+//            if (mMapDownloads.containsKey(mixId)) {
+//                return IN_PROGRESS
+//            } else {
+//                return DOWNLOADED
+//            }
+//        }
     }
 
-    fun setProgressListener(mixProgress: ProgressListener, mixId: Long) {
 
-    }
-
-    // TODO maybe should not be a part of that class
-    // move to utility class.
+    // TODO maybe should not be a part of that class, move to utility class.
     fun getFileSize(mixId: Long): String {
         val file = getFile(mixId)
         if (!file.exists()) {
@@ -67,51 +70,55 @@ class MixDownloader(context: Context) {
         return mContext.getString(R.string.download_mb, sizeInMb)
     }
 
-
-    fun scheduleDownload(mixId: Long, url: String?, mixProgress: ProgressListener) {
+    fun scheduleDownload(mixId: Long, url: String?) {
         val file = getFile(mixId)
-        if (file.exists()) {
-            return
+//        if (file.exists()) {
+//            return
+//        }
+
+
+        val request = Request.Builder()
+                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+//                .url("http://www.colocenter.nl/speedtest/100mb.bin")
+//                .url("https://upload.wikimedia.org/wikipedia/commons/7/72/%27Calypso%27_Panorama_of_Spirit%27s_View_from_%27Troy%27_%28Stereo%29.jpg")
+                .build()
+
+        mExecutor.submit {
+            val response = mOkHttpClient.newCall(request).execute()
+            val responseBody = response.body()
+            val mixResponseBody = ProgressResponseBody(mixId, responseBody)
+
+            StreamUtils.copy(mixResponseBody.byteStream(), file)
+            responseBody.close()
+            mixResponseBody.close()
         }
+    }
 
-        var listener = mMapDownloads[mixId]
-        if (listener == null) {
-            mMapDownloads.put(mixId, mixProgress)
-            listener = mixProgress
+    @UiThread
+    fun addProgressListener(mixProgress: ProgressListener, mixId: Long) {
+        mMapDownloads.put(mixId, mixProgress)
+    }
 
-            val request = Request.Builder()
-                    .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
-//                    .url("http://www.colocenter.nl/speedtest/100mb.bin")
-                    .build()
+    @UiThread
+    fun removeListener(mixProgressListener: ProgressListener) {
+        mMapDownloads.values.remove(mixProgressListener)
+    }
 
-            mExecutor.submit {
-                val response = mOkHttpClient.newCall(request).execute()
-                val responseBody = response.body()
-                val mixResponseBody = ProgressResponseBody(mixId, responseBody, listener!!, mHandler)
-
-                StreamUtils.copy(mixResponseBody.byteStream(), file)
-                responseBody.close()
-                mixResponseBody.close()
-
-                mHandler.post { removeListener(listener!!) }
+    private fun notifyListenerIfExisted(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
+        val listener = mMapDownloads[mixId]
+        listener?.let {
+            mHandler.post {
+                listener.update(mixId, bytesRead, contentLength, done)
             }
         }
     }
 
     private fun getFile(mixId: Long): File = File(mContext.cacheDir, mixId.toString())
 
-
-    @UiThread
-    private fun removeListener(mixProgressListener: ProgressListener) {
-        mMapDownloads.values.remove(mixProgressListener)
-    }
-
-    // TODO move to separate class
-    private class ProgressResponseBody(
+    // TODO move to separate class, probably
+    private inner class ProgressResponseBody(
             val mixId: Long,
-            val responseBody: ResponseBody,
-            val progressListener: ProgressListener,
-            val handler: Handler) : ResponseBody() {
+            val responseBody: ResponseBody) : ResponseBody() {
 
         private var bufferedSource: BufferedSource? = null
 
@@ -135,9 +142,7 @@ class MixDownloader(context: Context) {
                     val bytesRead = super.read(sink, byteCount)
                     // read() returns the number of bytes read, or -1 if this source is exhausted.
                     totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                    handler.post {
-                        progressListener.update(mixId, totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
-                    }
+                    notifyListenerIfExisted(mixId, totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
                     return bytesRead
                 }
             }

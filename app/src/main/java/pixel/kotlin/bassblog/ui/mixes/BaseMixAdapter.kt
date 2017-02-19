@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.download.MixDownloader
+import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.network.Mix
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -85,10 +87,13 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mDownloadIcon = itemView.findViewById(R.id.download_icon) as ImageView?
         private val mFileSize = itemView.findViewById(R.id.file_size_item) as TextView?
         private val mProgressPercent = itemView.findViewById(R.id.progress_percent) as TextView?
+        private val mSeekBar = itemView.findViewById(R.id.seek_bar_progress) as SeekBar?
         private val mCalendar = Calendar.getInstance()
         private var mMix: Mix? = null
+        private val mMyProgress: ItemProgressListener
 
         init {
+            mMyProgress = ItemProgressListener()
             itemView.setOnClickListener { handleClick() }
         }
 
@@ -103,12 +108,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.GONE
             mCalendar.timeInMillis = mix.published
 
-            val state = mMixDownLoader.getState(mix.mixId)
-            if (state == MixDownloader.DOWNLOADED) {
-                mDownloadIcon?.visibility = View.VISIBLE
-            } else {
-                mDownloadIcon?.visibility = View.GONE
-            }
+            handleDownloadState(mix)
+            mMixDownLoader.addProgressListener(mMyProgress, mMix?.mixId!!)
 
             mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId)
 
@@ -120,13 +121,34 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             val requestCreator = Picasso.with(itemView.context).load(mix.image)
             if (needResize()) {
                 requestCreator.resizeDimen(R.dimen.image_width, R.dimen.image_height)
-            } else {
-//                requestCreator.fit()
             }
             requestCreator.into(mPostImage)
         }
 
+        private fun handleDownloadState(mix: Mix) {
+            val state = mMixDownLoader.getState(mix.mixId)
+            when (state) {
+                MixDownloader.DOWNLOADED -> mDownloadIcon?.visibility = View.VISIBLE
+                MixDownloader.NOT_DOWNLOADED -> mDownloadIcon?.visibility = View.GONE
+                else -> mDownloadIcon?.visibility = View.GONE
+            }
+        }
+
+        private inner class ItemProgressListener : ProgressListener {
+            override fun update(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
+                val progressPercent = (100 * bytesRead / contentLength).toInt()
+
+                mFileSize?.text = String.format("%d Mb", contentLength / (1024 * 1024))
+                mProgressPercent?.text = String.format("%d %%", progressPercent)
+                mSeekBar?.progress = progressPercent
+            }
+        }
+
         fun onViewRecycled() {
+            mFileSize?.text = null
+            mProgressPercent?.text = null
+            mSeekBar?.progress = 0
+            mMixDownLoader.removeListener(mMyProgress)
             picasso.cancelRequest(mPostImage)
         }
     }

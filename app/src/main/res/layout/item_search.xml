@@ -89,7 +89,7 @@
                 tools:text="@string/download_percent" />
 
             <SeekBar
-                android:id="@+id/seek_bar"
+                android:id="@+id/seek_bar_progress"
                 style="@style/Widget.AppCompat.SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

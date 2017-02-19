@@ -97,9 +97,16 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     private fun handleDownload() {
         val mix = mPlaybackService?.getPlayingMix()
         mix?.let {
-            mixDownloader?.scheduleDownload(it.mixId, it.track,
-                    ProgressListener { mixId, bytesRead, contentLength, done -> printResult(done) })
+            mixDownloader?.scheduleDownload(it.mixId, it.track)
+            mixDownloader?.addProgressListener(myProgressListener, mix.mixId)
         }
+    }
+
+    private val myProgressListener = ProgressListener { l, l1, l2, done -> printResult(done) }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mixDownloader?.removeListener(myProgressListener)
     }
 
     private fun printResult(b: Boolean) {
