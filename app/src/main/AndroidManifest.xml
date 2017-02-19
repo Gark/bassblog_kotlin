@@ -29,6 +29,7 @@
             android:name=".ui.MusicPlayerActivity"
             android:exported="false"
             android:label="@string/now_playing"
+            android:parentActivityName=".ui.PagerActivity"
             android:screenOrientation="portrait" />
 
         <activity

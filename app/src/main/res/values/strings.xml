@@ -26,4 +26,6 @@
     <string name="ragga_jungle">ragga-jungle</string>
     <string name="download">download</string>
     <string name="cancel">Cancel</string>
+    <string name="share">Share</string>
+    <string name="delete_mix_from_cache">Delete mix from disk</string>
 </resources>

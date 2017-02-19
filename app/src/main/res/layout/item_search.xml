@@ -86,16 +86,15 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@color/colorAccent"
-                tools:text="@string/download_percent" />
+                tools:text="10 %" />
 
-            <SeekBar
+            <android.support.v7.widget.AppCompatSeekBar
                 android:id="@+id/seek_bar_progress"
                 style="@style/Widget.AppCompat.SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:clickable="false"
-                android:enabled="false"
+                android:layout_gravity="center"
                 android:max="100"
                 android:thumb="@null"
                 tools:progress="50"

@@ -3,9 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/track_list"
         android:icon="@drawable/ic_tracklist"
         android:title="@string/track_list"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/delete_mix"
+        android:icon="@drawable/ic_tracklist"
+        android:title="@string/delete_mix_from_cache"
+        app:showAsAction="never" />
 
 </menu>

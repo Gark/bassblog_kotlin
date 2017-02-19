@@ -1,6 +1,7 @@
 package pixel.kotlin.bassblog.ui.mixes
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -90,10 +91,11 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mSeekBar = itemView.findViewById(R.id.seek_bar_progress) as SeekBar?
         private val mCalendar = Calendar.getInstance()
         private var mMix: Mix? = null
-        private val mMyProgress: ItemProgressListener
+        // TODO
+        private var mMyProgress: ItemProgressListener? = null
 
         init {
-            mMyProgress = ItemProgressListener()
+
             itemView.setOnClickListener { handleClick() }
         }
 
@@ -103,34 +105,24 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mPostTitle.text = mix.title
-            mPostLabel.text = mix.label
-            mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.GONE
-            mCalendar.timeInMillis = mix.published
-
+            mMyProgress = ItemProgressListener()
+            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId!!)
             handleDownloadState(mix)
-            mMixDownLoader.addProgressListener(mMyProgress, mMix?.mixId!!)
+            displayTextInfo(mix)
 
             mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId)
 
-            mHeader?.let {
-                it.text = fmt.format(mCalendar.time)
-                it.visibility = if (showHeader) View.VISIBLE else View.GONE
-            }
-
-            val requestCreator = Picasso.with(itemView.context).load(mix.image)
-            if (needResize()) {
-                requestCreator.resizeDimen(R.dimen.image_width, R.dimen.image_height)
-            }
-            requestCreator.into(mPostImage)
+            displayHeader(showHeader)
+            displayImage(mix)
         }
 
         private fun handleDownloadState(mix: Mix) {
             val state = mMixDownLoader.getState(mix.mixId)
             when (state) {
-                MixDownloader.DOWNLOADED -> mDownloadIcon?.visibility = View.VISIBLE
-                MixDownloader.NOT_DOWNLOADED -> mDownloadIcon?.visibility = View.GONE
-                else -> mDownloadIcon?.visibility = View.GONE
+                MixDownloader.DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
+                MixDownloader.NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
+                MixDownloader.IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
+                MixDownloader.PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
             }
         }
 
@@ -141,14 +133,38 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
                 mFileSize?.text = String.format("%d Mb", contentLength / (1024 * 1024))
                 mProgressPercent?.text = String.format("%d %%", progressPercent)
                 mSeekBar?.progress = progressPercent
+                handleDownloadState(mMix!!)
             }
         }
 
+        private fun displayHeader(showHeader: Boolean) {
+            mHeader?.let {
+                it.text = fmt.format(mCalendar.time)
+                it.visibility = if (showHeader) View.VISIBLE else View.GONE
+            }
+        }
+
+        private fun displayImage(mix: Mix) {
+            val requestCreator = Picasso.with(itemView.context).load(mix.image)
+            if (needResize()) {
+                requestCreator.resizeDimen(R.dimen.image_width, R.dimen.image_height)
+            }
+            requestCreator.into(mPostImage)
+        }
+
+        private fun displayTextInfo(mix: Mix) {
+            mPostTitle.text = mix.title
+            mPostLabel.text = mix.label
+            mNowPlayingImage.visibility = if (mix == mCurrentMix) View.VISIBLE else View.GONE
+            mCalendar.timeInMillis = mix.published
+        }
+
         fun onViewRecycled() {
+            // TODO fix
             mFileSize?.text = null
             mProgressPercent?.text = null
             mSeekBar?.progress = 0
-            mMixDownLoader.removeListener(mMyProgress)
+            mMixDownLoader.removeListener(mMyProgress!!)
             picasso.cancelRequest(mPostImage)
         }
     }

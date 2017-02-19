@@ -35,15 +35,10 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.play_music_activity)
-
         mixDownloader = (application as BassBlogApplication).getMixDownloader()
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         button_play_toggle.setOnClickListener { handleToggleClick() }
         button_play_next.setOnClickListener { handleNextClick() }
         button_play_last.setOnClickListener { handlePlayLast() }
-//        button_share.setOnClickListener { handleShareClick() }
         button_download.setOnClickListener { handleDownload() }
         button_favorite_toggle.setOnClickListener { handleFavouriteClick() }
         seek_bar.setOnSeekBarChangeListener(this)
@@ -59,18 +54,39 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.let {
+            val state = mixDownloader?.getState(it.mixId)
+            val menuItem = menu?.findItem(R.id.delete_mix)
+            menuItem?.isVisible = state == MixDownloader.DOWNLOADED
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            android.R.id.home -> {
-                finish()
+            R.id.action_share -> {
+                handleShareClick()
                 return true
             }
             R.id.track_list -> {
                 handleTrackListClick()
                 return true
             }
-
+            R.id.delete_mix -> {
+                handleFileDelete()
+                return true
+            }
             else -> return super.onContextItemSelected(item)
+        }
+    }
+
+    private fun handleFileDelete() {
+        val mix = mPlaybackService?.getPlayingMix()
+        if (mix != null) {
+            mixDownloader?.deleteFileMix(mix.mixId)
+            updateDownloadButtonState()
         }
     }
 
@@ -97,32 +113,45 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     private fun handleDownload() {
         val mix = mPlaybackService?.getPlayingMix()
         mix?.let {
-            mixDownloader?.scheduleDownload(it.mixId, it.track)
             mixDownloader?.addProgressListener(myProgressListener, mix.mixId)
+            mixDownloader?.scheduleDownload(it.mixId, it.track)
         }
     }
 
-    private val myProgressListener = ProgressListener { l, l1, l2, done -> printResult(done) }
+    private val myProgressListener = ProgressListener { l, l1, l2, done ->
+        updateDownloadButtonState()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         mixDownloader?.removeListener(myProgressListener)
     }
 
-    private fun printResult(b: Boolean) {
-        button_download.setColorFilter(if (b) Color.RED else Color.CYAN)
+    private fun updateDownloadButtonState() {
+        val mix = mPlaybackService?.getPlayingMix()
+        mix?.mixId?.let {
+            val state = mixDownloader?.getState(it)
+            val color = when (state) {
+                MixDownloader.DOWNLOADED -> Color.RED
+                MixDownloader.IN_PROGRESS -> Color.CYAN
+                MixDownloader.NOT_DOWNLOADED -> Color.BLACK
+                MixDownloader.PENDING -> Color.YELLOW
+                else -> R.color.black
+            }
+            button_download.setColorFilter(color)
+        }
     }
 
-//    private fun handleShareClick() {
-//        mPlaybackService?.getPlayingMix()?.url?.let {
-//            val shareIntent = Intent(Intent.ACTION_SEND)
-//            shareIntent.type = "text/plain"
-//            shareIntent.putExtra(Intent.EXTRA_TEXT, it)
-//            shareIntent.resolveActivity(this.packageManager)?.let {
-//                startActivity(Intent.createChooser(shareIntent, getString(R.string.app_name)))
-//            }
-//        }
-//    }
+    private fun handleShareClick() {
+        mPlaybackService?.getPlayingMix()?.url?.let {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, it)
+            shareIntent.resolveActivity(this.packageManager)?.let {
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.app_name)))
+            }
+        }
+    }
 
     private fun handlePlayLast() {
         mPlaybackService?.playLast()
@@ -135,18 +164,8 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         super.onServiceConnected(name, service)
         mPlaybackService?.requestDataOnBind()
-
-        val mix = mPlaybackService?.getPlayingMix()
-        mix?.mixId?.let {
-            val state = mixDownloader?.getState(it)
-            val color = when (state) {
-                MixDownloader.DOWNLOADED -> Color.RED
-                MixDownloader.IN_PROGRESS -> Color.CYAN
-                MixDownloader.NOT_DOWNLOADED -> Color.BLACK
-                else -> R.color.black
-            }
-            button_download.setColorFilter(color)
-        }
+        invalidateOptionsMenu()
+        updateDownloadButtonState()
     }
 
     override fun onTick(progress: Int, duration: Int, secondaryProgress: Int) {

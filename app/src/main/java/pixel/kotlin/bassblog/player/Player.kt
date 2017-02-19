@@ -27,19 +27,17 @@ class Player(wifi: WifiManager, context: Context) : IPlayback, MediaPlayer.OnErr
     private val mHandler = Handler()
     private val runnable = Runnable { tick() }
 
-    private val mWifiLock: WifiManager.WifiLock
+    private val mWifiLock: WifiManager.WifiLock = wifi.createWifiLock("LOCK")
     private val mCallbacks = ArrayList<IPlayback.PlayerCallback>()
     private val TAG = Player::class.java.name
     private val mPlayList = PlayList()
-    private val mPlayer: MediaPlayer
+    private val mPlayer: MediaPlayer = MediaPlayer()
 
     private var mCurrentState = NOT_PLAYING
     private var mBuffered = 0
 
 
     init {
-        mWifiLock = wifi.createWifiLock("LOCK")
-        mPlayer = MediaPlayer()
         mPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
         mPlayer.setOnErrorListener(this)
         mPlayer.setOnCompletionListener { handleOnComplete() }
