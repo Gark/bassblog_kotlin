@@ -10,6 +10,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.network.GcmUpdateService
+import android.os.StrictMode
 
 
 class BassBlogApplication : Application() {
@@ -22,7 +23,7 @@ class BassBlogApplication : Application() {
         Fabric.with(this, Crashlytics())
         Realm.init(applicationContext)
         mTracker = getDefaultTracker()
-        mTracker?.send(HitBuilders.EventBuilder().setCategory("Application start").setAction("Application start").build())
+//        mTracker?.send(HitBuilders.EventBuilder().setCategory("Application start").setAction("Application start").build())
 
         GcmUpdateService.start(applicationContext)
 
@@ -34,6 +35,7 @@ class BassBlogApplication : Application() {
         realm.close()
 
         mMixDownloader = MixDownloader(applicationContext)
+//        enableStrictMode()
     }
 
     fun getMixDownloader(): MixDownloader = mMixDownloader!!
@@ -61,6 +63,21 @@ class BassBlogApplication : Application() {
     fun fireEventFavourite(mixName: String) {
         val event = HitBuilders.EventBuilder().setAction("Favourite mix").setLabel(mixName).build()
         getDefaultTracker()?.send(event)
+    }
+
+    private fun enableStrictMode() {
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()   // or .detectAll() for all detectable problems
+                .penaltyLog()
+                .build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+//                .penaltyDeath()
+                .build())
     }
 }
 

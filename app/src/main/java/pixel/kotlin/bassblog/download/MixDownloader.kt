@@ -3,19 +3,17 @@ package pixel.kotlin.bassblog.download
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.IntDef
 import android.support.annotation.UiThread
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.*
-import java.io.File
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import android.support.annotation.IntDef
-import pixel.kotlin.bassblog.R
 
 class MixDownloader(context: Context) {
 
@@ -42,7 +40,7 @@ class MixDownloader(context: Context) {
 
     @DownloadingState
     fun getState(mixId: Long): Long {
-        val file = getFile(mixId)
+        val file = FileUtils.getFile(mixId, mContext)
         val state = mMapState[mixId]
 
         if (state == PENDING) {
@@ -60,23 +58,9 @@ class MixDownloader(context: Context) {
         }
     }
 
-    // TODO maybe should not be a part of that class, move to utility class.
-    fun getFileSize(mixId: Long): String {
-        val file = getFile(mixId)
-        if (!file.exists()) {
-            return ""
-        }
-        val sizeInMb = file.length() / (1024 * 1024)
-        return mContext.getString(R.string.download_mb, sizeInMb)
-    }
+    fun getFileSize(mixId: Long): CharSequence? = FileUtils.getFileSize(mixId, mContext)
 
-    // TODO move to utility  class
-    fun deleteFileMix(mixId: Long) {
-        val file = getFile(mixId)
-        if (file.exists()) {
-            file.delete()
-        }
-    }
+    fun deleteFileMix(mixId: Long) = FileUtils.deleteFileMix(mixId, mContext)
 
     fun scheduleDownload(mixId: Long, url: String?) {
         // interrupt downloading if given mix is already scheduled
@@ -85,33 +69,42 @@ class MixDownloader(context: Context) {
         }
 
         // interrupt downloading if given mix is already downloaded
-        val file = getFile(mixId)
+        val file = FileUtils.getFile(mixId, mContext)
         if (file.exists()) {
             return
         }
 
         val request = Request.Builder()
-                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
+//                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
 //                .url("http://www.colocenter.nl/speedtest/100mb.bin")
-//                .url("https://upload.wikimedia.org/wikipedia/commons/7/72/%27Calypso%27_Panorama_of_Spirit%27s_View_from_%27Troy%27_%28Stereo%29.jpg")
+                .url("https://upload.wikimedia.org/wikipedia/commons/7/72/%27Calypso%27_Panorama_of_Spirit%27s_View_from_%27Troy%27_%28Stereo%29.jpg")
                 .build()
         mMapState.put(mixId, PENDING)
-        notifyListenerIfExisted(mixId, 0L, 1L, false)
+        notifyListenerIfExisted(mixId, 0, 0, 0, false)
 
         mExecutor.submit {
             updateToProgressState(mixId)
 
-            val response = mOkHttpClient.newCall(request).execute()
-            val responseBody = response.body()
-            val mixResponseBody = ProgressResponseBody(mixId, responseBody)
+            var responseBody: ResponseBody? = null
+            var mixResponseBody: ResponseBody? = null
 
-            StreamUtils.copy(mixResponseBody.byteStream(), file)
-
-            responseBody.close()
-            mixResponseBody.close()
+            try {
+                val response = mOkHttpClient.newCall(request).execute()
+                responseBody = response.body()
+                mixResponseBody = ProgressResponseBody(mixId, responseBody)
+                StreamUtils.copy(mixResponseBody.byteStream(), file)
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+                file.delete()
+            } finally {
+                responseBody?.close()
+                mixResponseBody?.close()
+            }
 
             updateToDownloadState(mixId)
-            notifyListenerIfExisted(mixId, file.length(), file.length(), true)
+
+            val size: Int = (file.length() / (1024 * 1024)).toInt()
+            notifyListenerIfExisted(mixId, 100, size, size, true)
         }
     }
 
@@ -137,16 +130,14 @@ class MixDownloader(context: Context) {
         mMapDownloads.values.remove(mixProgressListener)
     }
 
-    private fun notifyListenerIfExisted(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
+    private fun notifyListenerIfExisted(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
         mHandler.post {
             val listener = mMapDownloads[mixId]
             listener?.let {
-                listener.update(mixId, bytesRead, contentLength, done)
+                listener.update(mixId, progress, readMb, totalMb, done)
             }
         }
     }
-
-    private fun getFile(mixId: Long): File = File(mContext.cacheDir, mixId.toString())
 
     // TODO move to separate class, probably
     private inner class ProgressResponseBody(
@@ -169,16 +160,28 @@ class MixDownloader(context: Context) {
         private fun source(source: Source): Source {
             return object : ForwardingSource(source) {
                 internal var totalBytesRead = 0L
+                internal var progress = 0
+                internal var temp = 0
+                internal val total: Int = (responseBody.contentLength() / (1024 * 1024)).toInt()
 
                 @Throws(IOException::class)
                 override fun read(sink: Buffer, byteCount: Long): Long {
                     val bytesRead = super.read(sink, byteCount)
                     // read() returns the number of bytes read, or -1 if this source is exhausted.
                     totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-                    notifyListenerIfExisted(mixId, totalBytesRead, responseBody.contentLength(), bytesRead == -1L)
+
+                    System.out.println("olololol $totalBytesRead ${responseBody.contentLength()} ${bytesRead == -1L}) ")
+
+                    temp = (totalBytesRead / (1024 * 1024)).toInt()
+                    if (progress < temp) {
+                        progress = temp
+                        notifyListenerIfExisted(mixId, progress, temp, total, bytesRead == -1L)
+                    }
                     return bytesRead
                 }
             }
         }
     }
+
+
 }

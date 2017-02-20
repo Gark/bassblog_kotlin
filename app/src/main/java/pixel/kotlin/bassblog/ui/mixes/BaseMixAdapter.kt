@@ -90,12 +90,12 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mProgressPercent = itemView.findViewById(R.id.progress_percent) as TextView?
         private val mSeekBar = itemView.findViewById(R.id.seek_bar_progress) as SeekBar?
         private val mCalendar = Calendar.getInstance()
+
         private var mMix: Mix? = null
-        // TODO
         private var mMyProgress: ItemProgressListener? = null
 
         init {
-
+            mMyProgress = ItemProgressListener()
             itemView.setOnClickListener { handleClick() }
         }
 
@@ -105,7 +105,6 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mMyProgress = ItemProgressListener()
             mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId!!)
             handleDownloadState(mix)
             displayTextInfo(mix)
@@ -127,14 +126,20 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         }
 
         private inner class ItemProgressListener : ProgressListener {
-            override fun update(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
-                val progressPercent = (100 * bytesRead / contentLength).toInt()
-
-                mFileSize?.text = String.format("%d Mb", contentLength / (1024 * 1024))
-                mProgressPercent?.text = String.format("%d %%", progressPercent)
-                mSeekBar?.progress = progressPercent
+            override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
+                mFileSize?.text = String.format("%d Mb", totalMb)
+                mProgressPercent?.text = String.format("%d %%", progress)
+                mSeekBar?.progress = progress
                 handleDownloadState(mMix!!)
             }
+//            override fun update(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
+//                val progressPercent = (100 * bytesRead / contentLength).toInt()
+//
+//                mFileSize?.text = String.format("%d Mb", contentLength / (1024 * 1024))
+//                mProgressPercent?.text = String.format("%d %%", progressPercent)
+//                mSeekBar?.progress = progressPercent
+//                handleDownloadState(mMix!!)
+//            }
         }
 
         private fun displayHeader(showHeader: Boolean) {
@@ -175,6 +180,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     fun updatePlayingMix(mix: Mix?) {
         mCurrentMix = mix
-        notifyDataSetChanged()
+        // TODO
+//        notifyDataSetChanged()
     }
 }
