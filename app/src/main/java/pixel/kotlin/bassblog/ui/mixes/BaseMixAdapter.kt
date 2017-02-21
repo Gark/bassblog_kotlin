@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import com.squareup.picasso.Picasso
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
@@ -88,7 +86,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mDownloadIcon = itemView.findViewById(R.id.download_icon) as ImageView?
         private val mFileSize = itemView.findViewById(R.id.file_size_item) as TextView?
         private val mProgressPercent = itemView.findViewById(R.id.progress_percent) as TextView?
-        private val mSeekBar = itemView.findViewById(R.id.seek_bar_progress) as SeekBar?
+        private val mProgressBar = itemView.findViewById(R.id.downloading_progressbar) as ProgressBar?
+        private val mCancel = itemView.findViewById(R.id.download_cancel) as TextView?
         private val mCalendar = Calendar.getInstance()
 
         private var mMix: Mix? = null
@@ -97,6 +96,11 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         init {
             mMyProgress = ItemProgressListener()
             itemView.setOnClickListener { handleClick() }
+            mCancel?.setOnClickListener { view -> handleCancel(view) }
+        }
+
+        private fun handleCancel(view: View) {
+            Toast.makeText(view.context, "cancel -> ${mMix?.mixId}", Toast.LENGTH_SHORT).show()
         }
 
         private fun handleClick() {
@@ -129,17 +133,9 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
                 mFileSize?.text = String.format("%d Mb", totalMb)
                 mProgressPercent?.text = String.format("%d %%", progress)
-                mSeekBar?.progress = progress
+                mProgressBar?.progress = progress
                 handleDownloadState(mMix!!)
             }
-//            override fun update(mixId: Long, bytesRead: Long, contentLength: Long, done: Boolean) {
-//                val progressPercent = (100 * bytesRead / contentLength).toInt()
-//
-//                mFileSize?.text = String.format("%d Mb", contentLength / (1024 * 1024))
-//                mProgressPercent?.text = String.format("%d %%", progressPercent)
-//                mSeekBar?.progress = progressPercent
-//                handleDownloadState(mMix!!)
-//            }
         }
 
         private fun displayHeader(showHeader: Boolean) {
@@ -168,7 +164,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             // TODO fix
             mFileSize?.text = null
             mProgressPercent?.text = null
-            mSeekBar?.progress = 0
+            mProgressBar?.progress = 0
             mMixDownLoader.removeListener(mMyProgress!!)
             picasso.cancelRequest(mPostImage)
         }
@@ -180,7 +176,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
     fun updatePlayingMix(mix: Mix?) {
         mCurrentMix = mix
-        // TODO
+        // TODO fix it
 //        notifyDataSetChanged()
     }
 }

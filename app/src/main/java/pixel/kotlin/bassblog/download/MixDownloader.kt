@@ -160,9 +160,9 @@ class MixDownloader(context: Context) {
         private fun source(source: Source): Source {
             return object : ForwardingSource(source) {
                 internal var totalBytesRead = 0L
-                internal var progress = 0
+                internal var progressReadMb = 0
                 internal var temp = 0
-                internal val total: Int = (responseBody.contentLength() / (1024 * 1024)).toInt()
+                internal val totalMb: Int = (responseBody.contentLength() / (1024 * 1024)).toInt()
 
                 @Throws(IOException::class)
                 override fun read(sink: Buffer, byteCount: Long): Long {
@@ -170,12 +170,10 @@ class MixDownloader(context: Context) {
                     // read() returns the number of bytes read, or -1 if this source is exhausted.
                     totalBytesRead += if (bytesRead != -1L) bytesRead else 0
 
-                    System.out.println("olololol $totalBytesRead ${responseBody.contentLength()} ${bytesRead == -1L}) ")
-
                     temp = (totalBytesRead / (1024 * 1024)).toInt()
-                    if (progress < temp) {
-                        progress = temp
-                        notifyListenerIfExisted(mixId, progress, temp, total, bytesRead == -1L)
+                    if (progressReadMb < temp) {
+                        progressReadMb = temp
+                        notifyListenerIfExisted(mixId, 100 * progressReadMb / totalMb, progressReadMb, totalMb, bytesRead == -1L)
                     }
                     return bytesRead
                 }

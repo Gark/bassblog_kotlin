@@ -88,25 +88,24 @@
                 android:textColor="@color/colorAccent"
                 tools:text="10 %" />
 
-            <android.support.v7.widget.AppCompatSeekBar
-                android:id="@+id/seek_bar_progress"
-                style="@style/Widget.AppCompat.SeekBar"
-                android:layout_width="match_parent"
+            <android.support.v4.widget.ContentLoadingProgressBar
+                android:id="@+id/downloading_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:clickable="false"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:max="100"
-                android:thumb="@null"
-                tools:progress="50"
-                tools:secondaryProgress="75" />
+                tools:progress="50" />
 
-            <!--<TextView-->
-            <!--android:id="@+id/download_cancel"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--tools:text="@string/cancel" />-->
+            <TextView
+                android:id="@+id/download_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:text="@string/cancel"
+                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
