@@ -16,6 +16,10 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.DOWNLOADED
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.IN_PROGRESS
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.NOT_DOWNLOADED
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.PENDING
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.player.Player
@@ -59,7 +63,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         mix?.let {
             val state = mixDownloader?.getState(it.mixId)
             val menuItem = menu?.findItem(R.id.delete_mix)
-            menuItem?.isVisible = state == MixDownloader.DOWNLOADED
+            menuItem?.isVisible = state == DOWNLOADED// TODO
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -85,7 +89,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     private fun handleFileDelete() {
         val mix = mPlaybackService?.getPlayingMix()
         if (mix != null) {
-            mixDownloader?.deleteFileMix(mix.mixId)
+//            mixDownloader?.deleteFileMix(mix.mixId) //TODO
             updateDownloadButtonState()
         }
     }
@@ -114,11 +118,11 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         val mix = mPlaybackService?.getPlayingMix()
         mix?.let {
             //            mixDownloader?.addProgressListener(myProgressListener, mix.mixId)
-            mixDownloader?.scheduleDownload(it.mixId, it.track)
+            mixDownloader?.scheduleDownload(it.mixId, it.track, listener)
         }
     }
 
-    private val myProgressListener = ProgressListener { l, i1, i2, i3, b ->
+    private val listener = ProgressListener { l, i1, i2, i3, b ->
         updateDownloadButtonState()
     }
 
@@ -132,10 +136,10 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         mix?.mixId?.let {
             val state = mixDownloader?.getState(it)
             val color = when (state) {
-                MixDownloader.DOWNLOADED -> Color.RED
-                MixDownloader.IN_PROGRESS -> Color.CYAN
-                MixDownloader.NOT_DOWNLOADED -> Color.BLACK
-                MixDownloader.PENDING -> Color.YELLOW
+                DOWNLOADED -> Color.RED
+                IN_PROGRESS -> Color.CYAN
+                NOT_DOWNLOADED -> Color.BLACK
+                PENDING -> Color.YELLOW
                 else -> R.color.black
             }
             button_download.setColorFilter(color)

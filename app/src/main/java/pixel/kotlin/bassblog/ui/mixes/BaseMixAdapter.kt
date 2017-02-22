@@ -10,6 +10,10 @@ import android.widget.*
 import com.squareup.picasso.Picasso
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.DOWNLOADED
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.IN_PROGRESS
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.NOT_DOWNLOADED
+import pixel.kotlin.bassblog.download.DownloadEntity.Companion.PENDING
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.network.Mix
@@ -109,11 +113,11 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId!!)
+            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId)
             handleDownloadState(mix)
             displayTextInfo(mix)
 
-            mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId)
+//            mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId) // TODO
 
             displayHeader(showHeader)
             displayImage(mix)
@@ -122,10 +126,10 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private fun handleDownloadState(mix: Mix) {
             val state = mMixDownLoader.getState(mix.mixId)
             when (state) {
-                MixDownloader.DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
-                MixDownloader.NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
-                MixDownloader.IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
-                MixDownloader.PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
+                DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
+                NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
+                IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
+                PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
             }
         }
 
@@ -165,7 +169,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
             mFileSize?.text = null
             mProgressPercent?.text = null
             mProgressBar?.progress = 0
-            mMixDownLoader.removeListener(mMyProgress!!)
+            mMixDownLoader.removeListener(mMix?.mixId)// TODO
             picasso.cancelRequest(mPostImage)
         }
     }
