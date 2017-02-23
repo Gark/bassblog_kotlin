@@ -70,7 +70,7 @@ class PagerActivity : BinderActivity(), ViewPager.OnPageChangeListener {
             return when (position) {
                 1 -> FavouriteFragment()
                 2 -> DownloadFragment()
-                2 -> SearchFragment()
+                3 -> SearchFragment()
                 else -> AllMixFragment()
             }
         }

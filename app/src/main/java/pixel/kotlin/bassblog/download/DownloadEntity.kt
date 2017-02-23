@@ -1,12 +1,13 @@
 package pixel.kotlin.bassblog.download
 
 import android.content.Context
-import android.os.Handler
-import android.support.annotation.IntDef
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
+import java.io.File
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 class DownloadEntity(
         val context: Context,
@@ -15,36 +16,29 @@ class DownloadEntity(
         val mixId: Long,
         val listener: ProgressListener) : Runnable {
 
-    companion object {
-        @IntDef(NOT_DOWNLOADED, IN_PROGRESS, DOWNLOADED, PENDING)
-        annotation class DownloadingState
-
-        const val NOT_DOWNLOADED = 0L
-        const val IN_PROGRESS = 1L
-        const val DOWNLOADED = 2L
-        const val PENDING = 3L
-    }
-
     private val MB = 1024 * 1024
-    private val file = FileUtils.getFile(mixId, context)
-    private var mTotalSize: Int? = null
+    private val mInterrupt = AtomicBoolean(false)
 
-    private var mState = NOT_DOWNLOADED
+    private var file: File = FileUtils.getFile(mixId, context)
+    private var mTotalSize: Int? = null
+    private var mState = DownloadingState.NOT_DOWNLOADED
 
     init {
-        mState = PENDING
-        listener.update(mixId, 0, 0, 0, false)
+        mState = DownloadingState.PENDING
+        listener.update(mixId, 0, 0, 0, DownloadingState.PENDING)
     }
 
-    fun getTotalSize(): Int? = mTotalSize
+    fun cancelDownloading() = mInterrupt.set(true)
 
-    fun getReadSize(): Int? = (file.length() / MB).toInt()
+    fun getTotalSize(): Int = mTotalSize ?: 1
 
-    @DownloadingState
+    fun getReadSize(): Int = (file.length() / MB).toInt()
+
     fun getState(): Long = mState
 
     override fun run() {
-        mState = IN_PROGRESS
+        mState = DownloadingState.IN_PROGRESS
+        listener.update(mixId, 0, 0, 0, DownloadingState.IN_PROGRESS)
         val request = Request.Builder()
 //                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
 //                .url("http://www.colocenter.nl/speedtest/100mb.bin")
@@ -58,19 +52,21 @@ class DownloadEntity(
             val response = httpOk.newCall(request).execute()
             responseBody = response.body()
             mTotalSize = (responseBody.contentLength() / MB).toInt()
-            mixResponseBody = ProgressResponseBody(mixId, responseBody, listener)
+            mixResponseBody = ProgressResponseBody(mixId, responseBody, listener, mInterrupt)
             StreamUtils.copy(mixResponseBody.byteStream(), file)
+
+            // TODO
+            val size: Int = (file.length() / MB).toInt()
+            listener.update(mixId, 100, size, size, DownloadingState.DOWNLOADED)
+            mState = DownloadingState.DOWNLOADED
         } catch (ex: IOException) {
-            ex.printStackTrace()
-            mState = NOT_DOWNLOADED
+            Log.e("DownloadEntity", "exception", ex)
+            mState = DownloadingState.NOT_DOWNLOADED
             file.delete()
+            listener.update(mixId, 0, 0, 0, DownloadingState.NOT_DOWNLOADED)
         } finally {
             responseBody?.close()
             mixResponseBody?.close()
         }
-
-        val size: Int = (file.length() / MB).toInt()
-        listener.update(mixId, 100, size, size, true)
-        mState = DOWNLOADED
     }
 }

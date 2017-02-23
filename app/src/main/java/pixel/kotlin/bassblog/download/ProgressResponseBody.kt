@@ -4,11 +4,13 @@ import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ProgressResponseBody(
         val mixId: Long,
         val responseBody: ResponseBody,
-        val listener: ProgressListener?) : ResponseBody() {
+        val listener: ProgressListener?,
+        val interrupt: AtomicBoolean) : ResponseBody() {
 
     private var bufferedSource: BufferedSource? = null
 
@@ -32,6 +34,11 @@ class ProgressResponseBody(
 
             @Throws(IOException::class)
             override fun read(sink: Buffer, byteCount: Long): Long {
+                if (interrupt.get()) {
+                    throw IOException("Downloading is interrupted for mix $mixId ")
+                }
+
+
                 val bytesRead = super.read(sink, byteCount)
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += if (bytesRead != -1L) bytesRead else 0
@@ -39,8 +46,7 @@ class ProgressResponseBody(
                 temp = (totalBytesRead / (1024 * 1024)).toInt()
                 if (progressReadMb < temp) {
                     progressReadMb = temp
-                    listener?.update(mixId, 100 * progressReadMb / totalMb, progressReadMb, totalMb, bytesRead == -1L)
-//                    System.out.println("xxxxxxxxx -> $mixId $bytesRead $totalMb")
+                    listener?.update(mixId, 100 * progressReadMb / totalMb, progressReadMb, totalMb, DownloadingState.IN_PROGRESS)
                 }
                 return bytesRead
             }

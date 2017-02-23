@@ -6,22 +6,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.DOWNLOADED
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.IN_PROGRESS
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.NOT_DOWNLOADED
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.PENDING
-import pixel.kotlin.bassblog.download.FileUtils
-import pixel.kotlin.bassblog.download.MixDownloader
+import pixel.kotlin.bassblog.download.DownloadingState
 import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.network.Mix
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.system.measureTimeMillis
 
 abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<BaseMixAdapter.MixHolder>() {
 
@@ -97,16 +94,19 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private val mCalendar = Calendar.getInstance()
 
         private var mMix: Mix? = null
-        private var mMyProgress: ItemProgressListener? = null
+        private var mProgressListener: ItemProgressListener
 
         init {
-            mMyProgress = ItemProgressListener()
+            mProgressListener = ItemProgressListener()
             itemView.setOnClickListener { handleClick() }
-            mCancel?.setOnClickListener { view -> handleCancel(view) }
+            mCancel?.setOnClickListener { view -> handleCancel() }
         }
 
-        private fun handleCancel(view: View) {
-            Toast.makeText(view.context, "cancel -> ${mMix?.mixId}", Toast.LENGTH_SHORT).show()
+        private fun handleCancel() {
+            mMix?.let {
+                val entity = mMixDownLoader.getDownloadingEntity(it.mixId)
+                entity?.cancelDownloading()
+            }
         }
 
         private fun handleClick() {
@@ -115,12 +115,9 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mMixDownLoader.addProgressListener(mMyProgress!!, mix.mixId) // TODO
+            mMixDownLoader.addProgressListener(mProgressListener, mix.mixId) // TODO
             handleDownloadState(mix.mixId)
             displayTextInfo(mix)
-
-//            mFileSize?.text = FileUtils.getFileSize(mix.mixId, itemView.context)
-
             displayHeader(showHeader)
             displayImage(mix)
         }
@@ -128,27 +125,33 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         private fun handleDownloadState(mixId: Long) {
             val entity = mMixDownLoader.getDownloadingEntity(mixId)
             if (entity == null) {
-                mDownloadIcon?.setColorFilter(Color.TRANSPARENT)
+                mDownloadIcon?.setColorFilter(Color.LTGRAY)
                 mFileSize?.text = null
-
+                mProgressBar?.progress = 0
+                mProgressPercent?.text = null
             } else {
-                mFileSize?.text = String.format("%d Mb", entity.getTotalSize())// TODO
-
-                when (entity.getState()) {
-                    DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
-                    NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
-                    IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
-                    PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
-                }
+                fillProgressWithData(mixId, 100 * entity.getReadSize() / entity.getTotalSize(),
+                        entity.getReadSize(), entity.getTotalSize(), entity.getState())
             }
         }
 
         private inner class ItemProgressListener : ProgressListener {
-            override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
-                mFileSize?.text = String.format("%d Mb", totalMb)
-                mProgressPercent?.text = String.format("%d %%", progress)
-                mProgressBar?.progress = progress
-                handleDownloadState(mMix?.mixId!!)// TODO
+            override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, state: Long) {
+                fillProgressWithData(mixId, progress, readMb, totalMb, state)
+            }
+        }
+
+        private fun fillProgressWithData(mixId: Long, progress: Int, readMb: Int, totalMb: Int, state: Long) {
+            mFileSize?.text = String.format("%d Mb", totalMb)
+            mProgressPercent?.text = String.format("%d %%", progress)
+            mProgressBar?.progress = progress
+
+            when (state) {
+                DownloadingState.DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
+                DownloadingState.NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
+                DownloadingState.IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
+                DownloadingState.PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
+
             }
         }
 
@@ -175,10 +178,6 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         }
 
         fun onViewRecycled() {
-            // TODO fix
-            mFileSize?.text = null
-            mProgressPercent?.text = null
-            mProgressBar?.progress = 0
             mMixDownLoader.removeListener(mMix?.mixId)// TODO
             picasso.cancelRequest(mPostImage)
         }

@@ -16,10 +16,6 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.play_music_activity.*
 import pixel.kotlin.bassblog.BassBlogApplication
 import pixel.kotlin.bassblog.R
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.DOWNLOADED
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.IN_PROGRESS
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.NOT_DOWNLOADED
-import pixel.kotlin.bassblog.download.DownloadEntity.Companion.PENDING
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.player.Player

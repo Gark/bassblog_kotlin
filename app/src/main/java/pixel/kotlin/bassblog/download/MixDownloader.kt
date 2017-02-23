@@ -22,8 +22,11 @@ class MixDownloader(val context: Context) {
 
     fun scheduleDownload(mixId: Long, url: String?) {
         var entity = mMapDownloads[mixId]
+        // TODO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
         entity?.let {
-            return
+            if (it.getState() != DownloadingState.NOT_DOWNLOADED) {
+                return
+            }
         }
 
         entity = DownloadEntity(context, mOkHttpClient, url, mixId, mProgressListener)
@@ -32,10 +35,9 @@ class MixDownloader(val context: Context) {
     }
 
     private inner class MixProgressListener : ProgressListener {
-        override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
+        override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, state: Long) {
             mHandler.post {
-                //                System.out.println(" olololo -> $mixId $progress $readMb $totalMb $done")
-                mMapListeners[mixId]?.update(mixId, progress, readMb, totalMb, done)
+                mMapListeners[mixId]?.update(mixId, progress, readMb, totalMb, state)
             }
         }
     }
@@ -43,12 +45,10 @@ class MixDownloader(val context: Context) {
     @UiThread
     fun addProgressListener(mixProgress: ProgressListener, mixId: Long?) {
         mMapListeners.put(mixId, mixProgress)
-        //        System.out.println("added ${mMapListeners.size} ${mMapDownloads.size}")
     }
 
     @UiThread
     fun removeListener(mixId: Long?) {
         mMapListeners.remove(mixId)
-        //        System.out.println("removed ${mMapListeners.size} ${mMapDownloads.size}")
     }
 }
