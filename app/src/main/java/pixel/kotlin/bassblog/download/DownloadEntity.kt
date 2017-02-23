@@ -9,12 +9,11 @@ import okhttp3.ResponseBody
 import java.io.IOException
 
 class DownloadEntity(
-        val handler: Handler,
         val context: Context,
         val httpOk: OkHttpClient,
         val url: String?,
         val mixId: Long,
-        var mListener: ProgressListener?) : Runnable {
+        val listener: ProgressListener) : Runnable {
 
     companion object {
         @IntDef(NOT_DOWNLOADED, IN_PROGRESS, DOWNLOADED, PENDING)
@@ -32,21 +31,14 @@ class DownloadEntity(
 
     init {
         mState = PENDING
-        mListener?.update(mixId, 0, 0, 0, false)
+        listener.update(mixId, 0, 0, 0, false)
     }
 
     @DownloadingState
     fun getState(): Long = mState
 
-    fun addProgressListener(newListener: ProgressListener) {
-        mListener = newListener
-    }
-
-    fun removeProgressListener() {
-        mListener = null
-    }
-
     override fun run() {
+        System.out.println("xxxxxxxxx -> in progress")
         mState = IN_PROGRESS
         val request = Request.Builder()
 //                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
@@ -60,7 +52,7 @@ class DownloadEntity(
         try {
             val response = httpOk.newCall(request).execute()
             responseBody = response.body()
-            mixResponseBody = ProgressResponseBody(mixId, responseBody, mListener)
+            mixResponseBody = ProgressResponseBody(mixId, responseBody, listener)
             StreamUtils.copy(mixResponseBody.byteStream(), file)
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -71,10 +63,8 @@ class DownloadEntity(
         }
 
         val size: Int = (file.length() / (1024 * 1024)).toInt()
+        listener.update(mixId, 100, size, size, true)
 
-        handler.post {
-            mListener?.update(mixId, 100, size, size, true)
-        }
 
         mState = DOWNLOADED
     }

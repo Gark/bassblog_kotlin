@@ -14,7 +14,9 @@ class MixDownloader(val context: Context) {
     private val mHandler = Handler(Looper.getMainLooper())
     private val mExecutor: ExecutorService = Executors.newFixedThreadPool(2)
     private val mMapDownloads: HashMap<Long, DownloadEntity> = HashMap()
+    private val mMapListeners: HashMap<Long?, ProgressListener> = HashMap()
     private val mOkHttpClient = OkHttpClient.Builder().build()
+    private val mProgressListener = MixProgressListener()
 
     fun getState(mixId: Long): Long {
         val entity = mMapDownloads[mixId]
@@ -24,50 +26,33 @@ class MixDownloader(val context: Context) {
         return DownloadEntity.NOT_DOWNLOADED
     }
 
-    fun scheduleDownload(mixId: Long, url: String?, listener: ProgressListener) {
+    fun scheduleDownload(mixId: Long, url: String?) {
         var entity = mMapDownloads[mixId]
         entity?.let {
             return
         }
 
-        entity = DownloadEntity(mHandler, context, mOkHttpClient, url, mixId, listener)
+        entity = DownloadEntity(context, mOkHttpClient, url, mixId, mProgressListener)
         mMapDownloads.put(mixId, entity)
         mExecutor.submit { entity }
     }
 
+    private inner class MixProgressListener : ProgressListener {
+        override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
+            mHandler.post {
+                System.out.println(" olololo -> $mixId $progress $readMb $totalMb $done")
+                mMapListeners[mixId]?.update(mixId, progress, readMb, totalMb, done)
+            }
+        }
+    }
+
     @UiThread
     fun addProgressListener(mixProgress: ProgressListener, mixId: Long?) {
-        mMapDownloads[mixId]?.addProgressListener(mixProgress)
+        mMapListeners.put(mixId, mixProgress)
     }
 
     @UiThread
     fun removeListener(mixId: Long?) {
-        mMapDownloads[mixId]?.removeProgressListener()
+//        mMapDownloads.remove(mixId)
     }
-
-//
-//    private fun updateToProgressState(mixId: Long) {
-//        mHandler.post {
-//            mMapState.put(mixId, IN_PROGRESS)
-//        }
-//    }
-//
-//    private fun updateToDownloadState(mixId: Long) {
-//        mHandler.post {
-//            mMapState.remove(mixId)
-//        }
-//    }
-//
-
-//
-//    private fun notifyListenerIfExisted(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
-//        mHandler.post {
-//            val listener = mMapDownloads[mixId]
-//            listener?.let {
-//                listener.update(mixId, progress, readMb, totalMb, done)
-//            }
-//        }
-//    }
-//
-
 }

@@ -113,7 +113,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId)
+            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId) // TODO
             handleDownloadState(mix)
             displayTextInfo(mix)
 

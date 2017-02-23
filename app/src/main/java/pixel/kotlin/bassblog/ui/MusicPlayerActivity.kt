@@ -118,7 +118,7 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
         val mix = mPlaybackService?.getPlayingMix()
         mix?.let {
             //            mixDownloader?.addProgressListener(myProgressListener, mix.mixId)
-            mixDownloader?.scheduleDownload(it.mixId, it.track, listener)
+            mixDownloader?.scheduleDownload(it.mixId, it.track)
         }
     }
 

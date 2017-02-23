@@ -40,6 +40,7 @@ class ProgressResponseBody(
                 if (progressReadMb < temp) {
                     progressReadMb = temp
                     listener?.update(mixId, 100 * progressReadMb / totalMb, progressReadMb, totalMb, bytesRead == -1L)
+                    System.out.println("xxxxxxxxx -> $mixId $bytesRead $totalMb")
                 }
                 return bytesRead
             }
