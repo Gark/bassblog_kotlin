@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.network.GcmUpdateService
 import android.os.StrictMode
+import com.squareup.leakcanary.LeakCanary
 
 
 class BassBlogApplication : Application() {
@@ -35,17 +36,18 @@ class BassBlogApplication : Application() {
         realm.close()
 
         mMixDownloader = MixDownloader(applicationContext)
-//        enableStrictMode()
+        enableStrictMode()
+        iniCanary()
     }
 
     fun getMixDownloader(): MixDownloader = mMixDownloader!!
 
-//    fun iniCanary() {
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            return
-//        }
-//        LeakCanary.install(this)
-//    }
+    fun iniCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+        LeakCanary.install(this)
+    }
 
     fun getDefaultTracker(): Tracker? {
         mTracker.let {

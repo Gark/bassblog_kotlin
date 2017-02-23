@@ -18,13 +18,7 @@ class MixDownloader(val context: Context) {
     private val mOkHttpClient = OkHttpClient.Builder().build()
     private val mProgressListener = MixProgressListener()
 
-    fun getState(mixId: Long): Long {
-        val entity = mMapDownloads[mixId]
-        entity?.let {
-            return it.getState()
-        }
-        return DownloadEntity.NOT_DOWNLOADED
-    }
+    fun getDownloadingEntity(mixId: Long): DownloadEntity? = mMapDownloads[mixId]
 
     fun scheduleDownload(mixId: Long, url: String?) {
         var entity = mMapDownloads[mixId]
@@ -34,13 +28,13 @@ class MixDownloader(val context: Context) {
 
         entity = DownloadEntity(context, mOkHttpClient, url, mixId, mProgressListener)
         mMapDownloads.put(mixId, entity)
-        mExecutor.submit { entity }
+        mExecutor.submit(entity)
     }
 
     private inner class MixProgressListener : ProgressListener {
         override fun update(mixId: Long, progress: Int, readMb: Int, totalMb: Int, done: Boolean) {
             mHandler.post {
-                System.out.println(" olololo -> $mixId $progress $readMb $totalMb $done")
+                //                System.out.println(" olololo -> $mixId $progress $readMb $totalMb $done")
                 mMapListeners[mixId]?.update(mixId, progress, readMb, totalMb, done)
             }
         }
@@ -49,10 +43,12 @@ class MixDownloader(val context: Context) {
     @UiThread
     fun addProgressListener(mixProgress: ProgressListener, mixId: Long?) {
         mMapListeners.put(mixId, mixProgress)
+        //        System.out.println("added ${mMapListeners.size} ${mMapDownloads.size}")
     }
 
     @UiThread
     fun removeListener(mixId: Long?) {
-//        mMapDownloads.remove(mixId)
+        mMapListeners.remove(mixId)
+        //        System.out.println("removed ${mMapListeners.size} ${mMapDownloads.size}")
     }
 }

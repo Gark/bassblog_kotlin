@@ -59,12 +59,13 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        val mix = mPlaybackService?.getPlayingMix()
-        mix?.let {
-            val state = mixDownloader?.getState(it.mixId)
-            val menuItem = menu?.findItem(R.id.delete_mix)
-            menuItem?.isVisible = state == DOWNLOADED// TODO
-        }
+//        val mix = mPlaybackService?.getPlayingMix()
+//        mix?.let {
+//            val state = mixDownloader?.getState(it.mixId)
+//            val menuItem = menu?.findItem(R.id.delete_mix)
+//            menuItem?.isVisible = state == DOWNLOADED// TODO
+//        }
+        // TODO
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -131,19 +132,19 @@ class MusicPlayerActivity : BinderActivity(), SeekBar.OnSeekBarChangeListener {
 //        mixDownloader?.removeListener(myProgressListener)
     }
 
-    private fun updateDownloadButtonState() {
-        val mix = mPlaybackService?.getPlayingMix()
-        mix?.mixId?.let {
-            val state = mixDownloader?.getState(it)
-            val color = when (state) {
-                DOWNLOADED -> Color.RED
-                IN_PROGRESS -> Color.CYAN
-                NOT_DOWNLOADED -> Color.BLACK
-                PENDING -> Color.YELLOW
-                else -> R.color.black
-            }
-            button_download.setColorFilter(color)
-        }
+    private fun updateDownloadButtonState() {// TODO
+//        val mix = mPlaybackService?.getPlayingMix()
+//        mix?.mixId?.let {
+//            val state = mixDownloader?.getState(it)
+//            val color = when (state) {
+//                DOWNLOADED -> Color.RED
+//                IN_PROGRESS -> Color.CYAN
+//                NOT_DOWNLOADED -> Color.BLACK
+//                PENDING -> Color.YELLOW
+//                else -> R.color.black
+//            }
+//            button_download.setColorFilter(color)
+//        }
     }
 
     private fun handleShareClick() {

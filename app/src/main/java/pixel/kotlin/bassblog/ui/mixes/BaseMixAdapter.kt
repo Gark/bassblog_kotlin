@@ -14,12 +14,14 @@ import pixel.kotlin.bassblog.download.DownloadEntity.Companion.DOWNLOADED
 import pixel.kotlin.bassblog.download.DownloadEntity.Companion.IN_PROGRESS
 import pixel.kotlin.bassblog.download.DownloadEntity.Companion.NOT_DOWNLOADED
 import pixel.kotlin.bassblog.download.DownloadEntity.Companion.PENDING
+import pixel.kotlin.bassblog.download.FileUtils
 import pixel.kotlin.bassblog.download.MixDownloader
 import pixel.kotlin.bassblog.download.ProgressListener
 import pixel.kotlin.bassblog.network.Mix
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.measureTimeMillis
 
 abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback) : RecyclerView.Adapter<BaseMixAdapter.MixHolder>() {
 
@@ -113,23 +115,31 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
 
         fun displayData(mix: Mix, showHeader: Boolean) {
             mMix = mix
-            mMixDownLoader.addProgressListener(mMyProgress!!, mMix?.mixId) // TODO
-            handleDownloadState(mix)
+            mMixDownLoader.addProgressListener(mMyProgress!!, mix.mixId) // TODO
+            handleDownloadState(mix.mixId)
             displayTextInfo(mix)
 
-//            mFileSize?.text = mMixDownLoader.getFileSize(mix.mixId) // TODO
+//            mFileSize?.text = FileUtils.getFileSize(mix.mixId, itemView.context)
 
             displayHeader(showHeader)
             displayImage(mix)
         }
 
-        private fun handleDownloadState(mix: Mix) {
-            val state = mMixDownLoader.getState(mix.mixId)
-            when (state) {
-                DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
-                NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
-                IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
-                PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
+        private fun handleDownloadState(mixId: Long) {
+            val entity = mMixDownLoader.getDownloadingEntity(mixId)
+            if (entity == null) {
+                mDownloadIcon?.setColorFilter(Color.TRANSPARENT)
+                mFileSize?.text = null
+
+            } else {
+                mFileSize?.text = String.format("%d Mb", entity.getTotalSize())// TODO
+
+                when (entity.getState()) {
+                    DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.RED)
+                    NOT_DOWNLOADED -> mDownloadIcon?.setColorFilter(Color.LTGRAY)
+                    IN_PROGRESS -> mDownloadIcon?.setColorFilter(Color.CYAN)
+                    PENDING -> mDownloadIcon?.setColorFilter(Color.YELLOW)
+                }
             }
         }
 
@@ -138,7 +148,7 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
                 mFileSize?.text = String.format("%d Mb", totalMb)
                 mProgressPercent?.text = String.format("%d %%", progress)
                 mProgressBar?.progress = progress
-                handleDownloadState(mMix!!)
+                handleDownloadState(mMix?.mixId!!)// TODO
             }
         }
 

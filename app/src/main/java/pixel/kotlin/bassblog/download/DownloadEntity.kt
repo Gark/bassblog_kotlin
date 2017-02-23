@@ -25,7 +25,9 @@ class DownloadEntity(
         const val PENDING = 3L
     }
 
+    private val MB = 1024 * 1024
     private val file = FileUtils.getFile(mixId, context)
+    private var mTotalSize: Int? = null
 
     private var mState = NOT_DOWNLOADED
 
@@ -34,11 +36,14 @@ class DownloadEntity(
         listener.update(mixId, 0, 0, 0, false)
     }
 
+    fun getTotalSize(): Int? = mTotalSize
+
+    fun getReadSize(): Int? = (file.length() / MB).toInt()
+
     @DownloadingState
     fun getState(): Long = mState
 
     override fun run() {
-        System.out.println("xxxxxxxxx -> in progress")
         mState = IN_PROGRESS
         val request = Request.Builder()
 //                .url("https://upload.wikimedia.org/wikipedia/commons/f/ff/Pizigani_1367_Chart_10MB.jpg")
@@ -52,20 +57,20 @@ class DownloadEntity(
         try {
             val response = httpOk.newCall(request).execute()
             responseBody = response.body()
+            mTotalSize = (responseBody.contentLength() / MB).toInt()
             mixResponseBody = ProgressResponseBody(mixId, responseBody, listener)
             StreamUtils.copy(mixResponseBody.byteStream(), file)
         } catch (ex: IOException) {
             ex.printStackTrace()
+            mState = NOT_DOWNLOADED
             file.delete()
         } finally {
             responseBody?.close()
             mixResponseBody?.close()
         }
 
-        val size: Int = (file.length() / (1024 * 1024)).toInt()
+        val size: Int = (file.length() / MB).toInt()
         listener.update(mixId, 100, size, size, true)
-
-
         mState = DOWNLOADED
     }
 }
