@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.util.*
 
-class NetworkHelper() {
+class NetworkHelper {
 
     private val mApi: BassBlogApi
 
@@ -31,14 +31,14 @@ class NetworkHelper() {
         val response = call.execute()
         if (response.isSuccessful) {
             val body = response.body()
-            val list = body.items
+            val list = body?.items
             list?.let {
                 saveRealmList(it)
                 mixCount = it.size
             }
         } else {
-            val error = String(response.errorBody().bytes())
-            throw IOException("Unsuccessful result -> " + error)
+            val error = String(response.errorBody()?.bytes() ?: ByteArray(0))
+            throw IOException("Unsuccessful result -> $error")
         }
         return mixCount
     }

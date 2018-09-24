@@ -17,7 +17,7 @@ class AllMixFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mPresenter = Presenter(activity)
+        mPresenter = Presenter(activity!!.applicationContext)
     }
 
     override fun getLayout(): Int = R.layout.all_mix
@@ -28,10 +28,10 @@ class AllMixFragment : BaseFragment() {
     }
 
     override fun getAdapter(): BaseMixAdapter {
-        return AllMixesAdapter(activity, this)
+        return AllMixesAdapter(activity!!.applicationContext, this)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mixes_recycler.addOnScrollListener(MixScrollListener())
     }

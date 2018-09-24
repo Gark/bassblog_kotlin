@@ -1,20 +1,26 @@
 package pixel.kotlin.bassblog.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
-import android.support.v7.app.NotificationCompat
+import android.support.annotation.RequiresApi
+import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
 import pixel.kotlin.bassblog.R
 import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.Player
 import pixel.kotlin.bassblog.ui.PagerActivity
-import android.net.wifi.WifiManager
-import android.os.Build
+
+private const val CHANNEL_ID = "channel_id"
 
 class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
@@ -22,6 +28,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
     private val ACTION_PLAY_LAST = "pixel.kotlin.bassblog.ACTION.PLAY_LAST"
     private val ACTION_PLAY_NEXT = "pixel.kotlin.bassblog.ACTION.PLAY_NEXT"
     private val ACTION_STOP_SERVICE = "pixel.kotlin.bassblog.ACTION.STOP_SERVICE"
+
 
     private val NOTIFICATION_ID = 1
 
@@ -72,7 +79,7 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
 
     override fun onCreate() {
         super.onCreate()
-        val wifi = getSystemService(Context.WIFI_SERVICE)
+        val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE)
         mPlayer = Player(wifi as WifiManager, applicationContext)
         registerCallback(this)
     }
@@ -119,13 +126,18 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
     private var mContentViewSmall: RemoteViews? = null
 
     private fun showNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(applicationContext)
+        }
+
         // The PendingIntent to launch our activity if the user selects this notification
         val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, PagerActivity::class.java), 0)
         // Set the info for the views that show in the notification panel.
 
         val small = getSmallContentView()
         val big = getBigContentView()
-        val notification = NotificationCompat.Builder(this)
+        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+//        val notification = NotificationCompat.Builder(this)
                 .setSmallIcon(
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                             R.mipmap.ic_launcher
@@ -198,4 +210,16 @@ class PlaybackService : Service(), IPlayback, IPlayback.PlayerCallback {
     }
 
     private fun getPendingIntent(action: String): PendingIntent = PendingIntent.getService(this, 0, Intent(action), 0)
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private fun createNotificationChannel(context: Context) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val channelName = "BassBlog Channel"
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val notificationChannel = NotificationChannel(CHANNEL_ID, channelName, importance)
+//        notificationChannel.enableLights(true)
+//        notificationChannel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
+        notificationManager.createNotificationChannel(notificationChannel)
+    }
 }

@@ -10,7 +10,7 @@ import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.search_layout.*
 import pixel.kotlin.bassblog.R
-import pixel.kotlin.bassblog.network.*
+import pixel.kotlin.bassblog.network.Mix
 import pixel.kotlin.bassblog.player.PlayList
 import pixel.kotlin.bassblog.ui.mixes.BaseFragment
 import pixel.kotlin.bassblog.ui.mixes.BaseMixAdapter
@@ -19,7 +19,7 @@ import java.util.*
 
 class SearchFragment : BaseFragment(), TextWatcher {
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         search_edit_text.addTextChangedListener(this)
 
@@ -27,9 +27,20 @@ class SearchFragment : BaseFragment(), TextWatcher {
         for (item in array) item.setOnClickListener {
             search_edit_text.append(it.tag as String)
         }
-        search_edit_text.setOnEditorActionListener({ textView, i, keyEvent -> handleSearch() })
-
+        search_edit_text.setOnEditorActionListener { _, _, _ -> handleSearch() }
     }
+
+//    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        search_edit_text.addTextChangedListener(this)
+//
+//        val array = arrayListOf(_320_kbps, deep, drumfunk, hard, liquid, neurofunk, oldschool, ragga_jungle)
+//        for (item in array) item.setOnClickListener {
+//            search_edit_text.append(it.tag as String)
+//        }
+//        search_edit_text.setOnEditorActionListener({ textView, i, keyEvent -> handleSearch() })
+//
+//    }
 
     private fun handleSearch(): Boolean {
         return true
@@ -84,7 +95,7 @@ class SearchFragment : BaseFragment(), TextWatcher {
 
     override fun getLayout(): Int = R.layout.search_layout
 
-    override fun getAdapter(): BaseMixAdapter = SearchAdapter(activity, this)
+    override fun getAdapter(): BaseMixAdapter = SearchAdapter(activity!!.applicationContext, this)
 
     override fun getTabId(): Int = PlayList.SEARCH
 

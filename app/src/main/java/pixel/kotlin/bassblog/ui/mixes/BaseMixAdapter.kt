@@ -53,8 +53,8 @@ abstract class BaseMixAdapter(context: Context, val callback: MixSelectCallback)
         notifyDataSetChanged()
     }
 
-    override fun onViewRecycled(holder: MixHolder?) {
-        holder?.onViewRecycled()
+    override fun onViewRecycled(holder: MixHolder) {
+        holder.onViewRecycled()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MixHolder(mInflater.inflate(getLayout(), parent, false))

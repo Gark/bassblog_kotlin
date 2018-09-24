@@ -9,7 +9,7 @@ class FavouriteFragment : BaseFragment() {
 
     override fun getTabId(): Int = PlayList.FAVOURITE_MIX
 
-    override fun getAdapter(): BaseMixAdapter = FavouriteAdapter(activity, this)
+    override fun getAdapter(): BaseMixAdapter = FavouriteAdapter(activity!!.applicationContext, this)
 
     override fun getLayout(): Int = R.layout.all_mix
 

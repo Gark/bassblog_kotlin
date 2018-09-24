@@ -16,12 +16,12 @@ abstract class BinderFragment : Fragment(), ServiceConnection, IPlayback.PlayerC
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity.bindService(Intent(activity, PlaybackService::class.java), this, Context.BIND_AUTO_CREATE)
+        activity?.bindService(Intent(activity, PlaybackService::class.java), this, Context.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        activity.unbindService(this)
+        activity?.unbindService(this)
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
